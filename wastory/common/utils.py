@@ -1,4 +1,4 @@
-from wapang.common.errors import InvalidFieldFormatError
+from wastory.common.errors import InvalidFieldFormatError
 
 
 def validate_phone_number(value: str | None) -> str | None:

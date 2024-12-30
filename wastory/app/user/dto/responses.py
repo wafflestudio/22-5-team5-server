@@ -1,4 +1,3 @@
-from typing import Self
 from pydantic import BaseModel
 
 from wastory.app.user.models import User
