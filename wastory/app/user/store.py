@@ -6,38 +6,38 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 from wastory.app.user.errors import EmailAlreadyExistsError, UserUnsignedError, UsernameAlreadyExistsError
 from wastory.app.user.models import User
-from wastory.database.connection import get_db_session
+from wastory.database.annotation import transactional
+from wastory.database.connection import SESSION
 
 
 class UserStore:
-    def __init__(self, session: Annotated[Session, Depends(get_db_session)]) -> None:
-        self.session = session
-
-    def add_user(self, username: str, password: str, email: str) -> User:
-        if self.get_user_by_username(username):
+    @transactional
+    async def add_user(self, username: str, password: str, email: str) -> User:
+        if await self.get_user_by_username(username):
             raise UsernameAlreadyExistsError()
 
-        if self.get_user_by_email(email):
+        if await self.get_user_by_email(email):
             raise EmailAlreadyExistsError()
 
         user = User(username=username, password=password, email=email)
-        self.session.add(user)
+        SESSION.add(user)
         return user
 
-    def get_user_by_username(self, username: str) -> User | None:
-        return self.session.scalar(select(User).where(User.username == username))
+    async def get_user_by_username(self, username: str) -> User | None:
+        return await SESSION.scalar(select(User).where(User.username == username))
 
-    def get_user_by_email(self, email: str) -> User | None:
-        return self.session.scalar(select(User).where(User.email == email))
+    async def get_user_by_email(self, email: str) -> User | None:
+        return await SESSION.scalar(select(User).where(User.email == email))
 
-    def update_user(
+    @transactional
+    async def update_user(
         self,
         username: str,
         email: str | None,
         address: str | None,
         phone_number: str | None,
     ) -> User:
-        user = self.get_user_by_username(username)
+        user = await self.get_user_by_username(username)
         if user is None:
             raise UserUnsignedError()
 
