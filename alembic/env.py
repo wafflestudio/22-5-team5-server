@@ -8,7 +8,6 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from wastory.database.common import Base
 from wastory.database.settings import DB_SETTINGS
-from wastory.app.user.models import User
 
 print(DB_SETTINGS.url)
 

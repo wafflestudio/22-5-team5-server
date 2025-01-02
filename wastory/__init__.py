@@ -1,0 +1,1 @@
+from wastory.app.user.models import User
