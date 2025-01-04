@@ -42,5 +42,9 @@ jobs:
             git pull origin main
             poetry install --no-root
             poetry run pgrep -f "uvicorn" && pkill -f "uvicorn" || true
-            poetry run nohup uvicorn wastory.main:app --host 0.0.0.0 --port 8000 > fastapi.log 2>&1 
+            poetry run nohup uvicorn wastory.main:app --host 0.0.0.0 --port 8000 > fastapi.log 2>&1 &
+            disown
+
+            echo "Deployment completed. Here are the logs:"
+            tail -n 20 fastapi.log
           EOF
