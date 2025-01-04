@@ -5,6 +5,10 @@ on:
     types:
       - closed
 
+permissions:
+  contents: read
+  secrets: write
+
 jobs:
   deploy:
     if: github.event.pull_request.merged == true
