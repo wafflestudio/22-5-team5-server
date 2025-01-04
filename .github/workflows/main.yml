@@ -7,7 +7,6 @@ on:
 
 permissions:
   contents: read
-  secrets: write
 
 jobs:
   deploy:
