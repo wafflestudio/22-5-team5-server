@@ -38,8 +38,9 @@ jobs:
           ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
             echo "SSH Connection Successful!"
             cd /home/ubuntu/22-5-team5-server
+            git config pull.rebase false
             git pull origin main
-            poetry install
+            poetry install --no-root
             poetry run pgrep -f "uvicorn" && pkill -f "uvicorn" || true
             poetry run nohup uvicorn wastory.main:app --host 0.0.0.0 --port 8000 > fastapi.log 2>&1 
           EOF
