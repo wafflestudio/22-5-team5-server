@@ -17,4 +17,4 @@ class User(Base):
     phone_number: Mapped[str | None] = mapped_column(String(20))
 
     # Blog와의 관계 (각 유저당 하나의 블로그)
-    blogs: Mapped["Blog"] = relationship("Blog", back_populates="owner", uselist=False)
+    blogs: Mapped["Blog"] = relationship("Blog", back_populates="user", uselist=False)

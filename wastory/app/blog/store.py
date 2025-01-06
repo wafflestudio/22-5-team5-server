@@ -19,7 +19,7 @@ class BlogStore:
         if await self.get_blog_by_name(blog_name):
             raise BlognameAlreadyExistsError
         blog=Blog(
-            name=blog_name,
+            blog_name=blog_name,
             description=description,
             user_id=user_id
         )
@@ -37,7 +37,7 @@ class BlogStore:
         return blog
 
     async def get_blog_by_name(self, name: str) -> Blog | None:
-        get_blog_query = select(Blog).filter(Blog.name == name)
+        get_blog_query = select(Blog).filter(Blog.blog_name == name)
         blog = await SESSION.scalar(get_blog_query)
         return blog
 
@@ -49,13 +49,13 @@ class BlogStore:
         description: str | None,
     ) -> Blog:
         # 기존 블로그 검색
-        blog = await self.get_blog_by_blog_name(blog_name)
+        blog = await self.get_blog_by_name(blog_name)
         if blog is None:
             raise BlogNotFoundError
 
         # 블로그 이름 업데이트
         if new_blog_name is not None:
-            if await self.get_blog_by_blog_name(new_blog_name):
+            if await self.get_blog_by_name(new_blog_name):
                 raise BlognameAlreadyExistsError
             blog.blog_name = new_blog_name
 

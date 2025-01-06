@@ -10,6 +10,7 @@ from wastory.database.common import Base
 from wastory.database.settings import DB_SETTINGS
 
 from wastory.app.user.models import User
+from wastory.app.blog.models import Blog
 
 print(DB_SETTINGS.url)
 
