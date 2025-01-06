@@ -3,6 +3,7 @@ from starlette.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_401_UNAUTHORIZED,
     HTTP_409_CONFLICT,
+    HTTP_404_NOT_FOUND
 )
 
 
@@ -10,7 +11,9 @@ class BlognameAlreadyExistsError(HTTPException):
     def __init__(self) -> None:
         super().__init__(HTTP_409_CONFLICT, "Blogname already exists")
 
-class Blog
+class BlogNotFoundError(HTTPException):
+    def __init__(self):
+        super().__init__(HTTP_404_NOT_FOUND, "Blog not found")
 
 
 class InvalidFieldFormatError(HTTPException):
