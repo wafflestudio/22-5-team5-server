@@ -4,52 +4,60 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from wastory.app.user.errors import EmailAlreadyExistsError, UserUnsignedError, UsernameAlreadyExistsError
-from wastory.app.user.models import User
+from wastory.app.user.errors import (
+    
+)
+from wastory.app.blog.models import Blog
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 
 
-class UserStore:
+class Categoryblog:
     @transactional
-    async def add_user(self, username: str, password: str, email: str) -> User:
-        if await self.get_user_by_username(username):
-            raise UsernameAlreadyExistsError()
+    async def add_blog(self, user_id: int, blog_name: str, description: str | None) -> Blog:
+        blog=Blog(
+            name=blog_name,
+            description=description,
+            user_id=user_id
+        )
+        SESSION.add(blog)
+        await SESSION.flush()
+        return blog
+    async def get_blog_by_id(self, blog_id: int) -> Blog | None:
+        get_blog_query = select(Blog).filter(Blog.id == blog_id)
+        blog = await SESSION.scalar(get_blog_query)
+        return blog
 
-        if await self.get_user_by_email(email):
-            raise EmailAlreadyExistsError()
+    async def get_blog_of_user(self, user_id: int) -> Blog | None:
+        get_blog_query = select(Blog).filter(Blog.owner_id == user_id)
+        blog = await SESSION.scalar(get_blog_query)
+        return blog
 
-        user = User(username=username, password=password, email=email)
-        SESSION.add(user)
-        return user
-
-    async def get_user_by_username(self, username: str) -> User | None:
-        return await SESSION.scalar(select(User).where(User.username == username))
-
-    async def get_user_by_email(self, email: str) -> User | None:
-        return await SESSION.scalar(select(User).where(User.email == email))
+    async def get_blog_by_name(self, name: str) -> Blog | None:
+        get_blog_query = select(Blog).filter(Blog.name == name)
+        blog = await SESSION.scalar(get_blog_query)
+        return blog
 
     @transactional
-    async def update_user(
+    async def update_blog(
         self,
-        username: str,
-        email: str | None,
-        address: str | None,
-        phone_number: str | None,
-    ) -> User:
-        user = await self.get_user_by_username(username)
-        if user is None:
-            raise UserUnsignedError()
+        blog_name: str,
+        new_blog_name: str | None,
+        description: str | None,
+    ) -> Blog:
+        # 기존 블로그 검색
+        blog = await self.get_blog_by_blog_name(blog_name)
+        if blog is None:
+            raise ValueError(f"Blog with name '{blog_name}' does not exist.")
 
-        if email is not None:
-            if self.get_user_by_email(email):
-                raise EmailAlreadyExistsError()
-            user.email = email
+        # 블로그 이름 업데이트
+        if new_blog_name is not None:
+            if await self.get_blog_by_blog_name(new_blog_name):
+                raise ValueError(f"Blog with name '{new_blog_name}' already exists.")
+            blog.blog_name = new_blog_name
 
-        if address is not None:
-            user.address = address
+        # 설명 업데이트
+        if description is not None:
+            blog.description = description
 
-        if phone_number is not None:
-            user.phone_number = phone_number
-
-        return user
+        return blog

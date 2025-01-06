@@ -20,7 +20,7 @@ class Blog(Base):
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())  # 갱신 시간
 
     # 관계 설정
-    owner: Mapped["User"] = relationship("User", back_populates="blogs")
+    user: Mapped["User"] = relationship("User", back_populates="blogs")
 
     def __repr__(self):
         return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"

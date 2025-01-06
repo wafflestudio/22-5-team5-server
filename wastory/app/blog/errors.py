@@ -10,6 +10,8 @@ class BlognameAlreadyExistsError(HTTPException):
     def __init__(self) -> None:
         super().__init__(HTTP_409_CONFLICT, "Blogname already exists")
 
+class Blog
+
 
 class InvalidFieldFormatError(HTTPException):
     def __init__(self) -> None:
