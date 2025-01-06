@@ -15,3 +15,7 @@ class BlogCreateRequest(BaseModel):
         if len(value) < 3 or len(value) > 20:
             raise InvalidFieldFormatError()
         return value
+    
+class BlogUpdateRequest(BaseModel):
+    blog_name: str|None = None
+    description: str|None = None

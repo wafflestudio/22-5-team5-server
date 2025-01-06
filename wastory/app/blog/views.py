@@ -2,36 +2,39 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Header
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 
-from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest
-from wastory.app.user.dto.responses import MyProfileResponse
+from wastory.app.blog.dto.requests import BlogCreateRequest
+from wastory.app.blog.dto.responses import BlogDetailResponse
 from wastory.app.user.models import User
-from wastory.app.user.service import UserService
+from wastory.app.blog.service import BlogService
+from wastory.app.user.views import login_with_header
 
-user_router = APIRouter()
-
-
-async def login_with_header(
-    x_wapang_username: Annotated[str, Header(...)],
-    x_wapang_password: Annotated[str, Header(...)],
-    user_service: Annotated[UserService, Depends()],
-) -> User:
-    user = await user_service.get_user_by_username(x_wapang_username)
-    if not user or user.password != x_wapang_password:
-        raise HTTPException(
-            status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
-        )
-    return user
+blog_router = APIRouter()
 
 
-@user_router.post("/signup", status_code=HTTP_201_CREATED)
+@blog_router.post("/create", status_code=HTTP_201_CREATED)
 async def signup(
-    signup_request: UserSignupRequest, user_service: Annotated[UserService, Depends()]
-):
-    await user_service.add_user(
-        signup_request.username, signup_request.password, signup_request.email
+    user: Annotated[User, Depends(login_with_header)],
+    blog_service: Annotated[BlogService, Depends()],
+    blog_create_request: BlogCreateRequest
+) -> BlogDetailResponse:
+    return await blog_service.create_blog(
+        user=user,
+        name=blog_create_request.blog_name,
+        description=blog_create_request.description
     )
-    return "Success"
 
+@blog_router.get("/{blog_name}")
+async def get_blog(
+    blog_name: str,
+    blog_service: Annotated[BlogService, Depends()]
+)->BlogDetailResponse:
+    return await blog_service.get_blog_by_name(blog_name=blog_name)
+
+@blog_router.patch("/{blog_name}")
+async def update_blog(
+    user: Annotated[User, Depends(login_with_header)],
+    
+)
 
 @user_router.get("/me", status_code=HTTP_200_OK)
 async def me(user: Annotated[User, Depends(login_with_header)]) -> MyProfileResponse:
