@@ -1,19 +1,10 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
+from sqlalchemy import DateTime
 
-from wastory.app.user.models import User
 
-
-class MyProfileResponse(BaseModel):
-    username: str
-    email: str
-    address: str | None
-    phone_number: str | None
-
-    @staticmethod
-    def from_user(user: User) -> "MyProfileResponse":
-        return MyProfileResponse(
-            username=user.username,
-            email=user.email,
-            address=user.address,
-            phone_number=user.phone_number,
-        )
+class BlogDetailResponse(BaseModel):
+    id: int
+    name: str = Field(serialization_alias="blog_name")
+    description : str
+    created_at : DateTime
+    updated_at : DateTime

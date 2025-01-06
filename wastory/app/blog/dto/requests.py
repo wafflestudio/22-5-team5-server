@@ -4,7 +4,7 @@ from pydantic import AfterValidator, BaseModel, EmailStr, field_validator
 from wastory.common.errors import InvalidFieldFormatError
 
 
-class StoreCreateRequest(BaseModel):
+class BlogCreateRequest(BaseModel):
     blog_name: str
     description: str | None = None
 
