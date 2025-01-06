@@ -1,12 +1,12 @@
 from typing import Annotated
-from pydantic import AfterValidator, BaseModel, EmailStr, field_validator
+from pydantic import AfterValidator, BaseModel, EmailStr, field_validator, Field
 
 from wastory.common.errors import InvalidFieldFormatError
 
 
 class BlogCreateRequest(BaseModel):
-    blog_name: str
-    description: str | None = None
+    blog_name: str = Field(..., min_length=1, max_length=100)
+    description: str = Field(..., max_length=255)
 
     @field_validator("blog_name")
     def validate_store_name(cls, value: str | None) -> str | None:
