@@ -13,7 +13,7 @@ from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 
 
-class Categoryblog:
+class BlogStore:
     @transactional
     async def add_blog(self, user_id: int, blog_name: str, description: str | None) -> Blog:
         if await self.get_blog_by_name(blog_name):
@@ -32,7 +32,7 @@ class Categoryblog:
         return blog
 
     async def get_blog_of_user(self, user_id: int) -> Blog | None:
-        get_blog_query = select(Blog).filter(Blog.owner_id == user_id)
+        get_blog_query = select(Blog).filter(Blog.user_id == user_id)
         blog = await SESSION.scalar(get_blog_query)
         return blog
 
