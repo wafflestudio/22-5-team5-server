@@ -6,14 +6,9 @@ from starlette.status import (
 )
 
 
-class EmailAlreadyExistsError(HTTPException):
+class BlognameAlreadyExistsError(HTTPException):
     def __init__(self) -> None:
-        super().__init__(HTTP_409_CONFLICT, "Email already exists")
-
-
-class UsernameAlreadyExistsError(HTTPException):
-    def __init__(self) -> None:
-        super().__init__(HTTP_409_CONFLICT, "Username already exists")
+        super().__init__(HTTP_409_CONFLICT, "Blogname already exists")
 
 
 class InvalidFieldFormatError(HTTPException):
