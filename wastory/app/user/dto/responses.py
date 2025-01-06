@@ -17,3 +17,8 @@ class MyProfileResponse(BaseModel):
             address=user.address,
             phone_number=user.phone_number,
         )
+
+
+class UserSigninResponse(BaseModel):
+    access_token: str
+    refresh_token: str

@@ -1,3 +1,4 @@
+from datetime import datetime
 from functools import cache
 from typing import Annotated
 
@@ -5,7 +6,7 @@ from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from wastory.app.user.errors import EmailAlreadyExistsError, UserUnsignedError, UsernameAlreadyExistsError
-from wastory.app.user.models import User
+from wastory.app.user.models import User, BlockedToken
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 
@@ -42,7 +43,7 @@ class UserStore:
             raise UserUnsignedError()
 
         if email is not None:
-            if self.get_user_by_email(email):
+            if await self.get_user_by_email(email):
                 raise EmailAlreadyExistsError()
             user.email = email
 
@@ -53,3 +54,17 @@ class UserStore:
             user.phone_number = phone_number
 
         return user
+
+
+    @transactional
+    async def block_token(self, token_id: str, expired_at: datetime) -> None:
+        blocked_token = BlockedToken(token_id=token_id, expired_at=expired_at)
+        SESSION.add(blocked_token)
+
+    async def is_token_blocked(self, token_id: str) -> bool:
+        return (
+            await SESSION.scalar(
+                select(BlockedToken).where(BlockedToken.token_id == token_id)
+            )
+            is not None
+        )
