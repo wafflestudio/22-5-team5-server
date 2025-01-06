@@ -4,9 +4,10 @@ from fastapi import Depends
 from wastory.app.blog.models import Blog
 from wastory.app.user.models import User
 from wastory.app.blog.store import BlogStore
+from wastory.app.blog.dto.responses import BlogDetailResponse
 
 
-class UserService:
+class BlogService:
     def __init__(self, blog_store: Annotated[BlogStore, Depends()]) -> None:
         self.blog_store = blog_store
 
@@ -15,19 +16,33 @@ class UserService:
         user : User,
         name : str,
         description : str
-    ) -> 
+    ) -> BlogDetailResponse:
+        
+        blog = await self.blog_store.add_blog(user_id=user.id, blog_name=name, description=description)
 
-    async def add_user(self, username: str, password: str, email: str):
-        await self.blog_store.add_blog(username=username, password=password, email=email)
+        return BlogDetailResponse.model_validate(blog, from_attributes=True)
+    
+    async def get_blog_by_id(self, blog_id : int) -> BlogDetailResponse:
+        blog=await self.blog_store.get_blog_by_id(blog_id)
+        return BlogDetailResponse.model_validate(blog, from_attributes=True)
+    
+    async def get_blog_by_name(self, blog_name : str) -> BlogDetailResponse:
+        blog=await self.blog_store.get_blog_by_name(blog_name)
+        return BlogDetailResponse.model_validate(blog, from_attributes=True)
 
-    async def get_user_by_username(self, username: str) -> User | None:
-        return await self.user_store.get_user_by_username(username)
+    async def get_blog_by_user(self, user : User) -> BlogDetailResponse:
+        blog = await self.blog_store.get_blog_of_user(user.id)
+        return BlogDetailResponse.model_validate(blog, from_attributes=True)
 
-    async def update_user(
+    async def update_blog(
         self,
-        username: str,
-        email: str | None,
-        address: str | None,
-        phone_number: str | None,
-    ) -> User:
-        return await self.user_store.update_user(username, email, address, phone_number)
+        blog_name : str,
+        new_blog_name : str | None,
+        new_description : str |None
+    ) -> BlogDetailResponse:
+        updated_blog = await self.blog_store.update_blog(
+            blog_name=blog_name,
+            new_blog_name=new_blog_name,
+            description=new_description
+        )
+        return BlogDetailResponse.model_validate(updated_blog, from_attributes=True)
