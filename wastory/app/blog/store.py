@@ -25,6 +25,7 @@ class BlogStore:
         )
         SESSION.add(blog)
         await SESSION.flush()
+        await SESSION.refresh(blog)
         return blog
     async def get_blog_by_id(self, blog_id: int) -> Blog | None:
         get_blog_query = select(Blog).filter(Blog.id == blog_id)
@@ -62,5 +63,9 @@ class BlogStore:
         # 설명 업데이트
         if description is not None:
             blog.description = description
+
+        SESSION.merge(blog)
+        await SESSION.flush()
+        await SESSION.refresh(blog)
 
         return blog

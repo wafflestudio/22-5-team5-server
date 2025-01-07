@@ -5,6 +5,7 @@ from wastory.app.blog.models import Blog
 from wastory.app.user.models import User
 from wastory.app.blog.store import BlogStore
 from wastory.app.blog.dto.responses import BlogDetailResponse
+from wastory.app.blog.errors import BlogNotFoundError
 
 
 class BlogService:
@@ -24,14 +25,20 @@ class BlogService:
     
     async def get_blog_by_id(self, blog_id : int) -> BlogDetailResponse:
         blog=await self.blog_store.get_blog_by_id(blog_id)
+        if blog is None:
+            raise BlogNotFoundError
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
     
     async def get_blog_by_name(self, blog_name : str) -> BlogDetailResponse:
         blog=await self.blog_store.get_blog_by_name(blog_name)
+        if blog is None:
+            raise BlogNotFoundError
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
 
     async def get_blog_by_user(self, user : User) -> BlogDetailResponse:
         blog = await self.blog_store.get_blog_of_user(user.id)
+        if blog is None:
+            raise BlogNotFoundError
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
 
     async def update_blog(
