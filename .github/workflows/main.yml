@@ -39,6 +39,7 @@ jobs:
           ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
             echo "SSH Connection Successful!"
             export ENV=${ENV}
+            echo "Current ENV: $ENV"  # ENV 값 확인
             cd /home/ubuntu/22-5-team5-server
             git config pull.rebase false
             git pull origin main
