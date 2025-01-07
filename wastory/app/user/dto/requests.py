@@ -83,3 +83,13 @@ class UserUpdateRequest(BaseModel):
     phone_number: Annotated[
         str | None, AfterValidator(skip_none(validate_phone_number))
     ] = None
+
+
+class PasswordUpdateRequest(BaseModel):
+    old_password: str
+    new_password: Annotated[str, AfterValidator(validate_password)]
+
+
+class UserSigninRequest(BaseModel):
+    username: str
+    password: str

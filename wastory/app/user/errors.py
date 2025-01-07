@@ -29,3 +29,19 @@ class MissingRequiredFieldError(HTTPException):
 class UserUnsignedError(HTTPException):
     def __init__(self) -> None:
         super().__init__(HTTP_401_UNAUTHORIZED, "User is not signed in")
+
+class InvalidUsernameOrPasswordError(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(HTTP_401_UNAUTHORIZED, "Invalid username or password")
+
+class ExpiredSignatureError(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(HTTP_401_UNAUTHORIZED, "Token expired")
+
+class InvalidTokenError(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(HTTP_401_UNAUTHORIZED, "Invalid token")
+
+class BlockedTokenError(HTTPException):
+    def __init__(self) -> None:
+        super().__init__(HTTP_401_UNAUTHORIZED, "Blocked token")
