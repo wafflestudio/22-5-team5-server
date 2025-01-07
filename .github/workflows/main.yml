@@ -31,21 +31,18 @@ jobs:
           SERVER_HOST: ${{ secrets.SERVER_HOST }}
           SERVER_USER: ${{ secrets.SERVER_USER }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          ENV: ${{ secrets.ENV }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh -o StrictHostKeyChecking=no $SERVER_USER@$SERVER_HOST << 'EOF'
             echo "SSH Connection Successful!"
-            export ENV=${ENV}
-            echo "Current ENV: $ENV"  # ENV 값 확인
             cd /home/ubuntu/22-5-team5-server
             git config pull.rebase false
             git pull origin main
             poetry install --no-root
             poetry run pgrep -f "uvicorn" && pkill -f "uvicorn" || true
-            poetry run nohup uvicorn wastory.main:app --host 0.0.0.0 --port 8000 > fastapi.log 2>&1 &
+            poetry run nohup ENV="prod" uvicorn wastory.main:app --host 0.0.0.0 --port 8000 > fastapi.log 2>&1 &
             disown
 
             echo "Deployment completed. Here are the logs:"
