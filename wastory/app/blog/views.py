@@ -19,8 +19,7 @@ async def signup(
 ) -> BlogDetailResponse:
     return await blog_service.create_blog(
         user=user,
-        name=blog_create_request.blog_name,
-        description=blog_create_request.description
+        name=blog_create_request.address_name
     )
 
 @blog_router.get("/{blog_name}")

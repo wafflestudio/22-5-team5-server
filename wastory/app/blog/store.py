@@ -15,12 +15,13 @@ from wastory.database.connection import SESSION
 
 class BlogStore:
     @transactional
-    async def add_blog(self, user_id: int, blog_name: str, description: str | None) -> Blog:
+    async def add_blog(self, user_id: int, name : str) -> Blog:
+        blog_name = name + "님의 블로그"
         if await self.get_blog_by_name(blog_name):
             raise BlognameAlreadyExistsError
         blog=Blog(
+            address_name=name,
             blog_name=blog_name,
-            description=description,
             user_id=user_id
         )
         SESSION.add(blog)

@@ -16,10 +16,9 @@ class BlogService:
         self,
         user : User,
         name : str,
-        description : str
     ) -> BlogDetailResponse:
         
-        blog = await self.blog_store.add_blog(user_id=user.id, blog_name=name, description=description)
+        blog = await self.blog_store.add_blog(user_id=user.id, name=name)
 
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
     
