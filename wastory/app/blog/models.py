@@ -12,8 +12,9 @@ class Blog(Base):
         UniqueConstraint("user_id", name="unique_user_blog"),  # 각 유저당 하나의 블로그만 생성 가능
     )
 
-    id: Mapped[intpk]
+    id: Mapped[intpk] # 블로그 아이디
     blog_name: Mapped[str] = mapped_column(String(100), nullable=False)  # 블로그 제목
+    address_name: Mapped[str]=mapped_column(String(100), nullable=False) # 주소 이름
     description: Mapped[str | None] = mapped_column(String(255))  # 블로그 설명 (선택적)
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  # 블로그 소유자
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # 생성 시간

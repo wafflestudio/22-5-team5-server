@@ -5,14 +5,15 @@ from wastory.common.errors import InvalidFieldFormatError
 
 
 class BlogCreateRequest(BaseModel):
-    blog_name: str
-    description: str | None = None
+    address_name: str
 
-    @field_validator("blog_name")
-    def validate_store_name(cls, value: str | None) -> str | None:
+    @field_validator("address_name")
+    def validate_address_name(cls, value: str | None) -> str | None:
         if value is None:
             return None
         if len(value) < 3 or len(value) > 20:
+            raise InvalidFieldFormatError()
+        if " " in value:
             raise InvalidFieldFormatError()
         return value
     
