@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
 class Article(Base):
-    __tablename__ = "article"
+    __tablename__ = "Article"
 
     id : Mapped[intpk]
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
