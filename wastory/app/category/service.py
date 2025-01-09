@@ -49,5 +49,5 @@ class CategoryService:
         self,
         user:User
     )->list[CategoryListResponse]:
-        categories=await self.category_store.get_categories_by_user(user.blogs.id)
+        categories=await self.category_store.get_category_of_blog(user.blogs.id)
         return [CategoryListResponse.from_category(category) for category in categories]

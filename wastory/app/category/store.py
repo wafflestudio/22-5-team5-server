@@ -1,15 +1,12 @@
 from functools import cache
 from typing import Annotated
 
-from fastapi import Depends
 from sqlalchemy import select,and_
-from sqlalchemy.orm import Session
 from wastory.app.category.errors import CategoryNameDuplicateError,CategoryNotFoundError,NotOwnerError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.category.models import Category
-from wastory.app.blog.models import Blog
 
 class CategoryStore:
 
@@ -39,6 +36,7 @@ class CategoryStore:
         get_category_query=select(Category).filter(Category.id==id)
         category=await SESSION.scalar(get_category_query)
         return category
+    
 
     #여기가 많은 개선이 필요함!!
 
@@ -55,7 +53,7 @@ class CategoryStore:
 
 
 
-    async def get_categories_by_user(self,blog_id:int)->list[Category]|None:
+    async def get_category_of_blog(self,blog_id:int)->list[Category]|None:
         get_category_query=select(Category).filter(
             Category.blog_id==blog_id
         )
@@ -78,7 +76,7 @@ class CategoryStore:
         if category.blog !=user.blog:
             raise NotOwnerError()
 
-        if new_cateogry_name is not None:
+        if new_category_name is not None:
             if await self.get_category_by_name_parent_level(
                 new_cateogry_name=new_category_name,
                 parentId=category.parent_id,
