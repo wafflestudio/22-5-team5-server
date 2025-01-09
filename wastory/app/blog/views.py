@@ -11,7 +11,7 @@ from wastory.app.user.views import login_with_header
 blog_router = APIRouter()
 
 
-@blog_router.post("/", status_code=HTTP_201_CREATED)
+@blog_router.post("", status_code=HTTP_201_CREATED)
 async def create_blog(
     user: Annotated[User, Depends(login_with_header)],
     blog_service: Annotated[BlogService, Depends()],
