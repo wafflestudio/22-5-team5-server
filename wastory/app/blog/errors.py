@@ -23,3 +23,7 @@ class MissingRequiredFieldError(WastoryHttpException):
 class UserUnsignedError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=401, detail="User is not signed in")
+
+class BlogAlreadyExistsError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=400, detail="Blog exists")

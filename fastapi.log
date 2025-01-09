@@ -3,30 +3,8 @@ nohup: ignoring input
 * 'allow_population_by_field_name' has been renamed to 'populate_by_name'
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [4363]
+INFO:     Started server process [5876]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     211.36.146.7:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     211.36.146.7:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     211.36.146.7:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     211.36.146.7:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     211.36.146.7:0 - "POST /api/users/signup HTTP/1.0" 201 Created
-INFO:     211.36.146.7:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-INFO:     211.36.146.7:0 - "POST /api/blogs/ HTTP/1.0" 201 Created
-user found
-INFO:     211.36.146.7:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-called get_blog
-INFO:     211.36.146.7:0 - "GET /api/blogs/eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJhYWRkQGV4YW1wbGUuY29tIiwiZXhwIjoxNzM2Mzk4OTQ4LCJ0eXAiOiJhY2Nlc3MifQ.O4gGWuhK5s1MdpYjM0F6Sv-Q6JNnSa848YJE6Ctd1M8 HTTP/1.0" 404 Not Found
-called get_blog
-Debug: Blog=<Blog id=24, blog_name=aadd님의 블로그, user_id=48>
-main_image_url: None
-INFO:     211.36.146.7:0 - "GET /api/blogs/aadd HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     172.69.136.205:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     172.69.136.205:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     172.69.136.193:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     172.69.136.165:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     162.158.134.37:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     54.167.1.242:0 - "GET / HTTP/1.0" 200 OK
+INFO:     211.36.146.7:0 - "POST /api/blogs HTTP/1.0" 400 Bad Request
