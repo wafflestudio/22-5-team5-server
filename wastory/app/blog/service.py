@@ -28,8 +28,8 @@ class BlogService:
             raise BlogNotFoundError
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
     
-    async def get_blog_by_name(self, blog_name : str) -> BlogDetailResponse:
-        blog=await self.blog_store.get_blog_by_name(blog_name)
+    async def get_blog_by_address_name(self, address_name : str) -> BlogDetailResponse:
+        blog=await self.blog_store.get_blog_by_address_name(address_name)
         if blog is None:
             raise BlogNotFoundError
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
@@ -42,12 +42,12 @@ class BlogService:
 
     async def update_blog(
         self,
-        blog_name : str,
+        address_name : str,
         new_blog_name : str | None,
         new_description : str |None
     ) -> BlogDetailResponse:
         updated_blog = await self.blog_store.update_blog(
-            blog_name=blog_name,
+            address_name=address_name,
             new_blog_name=new_blog_name,
             description=new_description
         )

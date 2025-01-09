@@ -4,6 +4,9 @@ from sqlalchemy import String, DateTime
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from wastory.database.common import Base, intpk
 
+if TYPE_CHECKING:
+    from wastory.app.blog.models import Blog
+
 class User(Base):
     __tablename__ = "user"
 
