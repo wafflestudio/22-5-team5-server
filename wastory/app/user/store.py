@@ -5,7 +5,7 @@ from typing import Annotated
 from fastapi import Depends
 from sqlalchemy import select
 from sqlalchemy.orm import Session
-from wastory.app.user.errors import EmailAlreadyExistsError, UserUnsignedError, UsernameAlreadyExistsError
+from wastory.app.user.errors import EmailAlreadyExistsError, UserUnsignedError, UsernameAlreadyExistsError, InvalidUsernameOrPasswordError
 from wastory.app.user.models import User, BlockedToken
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
@@ -13,14 +13,11 @@ from wastory.database.connection import SESSION
 
 class UserStore:
     @transactional
-    async def add_user(self, username: str, password: str, email: str) -> User:
-        if await self.get_user_by_username(username):
-            raise UsernameAlreadyExistsError()
-
+    async def add_user(self, email: str, password: str) -> User:
         if await self.get_user_by_email(email):
             raise EmailAlreadyExistsError()
 
-        user = User(username=username, password=password, email=email)
+        user = User(password=password, email=email)
         SESSION.add(user)
         return user
 
@@ -69,27 +66,28 @@ class UserStore:
 
 
     @transactional
-    async def block_token(self, token_id: str, expired_at: datetime) -> None:
-        blocked_token = BlockedToken(token_id=token_id, expired_at=expired_at)
-        SESSION.add(blocked_token)
-
-    async def is_token_blocked(self, token_id: str) -> bool:
-        return (
-            await SESSION.scalar(
-                select(BlockedToken).where(BlockedToken.token_id == token_id)
-            )
-            is not None
-        )
-
-
-    @transactional
-    async def update_password(self, username:str, new_password: str) -> User:
-        user = await self.get_user_by_username(username)
+    async def update_password(self, email:str, old_password: str, new_password: str) -> User:
+        user = await self.get_user_by_email(email)
         if user is None:
             raise UserUnsignedError()
 
+        if user.password != old_password:
+            raise InvalidUsernameOrPasswordError()
+
         if new_password is not None:
             user.password = new_password
+
+        return user
+
+
+    @transactional
+    async def update_username(self, username:str, email:str) -> User:
+        user = await self.get_user_by_email(email)
+        if user is None:
+            raise UserUnsignedError()
+
+        if username is not None:
+            user.username = username
 
         return user
 

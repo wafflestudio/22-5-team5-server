@@ -7,7 +7,6 @@ from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZE
 
 from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, UserSigninRequest, PasswordUpdateRequest
 from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse
-from wastory.app.user.errors import InvalidTokenError, UserSigninResponse
 from wastory.app.user.errors import InvalidTokenError
 from wastory.app.user.models import User
 from wastory.app.user.service import UserService
@@ -89,7 +88,7 @@ async def signup(
     signup_request: UserSignupRequest, user_service: Annotated[UserService, Depends()]
 ):
     await user_service.add_user(
-        signup_request.username, signup_request.password, signup_request.email
+        signup_request.email, signup_request.password
     )
     return "Success"
 
@@ -141,9 +140,9 @@ async def update_me(
     update_request: PasswordUpdateRequest,
     user_service: Annotated[UserService, Depends()],
 ):
-    if user.password == update_request.old_password:
-        await user_service.update_password(
-            user.username,
-            new_password=update_request.new_password
-        )
+    await user_service.update_password(
+        user.email,
+        old_password=update_request.old_password,
+        new_password=update_request.new_password
+    )
     return "Success"
