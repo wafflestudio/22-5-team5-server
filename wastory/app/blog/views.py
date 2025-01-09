@@ -22,18 +22,18 @@ async def signup(
         name=blog_create_request.address_name
     )
 
-@blog_router.get("/{blog_name}")
+@blog_router.get("/{address_name}")
 async def get_blog(
-    blog_name: str,
+    address_name: str,
     blog_service: Annotated[BlogService, Depends()]
 )->BlogDetailResponse:
-    return await blog_service.get_blog_by_name(blog_name=blog_name)
+    return await blog_service.get_blog_by_address_name(address_name=address_name)
 
-@blog_router.patch("/{blog_name}")
+@blog_router.patch("/{address_name}")
 async def update_blog(
     user: Annotated[User, Depends(login_with_header)],
-    blog_name: str,
+    address_name: str,
     blog_service: Annotated[BlogService, Depends()],
     blog_update_request: BlogUpdateRequest
 ) -> BlogDetailResponse:
-    return await blog_service.update_blog(blog_name=blog_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)
+    return await blog_service.update_blog(address_name=address_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)

@@ -4,44 +4,44 @@ from starlette.status import (
     HTTP_401_UNAUTHORIZED,
     HTTP_409_CONFLICT,
 )
+from wastory.common.errors import WastoryHttpException
 
-
-class EmailAlreadyExistsError(HTTPException):
+class EmailAlreadyExistsError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_409_CONFLICT, "Email already exists")
+        super().__init__(status_code=409, detail="Email already exists")
 
 
-class UsernameAlreadyExistsError(HTTPException):
+class UsernameAlreadyExistsError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_409_CONFLICT, "Username already exists")
+        super().__init__(status_code=409, detail="Username already exists")
 
 
-class InvalidFieldFormatError(HTTPException):
+class InvalidFieldFormatError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_400_BAD_REQUEST, "Invalid field format")
+        super().__init__(status_code=400, detail="Invalid field format")
 
 
-class MissingRequiredFieldError(HTTPException):
+class MissingRequiredFieldError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_400_BAD_REQUEST, "Missing required fields")
+        super().__init__(status_code=400, detail="Missing required fields")
 
 
-class UserUnsignedError(HTTPException):
+class UserUnsignedError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_401_UNAUTHORIZED, "User is not signed in")
+        super().__init__(status_code=401, detail="User is not signed in")
 
 class InvalidUsernameOrPasswordError(HTTPException):
     def __init__(self) -> None:
-        super().__init__(HTTP_401_UNAUTHORIZED, "Invalid username or password")
+        super().__init__(status_code=401, detail="Invalid username or password")
 
-class ExpiredSignatureError(HTTPException):
+class ExpiredSignatureError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_401_UNAUTHORIZED, "Token expired")
+        super().__init__(status_code=401, detail="Token expired")
 
-class InvalidTokenError(HTTPException):
+class InvalidTokenError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_401_UNAUTHORIZED, "Invalid token")
+        super().__init__(status_code=401, detail="Invalid token")
 
-class BlockedTokenError(HTTPException):
+class BlockedTokenError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_401_UNAUTHORIZED, "Blocked token")
+        super().__init__(status_code=401, detail="Blocked token")

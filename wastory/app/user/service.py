@@ -1,4 +1,3 @@
-
 from datetime import datetime, timedelta
 from uuid import uuid4
 from typing import Annotated
@@ -28,14 +27,17 @@ class UserService:
     def __init__(self, user_store: Annotated[UserStore, Depends()]) -> None:
         self.user_store = user_store
 
-    async def add_user(self, username: str, password: str, email: str):
-        await self.user_store.add_user(username=username, password=password, email=email)
+    async def add_user(self, email: str, password: str):
+        await self.user_store.add_user(email=email, password=password)
 
     async def add_user_via_kakao(self, nickname: str):
         await self.user_store.add_user_via_kakao(nickname=nickname)
 
     async def get_user_by_username(self, username: str) -> User | None:
         return await self.user_store.get_user_by_username(username)
+
+    async def get_user_by_email(self, email: str) -> User | None:
+        return await self.user_store.get_user_by_email(email)
 
     async def get_user_by_nickname(self, nickname: str) -> User | None:
         return await self.user_store.get_user_by_nickname(nickname)
@@ -51,27 +53,35 @@ class UserService:
 
     async def update_password(
         self,
-        username: str,
+        email: str,
+        old_password: str,
         new_password: str,
     ) -> User:
-        return await self.user_store.update_password(username, new_password)
+        return await self.user_store.update_password(email, old_password, new_password)
 
-    async def signin(self, username: str, password: str) -> tuple[str, str]:
-        user = await self.get_user_by_username(username)
+    async def update_username(
+        self,
+        username: str,
+        email: str,
+    ) -> User:
+        return await self.user_store.update_username(username, email)
+
+    async def signin(self, email: str, password: str) -> tuple[str, str]:
+        user = await self.get_user_by_email(email)
         if user is None or user.password != password:
             raise InvalidUsernameOrPasswordError()
-        return self.issue_tokens(username)
+        return self.issue_tokens(user.email)
     
-    def issue_tokens(self, username: str) -> tuple[str, str]:
+    def issue_tokens(self, email: str) -> tuple[str, str]:
         access_payload = {
-            "sub": username,
-            "exp": datetime.now() + timedelta(minutes=5),
+            "sub": email,
+            "exp": datetime.now() + timedelta(minutes=10),
             "typ": TokenType.ACCESS.value,
         }
         access_token = jwt.encode(access_payload, SECRET, algorithm="HS256")
 
         refresh_payload = {
-            "sub": username,
+            "sub": email,
             "jti": uuid4().hex,
             "exp": datetime.now() + timedelta(days=7),
             "typ": TokenType.REFRESH.value,

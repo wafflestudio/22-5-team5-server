@@ -1,31 +1,25 @@
-from fastapi import HTTPException
-from starlette.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
-    HTTP_409_CONFLICT,
-    HTTP_404_NOT_FOUND
-)
+from wastory.common.errors import WastoryHttpException
 
 
-class BlognameAlreadyExistsError(HTTPException):
+class BlognameAlreadyExistsError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_409_CONFLICT, "Blogname already exists")
+        super().__init__(status_code=400, detail="Blogname already exists")
 
-class BlogNotFoundError(HTTPException):
+class BlogNotFoundError(WastoryHttpException):
     def __init__(self):
-        super().__init__(HTTP_404_NOT_FOUND, "Blog not found")
+        super().__init__(status_code=404, detail="Blog not found")
 
 
-class InvalidFieldFormatError(HTTPException):
+class InvalidFieldFormatError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_400_BAD_REQUEST, "Invalid field format")
+        super().__init__(status_code=400, detail="Invalid field format")
 
 
-class MissingRequiredFieldError(HTTPException):
+class MissingRequiredFieldError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_400_BAD_REQUEST, "Missing required fields")
+        super().__init__(status_code=400, detail="Missing required fields")
 
 
-class UserUnsignedError(HTTPException):
+class UserUnsignedError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_401_UNAUTHORIZED, "User is not signed in")
+        super().__init__(status_code=401, detail="User is not signed in")

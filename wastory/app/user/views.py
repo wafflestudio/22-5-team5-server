@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
-from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
+from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
 from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest
 from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse
@@ -42,8 +42,8 @@ async def login_with_header(
     credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
 ) -> User:
     token = credentials.credentials
-    username = user_service.validate_access_token(token)
-    user = await user_service.get_user_by_username(username)
+    email = user_service.validate_access_token(token)
+    user = await user_service.get_user_by_email(email)
     if not user:
         raise InvalidTokenError()
     return user
@@ -55,7 +55,7 @@ async def login_via_kakao(request: Request):
     return await oauth.kakao.authorize_redirect(request, redirect_uri)
 
 
-@user_router.get("/auth/kakao/callback")
+@user_router.get("/auth/kakao/callback", name="api_users_auth_kakao_callback")
 async def auth_kakao_callback(request: Request, user_service: Annotated[UserService, Depends()]):
     token = await oauth.kakao.authorize_access_token(request)
     user_info = await oauth.kakao.get("https://kapi.kakao.com/v2/user/me", token=token)
@@ -73,7 +73,7 @@ async def signup(
     signup_request: UserSignupRequest, user_service: Annotated[UserService, Depends()]
 ):
     await user_service.add_user(
-        signup_request.username, signup_request.password, signup_request.email
+        signup_request.email, signup_request.password
     )
     return "Success"
 
@@ -84,7 +84,7 @@ async def signin(
     signin_request: UserSigninRequest,
 ):
     access_token, refresh_token = await user_service.signin(
-        signin_request.username, signin_request.password
+        signin_request.email, signin_request.password
     )
     return UserSigninResponse(access_token=access_token, refresh_token=refresh_token)
 
@@ -125,9 +125,9 @@ async def update_me(
     update_request: PasswordUpdateRequest,
     user_service: Annotated[UserService, Depends()],
 ):
-    if user.password == update_request.old_password:
-        await user_service.update_password(
-            user.username,
-            new_password=update_request.new_password
-        )
+    await user_service.update_password(
+        user.email,
+        old_password=update_request.old_password,
+        new_password=update_request.new_password
+    )
     return "Success"
