@@ -12,7 +12,7 @@ blog_router = APIRouter()
 
 
 @blog_router.post("/", status_code=HTTP_201_CREATED)
-async def signup(
+async def create_blog(
     user: Annotated[User, Depends(login_with_header)],
     blog_service: Annotated[BlogService, Depends()],
     blog_create_request: BlogCreateRequest
@@ -22,11 +22,23 @@ async def signup(
         name=blog_create_request.address_name
     )
 
+@blog_router.get("/my_blog")
+async def get_blog_by_user(
+    user: Annotated[User, Depends(login_with_header)],
+    blog_service: Annotated[BlogService, Depends()]
+) -> BlogDetailResponse:
+    if user:
+        print("user found")
+    else:
+        print("user not found")
+    return await blog_service.get_blog_by_user(user)
+
 @blog_router.get("/{address_name}")
 async def get_blog(
     address_name: str,
     blog_service: Annotated[BlogService, Depends()]
 )->BlogDetailResponse:
+    print("called get_blog")
     return await blog_service.get_blog_by_address_name(address_name=address_name)
 
 @blog_router.patch("/{address_name}")
