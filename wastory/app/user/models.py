@@ -19,6 +19,7 @@ class User(Base):
     address: Mapped[str | None] = mapped_column(String(100))
     phone_number: Mapped[str | None] = mapped_column(String(20))
 
+
     blogs: Mapped["Blog"] = relationship("Blog", back_populates="user", uselist=False)
 
 class BlockedToken(Base):
