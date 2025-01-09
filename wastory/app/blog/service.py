@@ -6,11 +6,13 @@ from wastory.app.user.models import User
 from wastory.app.blog.store import BlogStore
 from wastory.app.blog.dto.responses import BlogDetailResponse
 from wastory.app.blog.errors import BlogNotFoundError
+from wastory.app.user.service import UserStore
 
 
 class BlogService:
-    def __init__(self, blog_store: Annotated[BlogStore, Depends()]) -> None:
+    def __init__(self, blog_store: Annotated[BlogStore, Depends()], user_store: Annotated[UserStore, Depends()]) -> None:
         self.blog_store = blog_store
+        self.user_store = user_store
 
     async def create_blog(
         self,
@@ -19,6 +21,8 @@ class BlogService:
     ) -> BlogDetailResponse:
         
         blog = await self.blog_store.add_blog(user_id=user.id, name=name)
+
+        await self.user_store.update_username(username=name, email=user.email)
 
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
     

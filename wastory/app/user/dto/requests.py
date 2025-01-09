@@ -87,5 +87,5 @@ class PasswordUpdateRequest(BaseModel):
 
 
 class UserSigninRequest(BaseModel):
-    username: str
+    email: EmailStr
     password: str
