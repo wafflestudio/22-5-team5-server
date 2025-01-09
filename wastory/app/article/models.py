@@ -8,14 +8,13 @@ if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
 class Article(Base):
-    __tablename__ = "Article"
+    __tablename__ = "article"
 
     id : Mapped[intpk]
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
-    updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), onupdate=func.now())
-    
+    updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())    
     # ondelete = "CASCADE" 를 통해 Article 삭제 시, Article 과 연결된 레코드에서 자동으로 참조가 제거.
     # blog 와 category 의 models 에서
     ## posts: Mapped[list["Article"]] = relationship("Article", back_populates="blog", cascade="all, delete-orphan")
@@ -23,7 +22,7 @@ class Article(Base):
     blog_id : Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete = "CASCADE"))
     category_id : Mapped[int] = mapped_column(ForeignKey("category.id", ondelete = "CASCADE"))
     
-    blog : Mapped["Blog"] = relationship("Blog", back_populates = "posts")
-    category : Mapped["Category"] = relationship("Category", back_populates = "post")
+    blog : Mapped["Blog"] = relationship("Blog", back_populates = "articles")
+    category : Mapped["Category"] = relationship("Category", back_populates = "articles")
     
     # 이후 댓글 및 tag 구현시 delete-orphan 추가하기기

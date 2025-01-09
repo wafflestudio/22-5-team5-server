@@ -42,4 +42,4 @@ class BlockedTokenError(WastoryHttpException):
 
 class PermissionDeniedError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(403, "User does not have permission")
+        super().__init__(403, detail = "User does not have permission")

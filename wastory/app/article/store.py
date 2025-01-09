@@ -10,14 +10,21 @@ from wastory.database.connection import SESSION
 class ArticleStore :
     @transactional
     async def create_article(
-        self, blog_id: int, category_id : int, atricle_title : str, article_content: str
+        self, atricle_title : str, article_content: str, blog_id : int, category_id : int,
     ) -> Article :
+        print("called article_store")
         # created_at, updated_at 은 자동반영되기에 따로 전달하지 않음.
         article = Article(
-            blog_id = blog_id, category_id = category_id, title = atricle_title, content = article_content)
+            title = atricle_title, content = article_content, blog_id = blog_id, category_id = category_id
+        )
         SESSION.add(article)
         # 왜 필요하지?       
-        SESSION.flush()
+        await SESSION.flush()
+        await SESSION.refresh(article)
+        if article : 
+            print("article.id", article.id)
+        else :
+            print("article not created")
         return article
     
     @transactional
@@ -31,29 +38,32 @@ class ArticleStore :
             article.title = article_title
         if article_content is not None:
             article.content = article_content
+        await SESSION.flush()
         return article
 
     @transactional
     async def delete_article(self, article: Article) -> None:
         if article is None: 
             raise ArticleNotFoundError()
-        SESSION.delete(article)
-        SESSION.flush()       
+        await SESSION.delete(article)
+        await SESSION.flush()       
 
     @transactional
     async def get_article_by_id(self, article_id : int) -> Article | None:
-        article = SESSION.get(Article, article_id)
+        article = await SESSION.get(Article, article_id)
         return article
     
     @transactional
     async def get_articles_by_ids(self, article_ids: list[int]) -> Sequence[Article]:
         article_list_query = select(Article).where(Article.id.in_(article_ids))
-        return SESSION.scalars(article_list_query).all()
+        result = await SESSION.scalars(article_list_query)  # await 추가
+        return result.all()
     
     @transactional
     async def get_articles_in_blog(self, blog_id: int) -> Sequence[Article]:
         query = select(Article).where(Article.blog_id == blog_id)
-        return SESSION.scalars(query).all()
+        result = await SESSION.scalars(query)  # await 추가
+        return result.all()
     
     @transactional
     async def get_articles_in_blog_in_category(
@@ -65,7 +75,8 @@ class ArticleStore :
             Article.category_id == category_id,
             Article.blog_id == blog_id
             )
-        return SESSION.scalars(query).all()
+        result = await SESSION.scalars(query)  # await 추가
+        return result.all()
     
     @transactional
     async def get_articles_by_words_and_blog_id(
@@ -100,4 +111,3 @@ class ArticleStore :
         # 쿼리 실행 및 결과 반환
         result = await SESSION.scalars(query)
         return result.all()
-

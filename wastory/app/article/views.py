@@ -16,7 +16,8 @@ async def create_article(
     article: ArticleCreateRequest,
     article_service: Annotated[ArticleService, Depends()],
 ) -> ArticleDetailResponse:
-    return await article_service.create_article(user, article.title, article.content)
+    print("called create_article")
+    return await article_service.create_article(user, article.title, article.content, article.blog_id, article.category_id)
 
 # article 수정
 @article_router.patch("/{article_id}", status_code=200)

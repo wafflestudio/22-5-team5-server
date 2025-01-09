@@ -46,6 +46,8 @@ class ArticleCreateRequest(BaseModel):
         AfterValidator(content_min_valid_character),
         AfterValidator(content_max_length_5000),
     ]
+    blog_id : int
+    category_id : int
 
 
 class ArticleUpdateRequest(BaseModel):

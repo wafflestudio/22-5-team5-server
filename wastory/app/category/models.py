@@ -6,6 +6,7 @@ from wastory.database.common import Base, intpk
 
 if TYPE_CHECKING:
     from wastory.app.blog.models import Blog
+    from wastory.app.article.models import Article
 
 
 class Category(Base):
@@ -22,7 +23,8 @@ class Category(Base):
     blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id"))
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("category.id"), nullable=True)
 
-    blog: Mapped["Blog"]=relationship("Blog", back_populates="categories")
+    blog: Mapped["Blog"] = relationship("Blog", back_populates="categories")
+    articles : Mapped[list["Article"]] = relationship("Article", back_populates="category")
 
     # 양방향 관계 설정
     parent: Mapped["Category"] = relationship(
