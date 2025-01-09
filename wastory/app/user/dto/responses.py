@@ -4,7 +4,7 @@ from wastory.app.user.models import User
 
 
 class MyProfileResponse(BaseModel):
-    username: str
+    username: str | None
     email: str
     address: str | None
     phone_number: str | None

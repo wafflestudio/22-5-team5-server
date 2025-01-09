@@ -2,7 +2,7 @@ from typing import Annotated
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
-from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
+from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
 from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest
 from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse
@@ -42,8 +42,8 @@ async def login_with_header(
     credentials: Annotated[HTTPAuthorizationCredentials, Depends(security)],
 ) -> User:
     token = credentials.credentials
-    username = user_service.validate_access_token(token)
-    user = await user_service.get_user_by_username(username)
+    email = user_service.validate_access_token(token)
+    user = await user_service.get_user_by_email(email)
     if not user:
         raise InvalidTokenError()
     return user
@@ -55,7 +55,7 @@ async def login_via_kakao(request: Request):
     return await oauth.kakao.authorize_redirect(request, redirect_uri)
 
 
-@user_router.get("/auth/kakao/callback")
+@user_router.get("/auth/kakao/callback", name="api_users_auth_kakao_callback")
 async def auth_kakao_callback(request: Request, user_service: Annotated[UserService, Depends()]):
     token = await oauth.kakao.authorize_access_token(request)
     user_info = await oauth.kakao.get("https://kapi.kakao.com/v2/user/me", token=token)

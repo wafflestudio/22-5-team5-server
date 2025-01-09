@@ -70,18 +70,18 @@ class UserService:
         user = await self.get_user_by_email(email)
         if user is None or user.password != password:
             raise InvalidUsernameOrPasswordError()
-        return self.issue_tokens(user.username)
+        return self.issue_tokens(user.email)
     
-    def issue_tokens(self, username: str) -> tuple[str, str]:
+    def issue_tokens(self, email: str) -> tuple[str, str]:
         access_payload = {
-            "sub": username,
-            "exp": datetime.now() + timedelta(minutes=5),
+            "sub": email,
+            "exp": datetime.now() + timedelta(minutes=10),
             "typ": TokenType.ACCESS.value,
         }
         access_token = jwt.encode(access_payload, SECRET, algorithm="HS256")
 
         refresh_payload = {
-            "sub": username,
+            "sub": email,
             "jti": uuid4().hex,
             "exp": datetime.now() + timedelta(days=7),
             "typ": TokenType.REFRESH.value,
