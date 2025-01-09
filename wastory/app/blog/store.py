@@ -43,6 +43,9 @@ class BlogStore:
     async def get_blog_by_address_name(self, name: str) -> Blog | None:
         get_blog_query = select(Blog).filter(Blog.address_name == name)
         blog = await SESSION.scalar(get_blog_query)
+        if blog:
+            print(f"Debug: Blog={blog}", flush=True)
+            print(f"main_image_url: {blog.main_image_url}", flush=True)
         return blog
     
     async def get_blog_by_name(self, name: str) -> Blog | None:
