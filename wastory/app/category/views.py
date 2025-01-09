@@ -17,11 +17,12 @@ async def create(
     category_create_request:CategoryCreateRequest,
     category_service: Annotated[CategoryService, Depends()],
 )-> CategoryDetailResponse:
+    print(category_create_request.categoryname)
     return await category_service.create_category(
-        user,
-        category_create_request.categoryname, 
-        category_create_request.categoryLevel,
-        category_create_request.parentId
+        user=user,
+        categoryname=category_create_request.categoryname, 
+        categorylevel=category_create_request.categoryLevel,
+        parentId=category_create_request.parentId
     )
 
 #현재 유저가 지니고 있는 카테고리들을 불러오는 API
@@ -33,7 +34,7 @@ async def get_list(
     return await category_service.list_categories(user)
 
 #특정 카테고리의 이름을 바꾸는 API
-@category_router.patch("/update", status_code=HTTP_200_OK)
+@category_router.patch("/{category_id}", status_code=HTTP_200_OK)
 async def update_category(
     user: Annotated[User, Depends(login_with_header)],
     category_id:int,
@@ -41,12 +42,12 @@ async def update_category(
     category_service: Annotated[CategoryService, Depends()],
 )-> CategoryDetailResponse:
     return await category_service.update_category(
-        user,
-        category_id,
+        user=user,
+        category_id=category_id,
         new_category_name=update_request.categoryname
     )
 
-@category_router.delete("/delete",status_code=HTTP_204_NO_CONTENT)
+@category_router.delete("/{category_id}",status_code=HTTP_204_NO_CONTENT)
 async def delete_category(
     user:Annotated[User,Depends(login_with_header)],
     category_id:int,

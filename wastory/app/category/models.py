@@ -5,7 +5,6 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from wastory.database.common import Base, intpk
 
 if TYPE_CHECKING:
-    from wastory.app.user.models import User
     from wastory.app.blog.models import Blog
 
 
@@ -18,10 +17,12 @@ class Category(Base):
 
     id: Mapped[intpk]
     name: Mapped[str] = mapped_column(String(50), index=True)
-    blog: Mapped["Blog"]=relationship("Blog", back_populates="categories")
+    level: Mapped[int] = mapped_column(Integer, nullable=False)
+
     blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id"))
-    level: Mapped[int] = mapped_column(Integer, nullable=False)  
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("category.id"), nullable=True)
+
+    blog: Mapped["Blog"]=relationship("Blog", back_populates="categories")
 
     # 양방향 관계 설정
     parent: Mapped["Category"] = relationship(

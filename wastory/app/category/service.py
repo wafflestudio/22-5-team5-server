@@ -22,10 +22,11 @@ class CategoryService:
         self, categoryname:str, categorylevel:int, parentId:int,user:User
         )-> CategoryDetailResponse:
             user_blog=await self.blog_store.get_blog_of_user(user.id)  #이건 블로그 코드랑 합쳐야 함
+            
             if user_blog is None:
                 raise BlogNotFoundError()
             new_category= await self.category_store.create_category(
-                user_blog, categoryname,categorylevel,parentId
+                blog_id=user_blog.id,categoryname=categoryname, categorylevel=categorylevel, parentId=parentId
             )
             return CategoryDetailResponse.from_category(new_category)
 
@@ -48,5 +49,5 @@ class CategoryService:
         self,
         user:User
     )->list[CategoryListResponse]:
-        categories=await self.category_store.get_categories_by_user(user.blog)
+        categories=await self.category_store.get_categories_by_user(user.blogs.id)
         return [CategoryListResponse.from_category(category) for category in categories]
