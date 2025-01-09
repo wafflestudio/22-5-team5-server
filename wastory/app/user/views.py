@@ -2,15 +2,31 @@ from typing import Annotated
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
+from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 
-from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest
+from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, UserSigninRequest, PasswordUpdateRequest
 from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse
+from wastory.app.user.errors import InvalidTokenError, UserSigninResponse
 from wastory.app.user.errors import InvalidTokenError
 from wastory.app.user.models import User
 from wastory.app.user.service import UserService
 
 user_router = APIRouter()
+
+security = HTTPBearer()
+
+# async def login_with_header(
+#     x_wapang_username: Annotated[str, Header(...)],
+#     x_wapang_password: Annotated[str, Header(...)],
+#     user_service: Annotated[UserService, Depends()],
+# ) -> User:
+#     user = await user_service.get_user_by_username(x_wapang_username)
+#     if not user or user.password != x_wapang_password:
+#         raise HTTPException(
+#             status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
+#         )
+#     return user
 
 security = HTTPBearer()
 

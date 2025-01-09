@@ -85,11 +85,14 @@ class UserUpdateRequest(BaseModel):
     ] = None
 
 
+<<<<<<< HEAD
 class PasswordUpdateRequest(BaseModel):
     old_password: str
     new_password: Annotated[str, AfterValidator(validate_password)]
 
 
+=======
+>>>>>>> origin/temp2-user
 class UserSigninRequest(BaseModel):
     username: str
     password: str

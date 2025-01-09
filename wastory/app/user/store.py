@@ -69,6 +69,20 @@ class UserStore:
 
 
     @transactional
+    async def block_token(self, token_id: str, expired_at: datetime) -> None:
+        blocked_token = BlockedToken(token_id=token_id, expired_at=expired_at)
+        SESSION.add(blocked_token)
+
+    async def is_token_blocked(self, token_id: str) -> bool:
+        return (
+            await SESSION.scalar(
+                select(BlockedToken).where(BlockedToken.token_id == token_id)
+            )
+            is not None
+        )
+
+
+    @transactional
     async def update_password(self, username:str, new_password: str) -> User:
         user = await self.get_user_by_username(username)
         if user is None:
