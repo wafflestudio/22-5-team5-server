@@ -32,7 +32,6 @@ class CategoryListResponse(BaseModel):
     id: int
     category_name: str
     level: int
-    child_list: Optional[List[CategoryDetailResponse]] = None  # 기본값 None
 
     @staticmethod
     def from_category(category: Category) -> "CategoryListResponse":
