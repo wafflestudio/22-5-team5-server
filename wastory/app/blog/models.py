@@ -5,6 +5,7 @@ from wastory.database.common import Base, intpk
 
 if TYPE_CHECKING:
     from wastory.app.user.models import User
+    from wastory.app.category.models import Category
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -22,6 +23,7 @@ class Blog(Base):
 
     # 관계 설정
     user: Mapped["User"] = relationship("User", back_populates="blogs")
+    categories: Mapped[list["Category"]] = relationship("Category",back_populates="blog")
 
     def __repr__(self):
         return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"
