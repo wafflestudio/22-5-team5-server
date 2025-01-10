@@ -33,15 +33,19 @@ class BlogStore:
         await SESSION.flush()
         await SESSION.refresh(blog)
         return blog
+    
+
     async def get_blog_by_id(self, blog_id: int) -> Blog | None:
         get_blog_query = select(Blog).filter(Blog.id == blog_id)
         blog = await SESSION.scalar(get_blog_query)
         return blog
 
+
     async def get_blog_of_user(self, user_id: int) -> Blog | None:
         get_blog_query = select(Blog).filter(Blog.user_id == user_id)
         blog = await SESSION.scalar(get_blog_query)
         return blog
+
 
     async def get_blog_by_address_name(self, name: str) -> Blog | None:
         get_blog_query = select(Blog).filter(Blog.address_name == name)
@@ -51,6 +55,7 @@ class BlogStore:
             print(f"main_image_url: {blog.main_image_url}", flush=True)
         return blog
     
+
     async def get_blog_by_name(self, name: str) -> Blog | None:
         get_blog_query = select(Blog).filter(Blog.blog_name == name)
         blog = await SESSION.scalar(get_blog_query)

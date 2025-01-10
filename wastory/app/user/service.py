@@ -75,7 +75,7 @@ class UserService:
     def issue_tokens(self, email: str) -> tuple[str, str]:
         access_payload = {
             "sub": email,
-            "exp": datetime.now() + timedelta(minutes=10),
+            "exp": datetime.now() + timedelta(minutes=60),
             "typ": TokenType.ACCESS.value,
         }
         access_token = jwt.encode(access_payload, SECRET, algorithm="HS256")
