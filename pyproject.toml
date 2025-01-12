@@ -25,6 +25,9 @@ pyjwt = "^2.10.1"
 asyncmy = "^0.2.10"
 
 
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^6.0.0"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
