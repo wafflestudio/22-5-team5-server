@@ -1,9 +1,10 @@
 [tool.poetry]
-name = "fastapi-assignment-1"
+name = "22-5-team5-server"
 version = "0.1.0"
-description = ""
-authors = ["Minkyu Lee <whizkyu@snu.ac.kr>"]
+description = "Wastory Clone project"
+authors = ["sanghyun Park <qkrtkdgus39@snu.ac.kr>"]
 readme = "README.md"
+packages = [{ include = "wastory" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
