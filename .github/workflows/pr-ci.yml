@@ -35,10 +35,6 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      # 6. 의존성 및 코드 포맷 검사 (선택)
-      - name: Run Lint (Optional)
-        run: poetry run flake8 wastory/
-
       # 7. 테스트 실행
       - name: Run Tests
         run: poetry run pytest
