@@ -33,15 +33,12 @@ jobs:
 
       # 5. 의존성 설치
       - name: Install dependencies
-        working-directory: ./22-5-team5-server
         run: poetry install
 
       # 6. 의존성 및 코드 포맷 검사 (선택)
       - name: Run Lint (Optional)
-        working-directory: ./22-5-team5-server
         run: poetry run flake8 wastory/
 
       # 7. 테스트 실행
       - name: Run Tests
-        working-directory: ./22-5-team5-server
         run: poetry run pytest
