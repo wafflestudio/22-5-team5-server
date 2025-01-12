@@ -1,37 +1,47 @@
-name: PR CI Pipeline
+name: CI for 22-5-team5-server
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
     branches:
       - main
 
 jobs:
-  test:
-    name: Run Tests and Lint
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout 코드
-      - name: Checkout repository
+      # 1. 코드 체크아웃
+      - name: Check out code
         uses: actions/checkout@v3
 
-      # 2. Python 설정 (3.11 고정)
+      # 2. Python 설치
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: 3.11
 
-      # 3. Dependencies 설치
+      # 3. Poetry 설치
+      - name: Install Poetry
+        run: curl -sSL https://install.python-poetry.org | python3 -
+
+      # 4. Poetry PATH 추가
+      - name: Add Poetry to PATH
+        run: echo "${HOME}/.local/bin" >> $GITHUB_PATH
+
+      # 5. 의존성 설치
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install poetry
-          poetry install
+        working-directory: ./22-5-team5-server
+        run: poetry install
 
-      # 4. Lint 검사
-      - name: Run flake8
-        run: poetry run flake8 .
+      # 6. 의존성 및 코드 포맷 검사 (선택)
+      - name: Run Lint (Optional)
+        working-directory: ./22-5-team5-server
+        run: poetry run flake8 wastory/
 
-      # 5. 유닛 테스트 실행
-      - name: Run pytest
-        run: poetry run pytest --cov=.
+      # 7. 테스트 실행
+      - name: Run Tests
+        working-directory: ./22-5-team5-server
+        run: poetry run pytest
