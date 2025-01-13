@@ -23,3 +23,9 @@ class SubscriptionService:
         내가 구독 중인 블로그들의 주소 이름 반환
         """
         return await self.subscription_store.get_subscribed_blog_addresses(subscriber_id)
+    
+    async def get_subscriber_blog_addresses(self, subscribed_id: int) -> List[str]:
+        """
+        나를 구독한 블로그들의 주소 이름 반환
+        """
+        return await self.subscription_store.get_subscriber_blog_addresses(subscribed_id)

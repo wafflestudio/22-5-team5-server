@@ -55,3 +55,15 @@ class SubscriptionStore:
         )
         result = await SESSION.scalars(query)
         return result.all()  # 리스트로 반환
+    
+    async def get_subscriber_blog_addresses(self, subscribed_id: int) -> List[str]:
+        """
+        나를 구독한 블로그들의 주소 이름 반환
+        """
+        query = (
+            select(Blog.address_name)
+            .join(Subscription, Subscription.subscriber_id == Blog.id)
+            .filter(Subscription.subscribed_id == subscribed_id)
+        )
+        result = await SESSION.scalars(query)
+        return result.all()  # 리스트로 반환

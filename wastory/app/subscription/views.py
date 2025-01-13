@@ -44,3 +44,13 @@ async def get_my_subscriptions(
     내가 구독 중인 블로그들의 주소 이름을 반환하는 API
     """
     return await subscribe_service.get_subscribed_blog_addresses(user.id)
+
+@subscription_router.get("/my_subscribers", response_model=List[str])
+async def get_my_subscribers(
+    user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
+    subscribe_service: Annotated[SubscriptionService, Depends()]
+) -> List[str]:
+    """
+    나를 구독한 블로그들의 주소 이름을 반환하는 API
+    """
+    return await subscribe_service.get_subscriber_blog_addresses(user.id)
