@@ -14,7 +14,12 @@ class CommentDetailResponse(BaseModel):
     @staticmethod
     def from_comment(comment: Comment) -> "CommentDetailResponse":
         return CommentDetailResponse(
-            
+            id=comment.id,
+            user_name=comment.user.nickname,
+            content=comment.content,
+            created_at=comment.created_at,
+            updated_at=comment.created_at,
+            secret=comment.secret
         )
 
 
