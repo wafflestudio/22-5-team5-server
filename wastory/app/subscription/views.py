@@ -54,3 +54,16 @@ async def get_my_subscribers(
     나를 구독한 블로그들의 주소 이름을 반환하는 API
     """
     return await subscribe_service.get_subscriber_blog_addresses(user.id)
+
+@subscription_router.delete("", status_code=HTTP_200_OK)
+async def cancel_subscription(
+    user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
+    subscribe_service: Annotated[SubscriptionService, Depends()],
+    subscribed_address_name: str,  # 구독 취소할 블로그의 주소 이름
+):
+    """
+    구독 취소 API
+    """
+    await subscribe_service.cancel_subscription(subscriber_user=user, subscribed_address_name=subscribed_address_name)
+
+    return {"message": "Subscription canceled successfully."}

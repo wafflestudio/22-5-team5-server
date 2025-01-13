@@ -8,6 +8,7 @@ from wastory.database.connection import SESSION
 from wastory.app.subscription.errors import (
     SubscriptionAlreadyExistsError,
     BlogNotFoundError,
+    SubscriptionNotFoundError
 )
 
 
@@ -67,3 +68,25 @@ class SubscriptionStore:
         )
         result = await SESSION.scalars(query)
         return result.all()  # 리스트로 반환
+    
+    @transactional
+    async def delete_subscription(self, subscriber_id: int, subscribed_id: int) -> bool:
+        """
+        구독 관계 삭제
+        """
+        # 구독 관계 존재 여부 확인
+        query = (
+            select(Subscription)
+            .filter(
+                Subscription.subscriber_id == subscriber_id,
+                Subscription.subscribed_id == subscribed_id
+            )
+        )
+        subscription = await SESSION.scalar(query)
+        if not subscription:
+            raise SubscriptionNotFoundError
+
+        # 구독 관계 삭제
+        await SESSION.delete(subscription)
+        await SESSION.flush()
+        return True
