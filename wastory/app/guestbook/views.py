@@ -7,17 +7,17 @@ from wastory.app.comment.dto.responses import CategoryDetailResponse,CategoryLis
 from wastory.app.comment.models import Category
 from wastory.app.comment.service import CategoryService
 from wastory.app.user.models import User
-comment_router = APIRouter()
+guestbook_router = APIRouter()
 from wastory.app.user.views import login_with_header
 
-@comment_router.post("/create", status_code=HTTP_201_CREATED)
+@guestbook_router.post("/create", status_code=HTTP_201_CREATED)
 async def create(
     user:Annotated[User,Depends(login_with_header)],
 )-> None:
     return await None
 
 
-@comment_router.get("/{article_id}", status_code=HTTP_200_OK)
+@guestbook_router.get("/{article_id}", status_code=HTTP_200_OK)
 async def create(
     user:Annotated[User,Depends(login_with_header)],
     article_id:int,
@@ -25,16 +25,16 @@ async def create(
     return await None
 
 
-@comment_router.patch("/{comment_id}", status_code=HTTP_200_OK)
+@guestbook_router.patch("/{comment_id}", status_code=HTTP_200_OK)
 async def create(
     user:Annotated[User,Depends(login_with_header)],
     comment_id:int,
 )-> None:
     return await None
 
-@comment_router.delete("/{comment_id}", status_code=HTTP_204_NO_CONTENT)
+@guestbook_router.delete("/{comment_id}", status_code=HTTP_204_NO_CONTENT)
 async def create(
     user:Annotated[User,Depends(login_with_header)],
     comment_id:int,
 )-> None:
-    return await None
+    return await None 
