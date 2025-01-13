@@ -5,11 +5,12 @@ from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZE
 from wastory.app.user.models import User
 comment_router = APIRouter()
 from wastory.app.user.views import login_with_header
+from wastory.app.comment.service import CommentService
 
 @comment_router.post("/create", status_code=HTTP_201_CREATED)
 async def create(
     user:Annotated[User,Depends(login_with_header)],
-
+    comment_service: Annotated[CommentService, Depends()]
 )-> None:
     return await None
 

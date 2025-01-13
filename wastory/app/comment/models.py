@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING, Optional
-from sqlalchemy import ForeignKey, String, Integer, Boolean
+from sqlalchemy import ForeignKey, String, Integer, Boolean, DateTime, func, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wastory.database.common import Base, intpk
@@ -10,11 +10,6 @@ if TYPE_CHECKING:
 
 class Comment(Base):
     __tablename__ = "comment"
-    __table_args__ = (
-        # 댓글 계층(level)은 0 이상이어야 함
-        CheckConstraint("level >= 0", name="check_level_non_negative"),
-    )
-
     id: Mapped[intpk]
     content: Mapped[str] = mapped_column(String(500), nullable=False)  # 500자로 확장 가능
     level: Mapped[int] = mapped_column(Integer, nullable=False, default=0)

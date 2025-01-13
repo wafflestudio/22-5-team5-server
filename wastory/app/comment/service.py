@@ -7,7 +7,7 @@ from wastory.app.category.errors import BlogNotFoundError
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
 from wastory.app.blog.store import BlogStore
-class CategoryService:
+class CommentService:
     def __init__(
         self, 
         category_store: Annotated[CategoryStore, Depends()],
