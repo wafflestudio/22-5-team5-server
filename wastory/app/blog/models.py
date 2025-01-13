@@ -32,10 +32,10 @@ class Blog(Base):
     articles: Mapped[list["Article"]] = relationship("Article",  back_populates="blog")
 
     subscriptions: Mapped[list["Subscription"]] = relationship(
-        "Subscription", foreign_keys=[Subscription.subscriber_id], back_populates="subscriber"
+        "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
     )  # 이 블로그가 구독한 다른 블로그들
     subscribers: Mapped[list["Subscription"]] = relationship(
-        "Subscription", foreign_keys=[Subscription.subscribed_to_id], back_populates="subscribed_to"
+        "Subscription", foreign_keys="Subscription.subscribed_id", back_populates="subscribed_blog"
     )  # 이 블로그를 구독한 다른 블로그들
 
 

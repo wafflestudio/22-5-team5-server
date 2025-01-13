@@ -10,7 +10,7 @@ class Subscription(Base):
     __tablename__ = "blog_subscription"
 
     __table_args__ = (
-        UniqueConstraint("subscriber_id", "subscribed_to_id", name="unique_subscription"),
+        UniqueConstraint("subscriber_id", "subscribed_id", name="unique_subscription"),
     )
 
     id: Mapped[intpk]  # 구독 관계의 고유 ID
@@ -20,4 +20,4 @@ class Subscription(Base):
 
     # 관계 설정
     subscriber: Mapped["Blog"] = relationship("Blog", foreign_keys=[subscriber_id], back_populates="subscriptions")
-    subscribed_to: Mapped["Blog"] = relationship("Blog", foreign_keys=[subscribed_id], back_populates="subscribers")
+    subscribed_blog: Mapped["Blog"] = relationship("Blog", foreign_keys=[subscribed_id], back_populates="subscribers")

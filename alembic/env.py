@@ -13,7 +13,7 @@ from wastory.app.user.models import User
 from wastory.app.blog.models import Blog
 from wastory.app.category.models import Category
 from wastory.app.article.models import Article
-from wastory.app.subscription.models import subscription
+from wastory.app.subscription.models import Subscription
 
 
 print(DB_SETTINGS.url)

@@ -43,7 +43,7 @@ async def get_my_subscriptions(
     """
     내가 구독 중인 블로그들의 주소 이름을 반환하는 API
     """
-    return await subscribe_service.get_subscribed_blog_addresses(user.id)
+    return await subscribe_service.get_subscribed_blog_addresses(user)
 
 @subscription_router.get("/my_subscribers", response_model=List[str])
 async def get_my_subscribers(
@@ -53,7 +53,7 @@ async def get_my_subscribers(
     """
     나를 구독한 블로그들의 주소 이름을 반환하는 API
     """
-    return await subscribe_service.get_subscriber_blog_addresses(user.id)
+    return await subscribe_service.get_subscriber_blog_addresses(user)
 
 @subscription_router.delete("", status_code=HTTP_200_OK)
 async def cancel_subscription(

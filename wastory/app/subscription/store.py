@@ -37,7 +37,7 @@ class SubscriptionStore:
         # 새로운 구독 생성
         subscription = Subscription(
             subscriber_id=subscriber_id,
-            subscribed_to_id=subscribed_id,
+            subscribed_id=subscribed_id,
         )
         SESSION.add(subscription)
         await SESSION.flush()
@@ -49,6 +49,7 @@ class SubscriptionStore:
         """
         내가 구독 중인 블로그들의 주소 이름 반환
         """
+        print(subscriber_id)
         query = (
             select(Blog.address_name)
             .join(Subscription, Subscription.subscribed_id == Blog.id)

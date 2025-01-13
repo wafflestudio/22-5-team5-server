@@ -22,17 +22,23 @@ class SubscriptionService:
         # SubscriptionDetailResponse로 변환하여 반환
         return SubscriptionDetailResponse.model_validate(subscription, from_attributes=True)
     
-    async def get_subscribed_blog_addresses(self, subscriber_id: int) -> List[str]:
+    async def get_subscribed_blog_addresses(self, subscriber: User) -> List[str]:
         """
         내가 구독 중인 블로그들의 주소 이름 반환
         """
-        return await self.subscription_store.get_subscribed_blog_addresses(subscriber_id)
+        subscriber_blog=await self.blog_service.get_blog_by_user(subscriber)
+        if not subscriber_blog:
+            raise BlogNotFoundError
+        return await self.subscription_store.get_subscribed_blog_addresses(subscriber_blog.id)
     
-    async def get_subscriber_blog_addresses(self, subscribed_id: int) -> List[str]:
+    async def get_subscriber_blog_addresses(self, subscribed: User) -> List[str]:
         """
         나를 구독한 블로그들의 주소 이름 반환
         """
-        return await self.subscription_store.get_subscriber_blog_addresses(subscribed_id)
+        subscribed_blog=await self.blog_service.get_blog_by_user(subscribed)
+        if not subscribed_blog:
+            raise BlogNotFoundError
+        return await self.subscription_store.get_subscriber_blog_addresses(subscribed_blog.id)
     
     async def cancel_subscription(self, subscriber_user: User, subscribed_address_name: str) -> bool:
         """
@@ -42,7 +48,7 @@ class SubscriptionService:
         subscribed_blog = await self.blog_service.get_blog_by_address_name(subscribed_address_name)
         subscriber_blog = await self.blog_service.get_blog_by_user(user=subscriber_user)
         if not subscribed_blog or not subscriber_blog:
-            BlogNotFoundError # 취소할 블로그가 없는 경우
+            raise BlogNotFoundError # 취소할 블로그가 없는 경우
 
         # 구독 관계 삭제
         return await self.subscription_store.delete_subscription(subscriber_blog.id, subscribed_blog.id)
