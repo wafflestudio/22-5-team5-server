@@ -2,10 +2,6 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Header
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED,HTTP_204_NO_CONTENT
 
-from wastory.app.comment.dto.requests import CategoryUpdateRequest,CategoryCreateRequest
-from wastory.app.comment.dto.responses import CategoryDetailResponse,CategoryListResponse
-from wastory.app.comment.models import Category
-from wastory.app.comment.service import CategoryService
 from wastory.app.user.models import User
 comment_router = APIRouter()
 from wastory.app.user.views import login_with_header
