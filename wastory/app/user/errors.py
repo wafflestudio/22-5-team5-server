@@ -1,3 +1,9 @@
+from fastapi import HTTPException
+from starlette.status import (
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_409_CONFLICT,
+)
 from wastory.common.errors import WastoryHttpException
 
 class EmailAlreadyExistsError(WastoryHttpException):
@@ -24,7 +30,7 @@ class UserUnsignedError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=401, detail="User is not signed in")
 
-class InvalidUsernameOrPasswordError(WastoryHttpException):
+class InvalidUsernameOrPasswordError(HTTPException):
     def __init__(self) -> None:
         super().__init__(status_code=401, detail="Invalid username or password")
 

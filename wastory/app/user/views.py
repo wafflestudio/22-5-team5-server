@@ -17,24 +17,11 @@ security = HTTPBearer()
 oauth = OAuth()
 oauth.register(
     name="kakao",
-    client_id="1184125",  # 카카오 REST API 키
-    client_secret="YOUR_KAKAO_CLIENT_SECRET",  # 선택 사항
-    access_token_url="https://kauth.kakao.com/oauth/token",
+    client_id="399e0f43c8ea373bb47d476a01fac7da",  # 카카오 REST API 키
+    access_token_url="https://kauth.kakao.com/oauth/token",   
     authorize_url="https://kauth.kakao.com/oauth/authorize",
     client_kwargs={"scope": "profile_nickname"},
 )
-
-# async def login_with_header(
-#     x_wapang_username: Annotated[str, Header(...)],
-#     x_wapang_password: Annotated[str, Header(...)],
-#     user_service: Annotated[UserService, Depends()],
-# ) -> User:
-#     user = await user_service.get_user_by_username(x_wapang_username)
-#     if not user or user.password != x_wapang_password:
-#         raise HTTPException(
-#             status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
-#         )
-#     return user
 
 
 async def login_with_header(
@@ -63,7 +50,15 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
 
     nickname = user_info["properties"]["nickname"]
     username = await user_service.get_user_by_nickname(nickname)
-    access_token, refresh_token = await user_service.issue_tokens(username)
+    if username == None:
+        await user_service.add_user(
+            nickname, None
+        )
+        await user_service.update_user(
+            nickname, nickname, nickname, None, None
+        )
+        username = nickname
+    access_token, refresh_token = user_service.issue_tokens(username)
 
     return UserSigninResponse(access_token=access_token, refresh_token=refresh_token)
 

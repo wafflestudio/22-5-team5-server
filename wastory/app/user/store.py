@@ -42,19 +42,21 @@ class UserStore:
     @transactional
     async def update_user(
         self,
-        username: str,
-        email: str | None,
+        username: str | None,
+        nickname: str | None,
+        email: str,
         address: str | None,
         phone_number: str | None,
     ) -> User:
-        user = await self.get_user_by_username(username)
+        user = await self.get_user_by_email(email)
         if user is None:
             raise UserUnsignedError()
 
-        if email is not None:
-            if await self.get_user_by_email(email):
-                raise EmailAlreadyExistsError()
-            user.email = email
+        if username is not None:
+            user.username = username
+
+        if nickname is not None:
+            user.nickname = nickname
 
         if address is not None:
             user.address = address
