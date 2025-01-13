@@ -1,5 +1,6 @@
 from fastapi import Depends
 from sqlalchemy import select
+from typing import List
 from wastory.app.subscription.models import Subscription
 from wastory.app.blog.models import Blog
 from wastory.database.annotation import transactional
@@ -42,3 +43,15 @@ class SubscriptionStore:
         await SESSION.refresh(subscription)
 
         return subscription
+
+    async def get_subscribed_blog_addresses(self, subscriber_id: int) -> List[str]:
+        """
+        내가 구독 중인 블로그들의 주소 이름 반환
+        """
+        query = (
+            select(Blog.address_name)
+            .join(Subscription, Subscription.subscribed_id == Blog.id)
+            .filter(Subscription.subscriber_id == subscriber_id)
+        )
+        result = await SESSION.scalars(query)
+        return result.all()  # 리스트로 반환

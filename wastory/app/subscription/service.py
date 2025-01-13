@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, List
 from fastapi import Depends
 from wastory.app.subscription.store import SubscriptionStore
 from wastory.app.subscription.dto.responses import SubscriptionDetailResponse
@@ -17,3 +17,9 @@ class SubscriptionService:
 
         # SubscriptionDetailResponse로 변환하여 반환
         return SubscriptionDetailResponse.model_validate(subscription, from_attributes=True)
+    
+    async def get_subscribed_blog_addresses(self, subscriber_id: int) -> List[str]:
+        """
+        내가 구독 중인 블로그들의 주소 이름 반환
+        """
+        return await self.subscription_store.get_subscribed_blog_addresses(subscriber_id)

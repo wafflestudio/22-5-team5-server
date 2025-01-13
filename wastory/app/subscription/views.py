@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, List
 from fastapi import APIRouter, Depends, HTTPException
 
 from wastory.app.subscription.service import SubscriptionService
@@ -10,7 +10,6 @@ from wastory.app.user.views import login_with_header
 from wastory.app.subscription.errors import BlogNotFoundError
 
 subscription_router = APIRouter()
-
 
 @subscription_router.post("", status_code=HTTP_201_CREATED)
 async def add_subscription(
@@ -35,3 +34,13 @@ async def add_subscription(
     )
 
     return subscription
+
+@subscription_router.get("/my_subscriptions", response_model=List[str])
+async def get_my_subscriptions(
+    user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
+    subscribe_service: Annotated[SubscriptionService, Depends()]
+) -> List[str]:
+    """
+    내가 구독 중인 블로그들의 주소 이름을 반환하는 API
+    """
+    return await subscribe_service.get_subscribed_blog_addresses(user.id)
