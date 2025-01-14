@@ -13,7 +13,7 @@ class Comment(Base):
     id: Mapped[intpk]
     content: Mapped[str] = mapped_column(String(500), nullable=False)
     level: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
-    secret: Mapped[bool] = mapped_column(Boolean, nullable=False, default=False)
+    secret: Mapped[int] = mapped_column(Integer, nullable=False, default=False)
 
     user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user.id"), nullable=True)
     user: Mapped[Optional["User"]] = relationship("User", back_populates="comments")

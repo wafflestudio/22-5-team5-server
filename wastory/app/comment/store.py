@@ -1,12 +1,11 @@
 from functools import cache
 from typing import Annotated
-
+from sqlalchemy.orm import selectinload
 from sqlalchemy import select,and_
 from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
-from wastory.app.category.models import Category
 from wastory.app.article.models import Article
 from wastory.app.comment.models import Comment
 
@@ -16,15 +15,17 @@ class CommentStore:
         comment=await SESSION.scalar(get_comment_query)
         return comment
 
-    async def get_list_by_article_id(self,article_id:int)->list[Comment]|None:
-        get_list_query=select(Comment).filter(
-            and_(
-                Comment.article_id==article_id,
-                Comment.level==1
-            )
+    async def get_list_by_article_id(self, article_id: int) -> list[Comment]:
+        """
+        Eager Loading을 통해 article_id에 속한 모든 댓글과 자식 댓글을 한 번에 가져옵니다.
+        """
+        stmt = (
+            select(Comment)
+            .filter(Comment.article_id == article_id)
+            .options(selectinload(Comment.children))  # 자식 댓글을 미리 로드
         )
-        comment_list=await SESSION.scalars(get_list_query)
-        return comment_list
+        result = await SESSION.scalars(stmt)
+        return list(result)
 
     @transactional
     async def create_comment_1(
@@ -103,10 +104,9 @@ class CommentStore:
             raise CommentNotFoundError()
 
         
-        #if category.blog_id != user.blogs.id:
-        #   raise NotOwnerError()
+        if comment.user_id!=user.id:
+            raise NotOwnerError()
 
-        # 카테고리 삭제
         await SESSION.delete(comment)
         await SESSION.flush()
 

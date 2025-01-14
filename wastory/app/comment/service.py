@@ -22,7 +22,7 @@ class CommentService:
         self, content:str,level:int,secret:int,user:User,article_id:int,parent_id:int
         )-> CommentDetailResponse:
             #article id를 받아서, article 을 받고 넘기자
-            article=self.article_store.get_article_by_id(article_id=article_id)
+            article=await self.article_store.get_article_by_id(article_id=article_id)
             if article==None:
                 raise ArticleNotFoundError()
             if level==1:
@@ -39,7 +39,6 @@ class CommentService:
                     secret=secret,
                     user=user,
                     article=article,
-                    article_id=article_id,
                     parent_id=parent_id
                 )
             return CommentDetailResponse.from_comment(new_comment)
@@ -52,6 +51,7 @@ class CommentService:
             comment_id=comment_id,
             content=content
         )
+        return CommentDetailResponse.from_comment(comment)
 
     async def delete_comment(
         self, user:User, comment_id:int
@@ -65,8 +65,6 @@ class CommentService:
         self, article_id:int
     )-> list[CommentListResponse]:
         comment_list=await self.comment_store.get_list_by_article_id(article_id)
-        final_list=[]
-        for comment in comment_list:
-            final_list.append(CommentListResponse.from_comment(comment))
+        final_list=[comment for comment in comment_list if comment.level==1]
 
-        return final_list
+        return [CommentListResponse.from_comment(comment) for comment in final_list]

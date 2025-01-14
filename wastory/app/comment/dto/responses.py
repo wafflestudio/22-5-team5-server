@@ -31,7 +31,11 @@ class CommentListResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     secret: int
-    children: List[CommentDetailResponse]
+    children: List[CommentDetailResponse]= []
+
+    #이게 왜 있어야 하는지 모르겠어요
+    class Config:
+            orm_mode = True
 
     @staticmethod
     def from_comment(comment: Comment) -> "CommentListResponse":

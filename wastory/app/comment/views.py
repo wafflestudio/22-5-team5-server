@@ -1,6 +1,6 @@
 from typing import Annotated
-from fastapi import APIRouter, Depends, HTTPException, Header
-from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED,HTTP_204_NO_CONTENT
+from fastapi import APIRouter, Depends
+from starlette.status import HTTP_200_OK, HTTP_201_CREATED,HTTP_204_NO_CONTENT
 
 from wastory.app.user.models import User
 comment_router = APIRouter()
@@ -9,7 +9,7 @@ from wastory.app.comment.service import CommentService
 from wastory.app.comment.dto.requests import CommentCreateRequest, CommentUpdateRequest
 from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse
 
-@comment_router.post("/{article_id}/create", status_code=HTTP_201_CREATED)
+@comment_router.post("/{article_id}", status_code=HTTP_201_CREATED)
 async def create(
     user:Annotated[User,Depends(login_with_header)],
     comment_service: Annotated[CommentService, Depends()],
@@ -25,7 +25,7 @@ async def create(
         parent_id=comment_request.parent_id
     )
 
-@comment_router.patch("/update/{comment_id}", status_code=HTTP_200_OK)
+@comment_router.patch("/{comment_id}", status_code=HTTP_200_OK)
 async def update(
     user:Annotated[User,Depends(login_with_header)],
     comment_id:int,
@@ -38,7 +38,7 @@ async def update(
         content=comment_request.content
     )
 
-@comment_router.delete("/delete/{comment_id}", status_code=HTTP_204_NO_CONTENT)
+@comment_router.delete("/{comment_id}", status_code=HTTP_204_NO_CONTENT)
 async def delete(
     user:Annotated[User,Depends(login_with_header)],
     comment_service: Annotated[CommentService,Depends()],
@@ -51,8 +51,8 @@ async def delete(
 
 #이거는 일단은 그냥 user 체크 안하고 모든걸 다 리스트화해서 보냄
 #(유저별로 비밀 안 비밀 표시 어케할지 고만해야 할듯..)
-@comment_router.get("/list/{article_id}", status_code=HTTP_200_OK)
-async def list(
+@comment_router.get("/{article_id}", status_code=HTTP_200_OK)
+async def get_comment_list(
     article_id:int,
     comment_service:Annotated[CommentService,Depends()]
 )-> list[CommentListResponse]:
