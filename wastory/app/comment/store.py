@@ -16,6 +16,16 @@ class CommentStore:
         comment=await SESSION.scalar(get_comment_query)
         return comment
 
+    async def get_list_by_article_id(self,article_id:int)->list[Comment]|None:
+        get_list_query=select(Comment).filter(
+            and_(
+                Comment.article_id==article_id,
+                Comment.level==1
+            )
+        )
+        comment_list=await SESSION.scalars(get_list_query)
+        return comment_list
+
     @transactional
     async def create_comment_1(
         self, content:str,secret:int,user:User,article:Article,article_id:int
@@ -58,17 +68,6 @@ class CommentStore:
             await SESSION.refresh(comment)
             return comment
 
-
-
-
-
-
-    async def get_category_of_blog(self,blog_id:int)->list[Category]|None:
-        get_category_query=select(Category).filter(
-            Category.blog_id==blog_id
-        )
-        categories=await SESSION.scalars(get_category_query)
-        return categories
 
     @transactional
     async def update_comment(

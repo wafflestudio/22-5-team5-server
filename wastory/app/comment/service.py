@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from wastory.app.comment.store import CommentStore
-from wastory.app.comment.dto.responses import CommentDetailResponse
+from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
@@ -60,3 +60,13 @@ class CommentService:
             user=user,
             comment_id=comment_id
         )
+
+    async def get_list(
+        self, article_id:int
+    )-> list[CommentListResponse]:
+        comment_list=await self.comment_store.get_list_by_article_id(article_id)
+        final_list=[]
+        for comment in comment_list:
+            final_list.append(CommentListResponse.from_comment(comment))
+
+        return final_list

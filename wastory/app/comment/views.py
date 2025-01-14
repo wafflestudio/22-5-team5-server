@@ -7,7 +7,7 @@ comment_router = APIRouter()
 from wastory.app.user.views import login_with_header
 from wastory.app.comment.service import CommentService
 from wastory.app.comment.dto.requests import CommentCreateRequest, CommentUpdateRequest
-from wastory.app.comment.dto.responses import CommentDetailResponse
+from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse
 
 @comment_router.post("/{article_id}/create", status_code=HTTP_201_CREATED)
 async def create(
@@ -49,11 +49,13 @@ async def delete(
         comment_id=comment_id
     )
 
-@comment_router.get("/{article_id}/list", status_code=HTTP_200_OK)
+#이거는 일단은 그냥 user 체크 안하고 모든걸 다 리스트화해서 보냄
+#(유저별로 비밀 안 비밀 표시 어케할지 고만해야 할듯..)
+@comment_router.get("/list/{article_id}", status_code=HTTP_200_OK)
 async def list(
-    user:Annotated[User,Depends(login_with_header)],
     article_id:int,
-)-> None:
-    return await None
+    comment_service:Annotated[CommentService,Depends()]
+)-> list[CommentListResponse]:
+    return await comment_service.get_list(article_id=article_id)
 
 

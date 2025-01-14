@@ -3,10 +3,11 @@ from typing import List, Optional
 from datetime import datetime
 from wastory.app.comment.models import Comment
 
+
 class CommentDetailResponse(BaseModel):
-    id : int
+    id: int
     user_name: str
-    content : str
+    content: str
     created_at: datetime
     updated_at: datetime
     secret: int
@@ -15,13 +16,32 @@ class CommentDetailResponse(BaseModel):
     def from_comment(comment: Comment) -> "CommentDetailResponse":
         return CommentDetailResponse(
             id=comment.id,
-            user_name=comment.user.nickname,
+            user_name=comment.user.nickname if comment.user else "Anonymous",  # 유저 정보 없을 때 처리
             content=comment.content,
             created_at=comment.created_at,
-            updated_at=comment.created_at,
-            secret=comment.secret
+            updated_at=comment.updated_at,
+            secret=comment.secret,
         )
 
 
+class CommentListResponse(BaseModel):
+    id: int
+    user_name: str
+    content: str
+    created_at: datetime
+    updated_at: datetime
+    secret: int
+    children: List[CommentDetailResponse]
 
-
+    @staticmethod
+    def from_comment(comment: Comment) -> "CommentListResponse":
+        return CommentListResponse(
+            id=comment.id,
+            user_name=comment.user.nickname if comment.user else "Anonymous",  # 유저 정보 없을 때 처리
+            content=comment.content,
+            created_at=comment.created_at,
+            updated_at=comment.updated_at,
+            secret=comment.secret,
+            # children 리스트를 재귀적으로 변환
+            children=[CommentDetailResponse.from_comment(child) for child in comment.children],
+        )
