@@ -2,54 +2,64 @@ from functools import cache
 from typing import Annotated
 
 from sqlalchemy import select,and_
-from wastory.app.category.errors import CategoryNameDuplicateError,CategoryNotFoundError,NotOwnerError
+from wastory.app.comment.errors import CommentNotFoundError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.category.models import Category
+from wastory.app.article.models import Article
+from wastory.app.comment.models import Comment
 
-class CategoryStore:
+class CommentStore:
+    async def get_comment_by_id(self,id:int)->Comment|None:
+        get_comment_query=select(Comment).filter(Comment.id==id)
+        comment=await SESSION.scalar(get_comment_query)
+        return comment
 
     @transactional
-    async def create_category(
-        self, blog_id:int,categoryname:str, categorylevel:int, parentId:int|None=None
-        )->Category:
-            category= Category(
-                blog_id=blog_id,
-                name=categoryname,
-                level=categorylevel,
-                parent_id=parentId,
-                children=[]
+    async def create_comment_1(
+        self, content:str,secret:int,user:User,article:Article,article_id:int
+        )->Comment:
+            comment= Comment(
+                content=content,
+                level=1,
+                secret=secret,
+                user=user,
+                user_id=user.id,
+                article=article,
+                article_id=article_id,
+                parent_id=None
                 )
-            SESSION.add(category)
+            SESSION.add(comment)
             await SESSION.flush()
-            await SESSION.refresh(category)
-            return category
+            await SESSION.refresh(comment)
+            return comment
         
-    async def get_category_by_categoryname(self, name:str) ->Category|None:
-        get_category_query=select(Category).filter(Category.name==name)
-        category=await SESSION.scalar(get_category_query)
-        return category
-    
-
-    async def get_category_by_id(self, id:int)->Category|None:
-        get_category_query=select(Category).filter(Category.id==id)
-        category=await SESSION.scalar(get_category_query)
-        return category
-    
-
-    #여기가 많은 개선이 필요함!!
-
-    async def get_category_by_name_parent_level(self,new_category_name:str,parentId:int, level:int)->Category|None:
-        get_category_query = select(Category).filter(
-            and_(
-                Category.name == new_category_name,
-                Category.level == level,
-                Category.parent_id == parentId  # parent가 User 객체라면 .id로 비교
+    @transactional
+    async def create_comment_2(
+        self, content:str,secret:int,user:User,article:Article,parent_id:int
+        )->Comment:
+            comment= Comment(
+                content=content,
+                level=2,
+                secret=secret,
+                user=user,
+                user_id=user.id,
+                article=article,
+                article_id=article.id,
+                parent_id=parent_id
             )
-        )
-        category=await SESSION.scalar(get_category_query)
-        return category
+            parent_comment=await self.get_comment_by_id(parent_id)
+            if not parent_comment:
+                raise CommentNotFoundError()
+            comment.parent = parent_comment
+            SESSION.add(comment)
+            await SESSION.flush()
+            await SESSION.refresh(comment)
+            return comment
+
+    
+
 
 
 

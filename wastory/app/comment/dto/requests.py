@@ -18,3 +18,5 @@ class CommentCreateRequest(BaseModel):
     ]
     parent_id: Optional[int] = None
     secret: int  # 0 또는 1로 표현된 값이라고 가정
+    level:int
+    

@@ -11,7 +11,7 @@ class BlogNotFoundError(HTTPException):
     def __init__(self) -> None:
         super().__init__(HTTP_404_NOT_FOUND, "blog not found")
 
-class CategoryNotFoundError(HTTPException):
+class CommentNotFoundError(HTTPException):
     def __init__(self) -> None:
         super().__init__(HTTP_404_NOT_FOUND, "category not found")
 
