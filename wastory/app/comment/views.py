@@ -38,12 +38,16 @@ async def update(
         content=comment_request.content
     )
 
-@comment_router.delete("/{comment_id}", status_code=HTTP_204_NO_CONTENT)
-async def create(
+@comment_router.delete("/delete/{comment_id}", status_code=HTTP_204_NO_CONTENT)
+async def delete(
     user:Annotated[User,Depends(login_with_header)],
+    comment_service: Annotated[CommentService,Depends()],
     comment_id:int,
 )-> None:
-    return await None
+    await comment_service.delete_comment(
+        user=user,
+        comment_id=comment_id
+    )
 
 @comment_router.get("/{article_id}/list", status_code=HTTP_200_OK)
 async def list(

@@ -97,19 +97,18 @@ class CommentStore:
         return comment
 
     @transactional
-    async def delete_category(self, user: User, category_id: int) -> None:
-        category = await self.get_category_by_id(category_id)
-        print(category)
+    async def delete_comment(self, user: User, comment_id: int) -> None:
+        comment = await self.get_comment_by_id(comment_id)
 
-        if category is None:
-            raise CategoryNotFoundError()
+        if comment is None:
+            raise CommentNotFoundError()
 
         
         #if category.blog_id != user.blogs.id:
         #   raise NotOwnerError()
 
         # 카테고리 삭제
-        await SESSION.delete(category)
+        await SESSION.delete(comment)
         await SESSION.flush()
 
     

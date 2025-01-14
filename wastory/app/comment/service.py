@@ -47,8 +47,16 @@ class CommentService:
     async def update_comment(
         self,user:User,comment_id:int,content:str
     )-> CommentDetailResponse:
-        comment=await self.comment_store.update_category(
+        comment=await self.comment_store.update_comment(
             user=user,
             comment_id=comment_id,
             content=content
+        )
+
+    async def delete_comment(
+        self, user:User, comment_id:int
+    )-> None:
+        await self.comment_store.delete_comment(
+            user=user,
+            comment_id=comment_id
         )
