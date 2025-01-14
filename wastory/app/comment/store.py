@@ -2,7 +2,7 @@ from functools import cache
 from typing import Annotated
 
 from sqlalchemy import select,and_
-from wastory.app.comment.errors import CommentNotFoundError
+from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
@@ -58,7 +58,7 @@ class CommentStore:
             await SESSION.refresh(comment)
             return comment
 
-    
+
 
 
 
@@ -71,37 +71,30 @@ class CommentStore:
         return categories
 
     @transactional
-    async def update_category(
+    async def update_comment(
         self,
         user:User,
-        category_id: int,
-        new_category_name:str
-    ) -> Category:
-        category = await self.get_category_by_id(category_id)
+        comment_id: int,
+        content:str
+    ) -> Comment:
+        comment = await self.get_comment_by_id(comment_id)
         
         
-        if category is None:
-            raise CategoryNotFoundError()
+        if comment is None:
+            raise CommentNotFoundError()
 
-        if category.blog !=user.blog:
+        if comment.user_id!=user.id:
             raise NotOwnerError()
 
-        if new_category_name is not None:
-            if await self.get_category_by_name_parent_level(
-                new_cateogry_name=new_category_name,
-                parentId=category.parent_id,
-                level=category.level
-                ): 
-                raise CategoryNameDuplicateError()
-        
-        category.name=new_category_name
+        if content is not None:
+            comment.content=content
         
 
-        SESSION.merge(category)
+        SESSION.merge(comment)
         await SESSION.flush()
-        await SESSION.refresh(category)
+        await SESSION.refresh(comment)
 
-        return category
+        return comment
 
     @transactional
     async def delete_category(self, user: User, category_id: int) -> None:
