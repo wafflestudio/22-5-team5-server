@@ -4,7 +4,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
-from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest
+from wastory.database.settings import PW_SETTINGS
+from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest, UserEmailRequest, UserEmailVerifyRequest
 from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse
 from wastory.app.user.errors import InvalidTokenError
 from wastory.app.user.models import User
@@ -17,7 +18,7 @@ security = HTTPBearer()
 oauth = OAuth()
 oauth.register(
     name="kakao",
-    client_id="399e0f43c8ea373bb47d476a01fac7da",  # 카카오 REST API 키
+    client_id=PW_SETTINGS.kakao_rest_api_key,  # 카카오 REST API 키
     access_token_url="https://kauth.kakao.com/oauth/token",   
     authorize_url="https://kauth.kakao.com/oauth/authorize",
     client_kwargs={"scope": "profile_nickname"},
@@ -61,6 +62,22 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
 
     return UserSigninResponse(access_token=access_token, refresh_token=refresh_token)
 
+
+@user_router.post("/request-verification")
+async def request_verification(
+    email_request: UserEmailRequest, user_service: Annotated[UserService, Depends()]
+):
+    await user_service.send_verification_code(email_request.email)
+    return "Success"
+
+
+@user_router.post("/verify-email")
+async def verify_email(
+    verification_request: UserEmailVerifyRequest, user_service: Annotated[UserService, Depends()]
+):
+    is_valid = user_service.verify_code(verification_request.email, verification_request.code)
+    return is_valid
+    
 
 @user_router.post("/signup", status_code=HTTP_201_CREATED)
 async def signup(
