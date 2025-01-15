@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlalchemy import String, Integer, DateTime, func
+from sqlalchemy import String, Integer, DateTime, func, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from wastory.database.common import Base, intpk
 

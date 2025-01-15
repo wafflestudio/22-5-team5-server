@@ -7,8 +7,9 @@ from wastory.database.common import Base, intpk
 if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
+    from wastory.app.comment.models import Comment
 class Article(Base):
-    __tablename__ = "Article"
+    __tablename__ = "article"
 
     id : Mapped[intpk]
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
@@ -26,3 +27,8 @@ class Article(Base):
     category : Mapped["Category"] = relationship("Category", back_populates = "articles")
     
     # 이후 댓글 및 tag 구현시 delete-orphan 추가하기기
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment",
+        back_populates="article",  # Comment 모델의 article 관계명
+        cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
+    )
