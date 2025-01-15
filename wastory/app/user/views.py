@@ -49,16 +49,15 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
     user_info = user_info.json()
 
     nickname = user_info["properties"]["nickname"]
-    username = await user_service.get_user_by_nickname(nickname)
-    if username == None:
+    user = await user_service.get_user_by_nickname(nickname)
+    if user == None:
         await user_service.add_user(
             nickname, None
         )
         await user_service.update_user(
             nickname, nickname, nickname, None, None
         )
-        username = nickname
-    access_token, refresh_token = user_service.issue_tokens(username)
+    access_token, refresh_token = user_service.issue_tokens(user.email)
 
     return UserSigninResponse(access_token=access_token, refresh_token=refresh_token)
 

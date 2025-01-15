@@ -26,10 +26,11 @@ async def get_notifications_by_user(
 
 @notification_router.delete("/my_notifications")
 async def delete_notification(
+    user: Annotated[User, Depends(login_with_header)],
     notification_delete_request: NotificationDeleteRequest,
     notification_service: Annotated[NotificationService, Depends()]
 )->str:
-    await notification_service.delete_notification_by_id(notification_id=notification_delete_request.notification_id)
+    await notification_service.delete_notification_by_id(user=user, notification_id=notification_delete_request.notification_id)
     return "Success"
 
 @notification_router.patch("/my_notifications")
@@ -38,5 +39,5 @@ async def check_notification(
     notification_check_request: NotificationCheckRequest,
     notification_service: Annotated[NotificationService, Depends()]
 ) -> str:
-    await notification_service.check_notification(notification_id=notification_check_request.notification_id)
+    await notification_service.check_notification(user=user, notification_id=notification_check_request.notification_id)
     return "Success"

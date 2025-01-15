@@ -1,5 +1,5 @@
 from functools import cache
-from typing import Annotated
+from typing import Annotated, List, Union
 
 from fastapi import Depends
 from sqlalchemy import select
@@ -15,19 +15,25 @@ from wastory.database.connection import SESSION
 
 class NotificationStore:
     @transactional
-    async def add_notification(self, user_id: int, type : int, description: str) -> Notification:
+    async def add_notification(self, user_ids: List[int], type : int, description: str | None) -> Notification:
         description = "알림"
         if type == 1:
-            description = ""
-        notification=Notification(
-            notification_type=type,
-            description=description,
-            user_id=user_id
-        )
-        SESSION.add(notification)
+            description = "새 글"
+        if type == 2:
+            description = "구독"
+        notifications = [
+            Notification(
+                notification_type=type,
+                description=description,
+                user_id=user_id
+            )
+            for user_id in user_ids
+        ]
+        SESSION.add_all(notifications)
         await SESSION.flush()
-        await SESSION.refresh(notification)
-        return notification
+        for notification in notifications:
+            await SESSION.refresh(notification)
+        return notifications
     
 
     async def get_notification_by_id(self, notification_id: int) -> Notification | None:

@@ -7,6 +7,7 @@ if TYPE_CHECKING:
     from wastory.app.user.models import User
     from wastory.app.category.models import Category
     from wastory.app.article.models import Article
+    from wastory.app.subscription.models import Subscription
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -29,6 +30,12 @@ class Blog(Base):
     user: Mapped["User"] = relationship("User", back_populates="blogs")
     categories: Mapped[list["Category"]] = relationship("Category", back_populates="blog")
     articles: Mapped[list["Article"]] = relationship("Article",  back_populates="blog")
+    subscriptions: Mapped[list["Subscription"]] = relationship(
+        "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
+    )  # 이 블로그가 구독한 다른 블로그들
+    subscribers: Mapped[list["Subscription"]] = relationship(
+        "Subscription", foreign_keys="Subscription.subscribed_id", back_populates="subscribed_blog"
+    )  # 이 블로그를 구독한 다른 블로그들
 
     def __repr__(self):
         return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"
