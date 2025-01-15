@@ -5,8 +5,6 @@ from wastory.app.category.models import Category
 
 
 
-
-
 class CategoryDetailResponse(BaseModel):
     id: int
     category_name: str
