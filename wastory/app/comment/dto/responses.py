@@ -16,7 +16,7 @@ class CommentDetailResponse(BaseModel):
     def from_comment(comment: Comment) -> "CommentDetailResponse":
         return CommentDetailResponse(
             id=comment.id,
-            user_name=comment.user.nickname if comment.user else "Anonymous",  # 유저 정보 없을 때 처리
+            user_name=comment.user_name,
             content=comment.content,
             created_at=comment.created_at,
             updated_at=comment.updated_at,
@@ -41,7 +41,7 @@ class CommentListResponse(BaseModel):
     def from_comment(comment: Comment) -> "CommentListResponse":
         return CommentListResponse(
             id=comment.id,
-            user_name=comment.user.nickname if comment.user else "Anonymous",  # 유저 정보 없을 때 처리
+            user_name=comment.user_name,
             content=comment.content,
             created_at=comment.created_at,
             updated_at=comment.updated_at,

@@ -22,7 +22,7 @@ class CommentService:
         self, content:str,level:int,secret:int,user:User,article_id:int,parent_id:int
         )-> CommentDetailResponse:
             #article id를 받아서, article 을 받고 넘기자
-            article=await self.article_store.get_article_by_id(article_id=article_id)
+            article=await self.article_store.get_article_by_id(article_id)
             if article==None:
                 raise ArticleNotFoundError()
             if level==1:
@@ -30,7 +30,7 @@ class CommentService:
                     content=content,
                     secret=secret,
                     user=user,
-                    article=article,
+                    
                     article_id=article_id
                 )
             elif level==2:
@@ -38,7 +38,7 @@ class CommentService:
                     content=content,
                     secret=secret,
                     user=user,
-                    article=article,
+                    article_id=article_id,
                     parent_id=parent_id
                 )
             return CommentDetailResponse.from_comment(new_comment)

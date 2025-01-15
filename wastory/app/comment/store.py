@@ -48,35 +48,37 @@ class CommentStore:
 
     @transactional
     async def create_comment_1(
-        self, content:str,secret:int,user:User,article:Article,article_id:int
+        self, content:str,secret:int,user:User,article_id:int
         )->Comment:
+            print(content)
+            print(user.username)
+            print(secret)
             comment= Comment(
                 content=content,
                 level=1,
                 secret=secret,
-                user=user,
                 user_id=user.id,
-                article=article,
+                user_name=user.username,
                 article_id=article_id,
                 parent_id=None
                 )
             SESSION.add(comment)
+            print(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
             return comment
         
     @transactional
     async def create_comment_2(
-        self, content:str,secret:int,user:User,article:Article,parent_id:int
+        self, content:str,secret:int,user:User,article_id:int,parent_id:int
         )->Comment:
             comment= Comment(
                 content=content,
                 level=2,
                 secret=secret,
-                user=user,
                 user_id=user.id,
-                article=article,
-                article_id=article.id,
+                user_name=user.username,
+                article_id=article_id,
                 parent_id=parent_id
             )
             parent_comment=await self.get_comment_by_id(parent_id)
