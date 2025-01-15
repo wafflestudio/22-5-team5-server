@@ -38,6 +38,7 @@ class ArticleStore :
             article.title = article_title
         if article_content is not None:
             article.content = article_content
+        await SESSION.merge(article)
         await SESSION.flush()
         return article
 
