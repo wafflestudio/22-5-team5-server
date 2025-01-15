@@ -51,11 +51,17 @@ async def delete(
 
 #이거는 일단은 그냥 user 체크 안하고 모든걸 다 리스트화해서 보냄
 #(유저별로 비밀 안 비밀 표시 어케할지 고만해야 할듯..)
-@comment_router.get("/{article_id}", status_code=HTTP_200_OK)
+@comment_router.get("/{article_id}/{page}", status_code=HTTP_200_OK)
 async def get_comment_list(
-    article_id:int,
-    comment_service:Annotated[CommentService,Depends()]
-)-> list[CommentListResponse]:
-    return await comment_service.get_list(article_id=article_id)
+    article_id: int,
+    page: int,
+    comment_service: Annotated[CommentService, Depends()],
+) -> list[CommentListResponse]:
+    per_page = 10  # 페이지당 10개(혹은 쿼리 파라미터로 받아도 됨)
+    return await comment_service.get_list_level1_with_children(
+        article_id=article_id,
+        page=page,
+        per_page=per_page
+    )
 
 

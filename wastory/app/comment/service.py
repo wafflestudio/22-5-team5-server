@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from wastory.app.comment.store import CommentStore
-from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse
+from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse,PaginatedCommentListResponse
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
@@ -61,10 +61,42 @@ class CommentService:
             comment_id=comment_id
         )
 
-    async def get_list(
-        self, article_id:int
-    )-> list[CommentListResponse]:
-        comment_list=await self.comment_store.get_list_by_article_id(article_id)
-        final_list=[comment for comment in comment_list if comment.level==1]
+    async def get_list_level1_with_children(
+        self,
+        article_id: int,
+        page: int,
+        per_page: int
+    ) -> list[CommentListResponse]:
+        """
+        page, per_page에 맞춰 level=1 댓글은 페이지네이션, 
+        각 댓글의 children은 전부 포함.
+        """
+        # store에서 level=1 댓글들만 가져옴 (limit/offset)
+        level1_comments = await self.comment_store.get_level1_comments_with_children(
+            article_id=article_id, 
+            page=page, 
+            per_page=per_page
+        )
 
-        return [CommentListResponse.from_comment(comment) for comment in final_list]
+        # DTO 변환
+        return [CommentListResponse.from_comment(c) for c in level1_comments]
+
+    # 페이지네이션 정보를 추가로 내려주고 싶으면
+    async def get_list_level1_with_pagination(
+        self,
+        article_id: int,
+        page: int,
+        per_page: int
+    ) -> PaginatedCommentListResponse:
+        total_count = await self.comment_store.get_total_level1_comments_count(article_id)
+        level1_comments = await self.comment_store.get_level1_comments_with_children(
+            article_id=article_id, 
+            page=page, 
+            per_page=per_page
+        )
+        return PaginatedCommentListResponse(
+            page=page,
+            per_page=per_page,
+            total_count=total_count,
+            comments=[CommentListResponse.from_comment(c) for c in level1_comments]
+        )

@@ -49,3 +49,9 @@ class CommentListResponse(BaseModel):
             # children 리스트를 재귀적으로 변환
             children=[CommentDetailResponse.from_comment(child) for child in comment.children],
         )
+
+class PaginatedCommentListResponse(BaseModel):
+    page: int
+    per_page: int
+    total_count: int
+    comments: List[CommentListResponse]

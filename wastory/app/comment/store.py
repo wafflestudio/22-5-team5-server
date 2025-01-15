@@ -1,7 +1,7 @@
 from functools import cache
 from typing import Annotated
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select,and_
+from sqlalchemy import select,and_,func
 from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
@@ -15,17 +15,36 @@ class CommentStore:
         comment=await SESSION.scalar(get_comment_query)
         return comment
 
-    async def get_list_by_article_id(self, article_id: int) -> list[Comment]:
+    async def get_level1_comments_with_children(
+        self, article_id: int, page: int, per_page: int
+    ) -> list[Comment]:
         """
-        Eager Loading을 통해 article_id에 속한 모든 댓글과 자식 댓글을 한 번에 가져옵니다.
+        1) level=1 댓글만 페이지네이션 (page, per_page)
+        2) 각 level=1 댓글에 속한 모든 자식(level=2 이상)은 전부 selectinload로 로드
         """
+        offset_val = (page - 1) * per_page
+
         stmt = (
             select(Comment)
-            .filter(Comment.article_id == article_id)
-            .options(selectinload(Comment.children))  # 자식 댓글을 미리 로드
+            .filter(Comment.article_id == article_id, Comment.level == 1)
+            .options(selectinload(Comment.children))  # 자식 로드
+            .offset(offset_val)
+            .limit(per_page)
         )
-        result = await SESSION.scalars(stmt)
-        return list(result)
+        results = await SESSION.scalars(stmt)
+        return list(results)
+
+    async def get_total_level1_comments_count(self, article_id: int) -> int:
+        """
+        level=1인 댓글의 전체 개수를 구합니다.
+        페이지네이션 시 total_count를 반환해주고 싶으면 사용.
+        """
+        stmt = select(func.count(Comment.id)).filter(
+            Comment.article_id == article_id,
+            Comment.level == 1
+        )
+        count = await SESSION.scalar(stmt)
+        return count or 0
 
     @transactional
     async def create_comment_1(
