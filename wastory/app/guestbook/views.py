@@ -10,7 +10,10 @@ from wastory.app.user.views import login_with_header
 @guestbook_router.post("/create", status_code=HTTP_201_CREATED)
 async def create(
     user:Annotated[User,Depends(login_with_header)],
+    guestbook_service: Annotated[GuestbookService,Depends()]
 )-> None:
-    return await None
+    return await guestbook_service.create_guestbook(
+        user=user
+    )
 
 

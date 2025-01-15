@@ -47,7 +47,7 @@ class CommentStore:
         return count or 0
 
     @transactional
-    async def create_comment_1(
+    async def create_article_comment_1(
         self, content:str,secret:int,user:User,article_id:int
         )->Comment:
             print(content)
@@ -69,7 +69,7 @@ class CommentStore:
             return comment
         
     @transactional
-    async def create_comment_2(
+    async def create_article_comment_2(
         self, content:str,secret:int,user:User,article_id:int,parent_id:int
         )->Comment:
             comment= Comment(
@@ -79,6 +79,50 @@ class CommentStore:
                 user_id=user.id,
                 user_name=user.username,
                 article_id=article_id,
+                parent_id=parent_id
+            )
+            parent_comment=await self.get_comment_by_id(parent_id)
+            if not parent_comment:
+                raise CommentNotFoundError()
+            comment.parent = parent_comment
+            SESSION.add(comment)
+            await SESSION.flush()
+            await SESSION.refresh(comment)
+            return comment
+
+    @transactional
+    async def create_guestbook_comment_1(
+        self, content:str,secret:int,user:User,guestbook_id:int
+        )->Comment:
+            print(content)
+            print(user.username)
+            print(secret)
+            comment= Comment(
+                content=content,
+                level=1,
+                secret=secret,
+                user_id=user.id,
+                user_name=user.username,
+                guestbook_id=article_id,
+                parent_id=None
+                )
+            SESSION.add(comment)
+            print(comment)
+            await SESSION.flush()
+            await SESSION.refresh(comment)
+            return comment
+        
+    @transactional
+    async def create_guestbook_comment_2(
+        self, content:str,secret:int,user:User,guestbook_id:int,parent_id:int
+        )->Comment:
+            comment= Comment(
+                content=content,
+                level=2,
+                secret=secret,
+                user_id=user.id,
+                user_name=user.username,
+                guestbook_id=article_id,
                 parent_id=parent_id
             )
             parent_comment=await self.get_comment_by_id(parent_id)

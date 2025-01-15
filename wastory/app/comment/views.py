@@ -16,7 +16,7 @@ async def create(
     comment_request: CommentCreateRequest,
     article_id:int,
 )-> CommentDetailResponse:
-    return await comment_service.create_comment(
+    return await comment_service.create_article_comment(
         content=comment_request.content,
         level=comment_request.level,
         secret=comment_request.secret,
@@ -24,6 +24,23 @@ async def create(
         article_id=article_id,
         parent_id=comment_request.parent_id
     )
+
+@comment_router.post("/guestbook/{guestbook_id}", status_code=HTTP_201_CREATED)
+async def create(
+    user:Annotated[User,Depends(login_with_header)],
+    comment_service: Annotated[CommentService, Depends()],
+    comment_request: CommentCreateRequest,
+    guestbook_id:int,
+)-> CommentDetailResponse:
+    return await comment_service.create_guestbook_comment(
+        content=comment_request.content,
+        level=comment_request.level,
+        secret=comment_request.secret,
+        user=user,
+        guestbook_id=guestbook_id,
+        parent_id=comment_request.parent_id
+    )
+
 
 @comment_router.patch("/{comment_id}", status_code=HTTP_200_OK)
 async def update(

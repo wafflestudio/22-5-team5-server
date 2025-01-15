@@ -18,7 +18,7 @@ class CommentService:
         self.article_store=article_store
 
 
-    async def create_comment(
+    async def create_article_comment(
         self, content:str,level:int,secret:int,user:User,article_id:int,parent_id:int
         )-> CommentDetailResponse:
             #article id를 받아서, article 을 받고 넘기자
@@ -26,7 +26,7 @@ class CommentService:
             if article==None:
                 raise ArticleNotFoundError()
             if level==1:
-                new_comment=await self.comment_store.create_comment_1(
+                new_comment=await self.comment_store.create_article_comment_1(
                     content=content,
                     secret=secret,
                     user=user,
@@ -34,11 +34,35 @@ class CommentService:
                     article_id=article_id
                 )
             elif level==2:
-                new_comment=await self.comment_store.create_comment_2(
+                new_comment=await self.comment_store.create_article_comment_2(
                     content=content,
                     secret=secret,
                     user=user,
                     article_id=article_id,
+                    parent_id=parent_id
+                )
+            return CommentDetailResponse.from_comment(new_comment)
+
+    async def create_guestbook_comment(
+        self, content:str,level:int,secret:int,user:User,guestbook_id:int,parent_id:int
+        )-> CommentDetailResponse:
+            #article id를 받아서, article 을 받고 넘기자
+            guestbook=await self.guestbook_store.get_guestbook_by_id(guestbook_id)
+            if guestbook==None:
+                raise ArticleNotFoundError()   ##바꿔야 해
+            if level==1:
+                new_comment=await self.comment_store.create_guestbook_comment_1(
+                    content=content,
+                    secret=secret,
+                    user=user,
+                    guestbook_id=guestbook_id
+                )
+            elif level==2:
+                new_comment=await self.comment_store.create_guestbook_comment_2(
+                    content=content,
+                    secret=secret,
+                    user=user,
+                    guestbook_id=guestbook_id,
                     parent_id=parent_id
                 )
             return CommentDetailResponse.from_comment(new_comment)
