@@ -13,6 +13,7 @@ from wastory.app.user.errors import (
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
 import jwt
+import random
 
 
 SECRET = "secret_for_jwt"
@@ -44,12 +45,13 @@ class UserService:
 
     async def update_user(
         self,
-        username: str,
-        email: str | None,
+        username: str | None,
+        nickname: str | None,
+        email: str,
         address: str | None,
         phone_number: str | None,
     ) -> User:
-        return await self.user_store.update_user(username, email, address, phone_number)
+        return await self.user_store.update_user(username, nickname, email, address, phone_number)
 
     async def update_password(
         self,
@@ -75,7 +77,7 @@ class UserService:
     def issue_tokens(self, email: str) -> tuple[str, str]:
         access_payload = {
             "sub": email,
-            "exp": datetime.now() + timedelta(minutes=60),
+            "exp": datetime.now() + timedelta(minutes=10),
             "typ": TokenType.ACCESS.value,
         }
         access_token = jwt.encode(access_payload, SECRET, algorithm="HS256")
@@ -134,3 +136,6 @@ class UserService:
         username = await self.validate_refresh_token(refresh_token)
         await self.user_store.block_token(refresh_token, datetime.now())
         return self.issue_tokens(username)
+
+    def generate_verification_code() -> str:
+        return str(random.randint(100000, 999999))
