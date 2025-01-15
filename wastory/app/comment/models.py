@@ -7,7 +7,7 @@ from wastory.database.common import Base, intpk
 if TYPE_CHECKING:
     from wastory.app.article.models import Article
     from wastory.app.user.models import User
-    from wastory.app.guestbook.models import GuestBook  # 새로 만든 GuestBook
+    from wastory.app.blog.models import Blog  
 
 class Comment(Base):
     __tablename__ = "comment"
@@ -24,9 +24,8 @@ class Comment(Base):
     article_id: Mapped[Optional[int]] = mapped_column(ForeignKey("article.id", ondelete="CASCADE"), nullable=True)
     article: Mapped[Optional["Article"]] = relationship("Article", back_populates="comments")
 
-    # GuestBook에 대한 FK (새로 추가)
-    guestbook_id: Mapped[Optional[int]] = mapped_column(ForeignKey("guestbook.id", ondelete="CASCADE"), nullable=True, index=True)
-    guestbook: Mapped[Optional["GuestBook"]] = relationship("GuestBook", back_populates="comments")
+    blog_id: Mapped[Optional[int]] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=True, index=True)
+    blog: Mapped[Optional["Blog"]] = relationship("Blog", back_populates="comments")
 
     # 자기 자신의 FK(부모 댓글)
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("comment.id"), nullable=True)
@@ -48,7 +47,7 @@ class Comment(Base):
 
     __table_args__ = (
         CheckConstraint(
-            "(article_id IS NOT NULL OR guestbook_id IS NOT NULL)",
-            name="check_article_or_guestbook"
+            "(article_id IS NOT NULL OR blog_id IS NOT NULL)",
+            name="check_article_or_blog"
         ),
     )

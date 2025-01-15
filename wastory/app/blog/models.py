@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from wastory.app.user.models import User
     from wastory.app.category.models import Category
     from wastory.app.article.models import Article
-    from wastory.app.guestbook.models import GuestBook
+    from wastory.app.comment.models import Comment
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -31,6 +31,10 @@ class Blog(Base):
     categories: Mapped[list["Category"]] = relationship("Category", back_populates="blog")
     articles: Mapped[list["Article"]] = relationship("Article",  back_populates="blog")
 
-
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment",
+        back_populates="blog",  # Comment 모델의 article 관계명
+        cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
+    )
     def __repr__(self):
         return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"
