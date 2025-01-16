@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends
-from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleDetailInListResponse
+from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleSearchInListResponse
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
@@ -29,7 +29,7 @@ class ArticleService:
         self.notification_service = notification_service
     
     async def create_article(
-        self, user: User, category_id :int, article_title: str, article_content: str
+        self, user: User, category_id :int, article_title: str, article_content: str, article_description: str,
     ) -> ArticleDetailResponse :
                 
         # 사용자의 Blog 확인
@@ -39,7 +39,7 @@ class ArticleService:
         
         print("category ID : ", category_id)
         
-        new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content)
+        new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content, article_description = article_description)
 
         # 새 글 알림
         await self.notification_service.add_notification(
@@ -83,26 +83,30 @@ class ArticleService:
     async def get_articles_in_blog(
         self,
         blog_id: int,
-    ) -> list[ArticleDetailInListResponse]:
+    ) -> list[ArticleSearchInListResponse]:
         articles = await self.article_store.get_articles_in_blog(blog_id)
-        return [ArticleDetailInListResponse.from_article(article) for article in articles]
+        return [ArticleSearchInListResponse.from_article(article) for article in articles]
     
     async def get_articles_in_blog_in_category(
         self,
         category_id: int,
         blog_id: int,
-    ) -> list[ArticleDetailInListResponse]:
+    ) -> list[ArticleSearchInListResponse]:
         articles = await self.article_store.get_articles_in_blog_in_category(category_id, blog_id)
-        return [ArticleDetailInListResponse.from_article(article) for article in articles]    
+        return [ArticleSearchInListResponse.from_article(article) for article in articles]    
 
     async def get_articles_by_words_and_blog_id(
         self,
         searching_words: str | None = None,
         blog_id: int | None = None
-    ) -> list[ArticleDetailInListResponse]:
+    ) -> list[ArticleSearchInListResponse]:
         articles = await self.article_store.get_articles_by_words_and_blog_id(searching_words, blog_id)
-        return [ArticleDetailInListResponse.from_article(article) for article in articles]
+        return [ArticleSearchInListResponse.from_article(article) for article in articles]
 
+
+    async def get_article_by_id(self, article_id : int) -> ArticleDetailResponse:
+        article = await self.article_store.get_article_by_id(article_id)
+        return ArticleDetailResponse.from_article(article)
     
     async def delete_article(
         self,

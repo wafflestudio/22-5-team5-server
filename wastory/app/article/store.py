@@ -7,13 +7,15 @@ from wastory.app.article.models import Article
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 
+from wastory.app.article.dto.responses import ArticleSearchInListResponse
+
 class ArticleStore :
     @transactional
     async def create_article(
-        self, atricle_title : str, article_content: str, blog_id : int, category_id : int,
+        self, atricle_title : str, article_content: str, article_description: str, blog_id : int, category_id : int,
     ) -> Article :
         article = Article(
-            title = atricle_title, content = article_content, blog_id = blog_id, category_id = category_id
+            title = atricle_title, content = article_content, description = article_description, blog_id = blog_id, category_id = category_id
         )
         SESSION.add(article)
         # 왜 필요하지?       
@@ -27,19 +29,22 @@ class ArticleStore :
         article: Article, 
         article_title: str | None = None,
         article_content: str | None = None,
+        article_description: str | None = None,
+
     ) -> Article:
         if article_title is not None:
             article.title = article_title
         if article_content is not None:
             article.content = article_content
+        if article_content is not None:
+            article.description = article_description
         await SESSION.merge(article)
         await SESSION.flush()
         return article
+    
 
     @transactional
     async def delete_article(self, article: Article) -> None:
-        if article is None: 
-            raise ArticleNotFoundError()
         await SESSION.delete(article)
         await SESSION.flush()       
 
@@ -55,30 +60,36 @@ class ArticleStore :
         return result.all()
     
     @transactional
-    async def get_articles_in_blog(self, blog_id: int) -> Sequence[Article]:
+    async def get_articles_in_blog(self, blog_id: int) -> Sequence[ArticleSearchInListResponse]:
         query = select(Article).where(Article.blog_id == blog_id)
         result = await SESSION.scalars(query)  # await 추가
-        return result.all()
+        articles = result.all()
+        
+        # Pydantic 모델로 변환하여 필요한 데이터만 반환
+        return [ArticleSearchInListResponse.model_validate(article) for article in articles] 
     
     @transactional
     async def get_articles_in_blog_in_category(
         self, 
         category_id: int,
         blog_id: int,
-        ) -> Sequence[Article]:
+        ) -> Sequence[ArticleSearchInListResponse]:
+
         query = select(Article).where(
             Article.category_id == category_id,
             Article.blog_id == blog_id
             )
         result = await SESSION.scalars(query)  # await 추가
-        return result.all()
-    
+        articles = result.all()
+        
+        # Pydantic 모델로 변환하여 필요한 데이터만 반환
+        return [ArticleSearchInListResponse.model_validate(article) for article in articles]    
     @transactional
     async def get_articles_by_words_and_blog_id(
         self, 
         searching_words: str | None = None,
         blog_id: int | None = None
-    ) -> Sequence[Article]:
+    ) -> Sequence[ArticleSearchInListResponse]:
     
         # 검색어가 없으면 빈 리스트 반환
         if not searching_words:
@@ -105,4 +116,8 @@ class ArticleStore :
         
         # 쿼리 실행 및 결과 반환
         result = await SESSION.scalars(query)
-        return result.all()
+        articles = result.all()
+        
+        # Pydantic 모델로 변환하여 필요한 데이터만 반환
+        return [ArticleSearchInListResponse.model_validate(article) for article in articles]
+        

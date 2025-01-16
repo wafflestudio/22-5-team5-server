@@ -46,6 +46,7 @@ class ArticleCreateRequest(BaseModel):
         AfterValidator(content_min_valid_character),
         AfterValidator(content_max_length_5000),
     ]
+    description : str
     category_id : int
 
 
@@ -60,3 +61,4 @@ class ArticleUpdateRequest(BaseModel):
         AfterValidator(content_min_valid_character),
         AfterValidator(content_max_length_5000),
     ] = None
+    description :str
