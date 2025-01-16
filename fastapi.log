@@ -15,3 +15,362 @@ INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
 INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
 INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
 INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao/callback?code=AFvFqYA8Im5dBpYdk5_3ixd11DgwISav8lj20FLMs68k95znrhFZ0wAAAAQKKwzTAAABlG1IB5insOtctwzlGQ&state=j0eM72PGObwkP6W1tZc1p0eO7AYfYU HTTP/1.0" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
+  |     yield
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 186, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 767, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    |     result = await app(  # type: ignore[func-returns-value]
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    |     return await self.app(scope, receive, send)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |   File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    |     self.gen.throw(value)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    |     raise e
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    |     raise app_exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    |     await self.app(scope, receive, send_wrapper)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 61, in auth_kakao_callback
+    |     access_token, refresh_token = user_service.issue_tokens(user.email)
+    |                                                             ^^^^^^^^^^
+    | AttributeError: 'NoneType' object has no attribute 'email'
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    with collapse_excgroups():
+  File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    raise e
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    raise app_exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 61, in auth_kakao_callback
+    access_token, refresh_token = user_service.issue_tokens(user.email)
+                                                            ^^^^^^^^^^
+AttributeError: 'NoneType' object has no attribute 'email'
+INFO:     117.111.14.1:0 - "POST /api/users/signup HTTP/1.0" 400 Bad Request
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "POST /api/users/signup HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao/callback?code=-WExY2JvSXRKGLYolnWwjigvtWiuM2Cx_sbzfpNcHkRu1NHrQEYWQwAAAAQKKwzTAAABlG1IWF3C3p98Pd5TpQ&state=gGXMwGN9aOj7qfmVbxamggTOQPE7II HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf4a32840>
+main_image_url: None
+/home/ubuntu/22-5-team5-server/wastory/app/blog/store.py:90: RuntimeWarning: coroutine 'async_scoped_session.merge' was never awaited
+  SESSION.merge(blog)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+INFO:     117.111.14.1:0 - "POST /api/blogs HTTP/1.0" 201 Created
+default :  14
+category ID :  14
+address_name []
+[]
+INFO:     117.111.14.1:0 - "POST /api/articles/create HTTP/1.0" 201 Created
+INFO:     117.111.14.1:0 - "GET /api/articles/blogs/50 HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     121.140.210.67:0 - "POST /api/users/signup HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf46bc2f0>
+main_image_url: None
+INFO:     121.140.210.67:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     172.69.136.171:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     172.69.136.171:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     172.69.136.180:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     172.69.136.212:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     121.140.210.67:0 - "POST /api/users/signup HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf4a30dd0>
+main_image_url: None
+INFO:     121.140.210.67:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+called get_blog
+Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf4816c90>
+main_image_url: None
+INFO:     117.111.14.1:0 - "GET /api/blogs/aaaa HTTP/1.0" 200 OK
+called get_blog
+Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf48175f0>
+main_image_url: None
+INFO:     117.111.14.1:0 - "GET /api/blogs/aaaa HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "POST /api/users/signup HTTP/1.0" 409 Conflict
+INFO:     117.111.14.1:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
+INFO:     117.111.14.1:0 - "GET /api/blogs/my_blog HTTP/1.0" 401 Unauthorized
+user found
+INFO:     117.111.14.1:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+default :  1
+category ID :  1
+address_name []
+[]
+INFO:     117.111.14.1:0 - "POST /api/articles/create HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+default :  1
+category ID :  1
+address_name []
+[]
+INFO:     121.140.210.67:0 - "POST /api/articles/create HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+default :  1
+category ID :  1
+address_name []
+[]
+INFO:     121.140.210.67:0 - "POST /api/articles/create HTTP/1.0" 201 Created
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+default :  1
+category ID :  1
+address_name []
+[]
+INFO:     121.140.210.67:0 - "POST /api/articles/create HTTP/1.0" 201 Created
+INFO:     103.203.57.20:48036 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33460 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33460 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58352 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58352 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59792 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59792 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59792 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59792 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50672 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50672 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50436 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50436 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39452 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39452 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52914 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52914 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52914 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52914 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52914 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52914 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52916 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52916 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     127.0.0.1:45206 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45206 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46404 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47550 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47550 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     172.71.182.84:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     172.71.99.189:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     172.71.184.150:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     172.71.184.150:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     127.0.0.1:41676 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41676 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41676 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41676 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:41684 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60796 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37836 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37836 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET / HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     195.178.110.163:0 - "GET /.svn/entries HTTP/1.0" 404 Not Found
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
