@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlalchemy import String, ForeignKey, UniqueConstraint, DateTime, func
+from sqlalchemy import String, ForeignKey, UniqueConstraint, DateTime, func, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from wastory.database.common import Base, intpk
 
@@ -8,6 +8,8 @@ if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.article.models import Article
     from wastory.app.comment.models import Comment
+    from wastory.app.subscription.models import Subscription
+    from wastory.app.like.models import Like
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -22,7 +24,7 @@ class Blog(Base):
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # 생성 시간
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())  # 갱신 시간
     main_image_url: Mapped[str|None] = mapped_column(String(255), nullable=True, server_default=None)
-
+    default_category_id: Mapped[int] = mapped_column(Integer, nullable=False)
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  # 블로그 소유자
 
@@ -30,7 +32,16 @@ class Blog(Base):
     user: Mapped["User"] = relationship("User", back_populates="blogs")
     categories: Mapped[list["Category"]] = relationship("Category", back_populates="blog")
     articles: Mapped[list["Article"]] = relationship("Article",  back_populates="blog")
+    subscriptions: Mapped[list["Subscription"]] = relationship(
+        "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
+    )  # 이 블로그가 구독한 다른 블로그들
+    subscribers: Mapped[list["Subscription"]] = relationship(
+        "Subscription", foreign_keys="Subscription.subscribed_id", back_populates="subscribed_blog"
+    )  # 이 블로그를 구독한 다른 블로그들
+    likes: Mapped[list["Like"]] = relationship("Like", back_populates ="blog", cascade = "all,delete-orphan")
+    # 이 블로그가 누른 like 의 모음
 
+<<<<<<< HEAD
     comments: Mapped[list["Comment"]] = relationship(
         "Comment",
         back_populates="blog",  # Comment 모델의 article 관계명
@@ -38,3 +49,5 @@ class Blog(Base):
     )
     def __repr__(self):
         return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"
+=======
+>>>>>>> origin/main

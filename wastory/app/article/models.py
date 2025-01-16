@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
     from wastory.app.comment.models import Comment
+    from wastory.app.like.models import Like
 class Article(Base):
     __tablename__ = "article"
 
@@ -32,3 +33,6 @@ class Article(Base):
         back_populates="article",  # Comment 모델의 article 관계명
         cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
     )
+
+    likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
+    

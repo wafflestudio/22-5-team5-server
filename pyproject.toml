@@ -22,6 +22,10 @@ authlib = "^1.4.0"
 httpx = "^0.28.1"
 asyncmy = "^0.2.10"
 pyjwt = "^2.10.1"
+pyjwt = "^2.10.1"
+asyncmy = "^0.2.10"
+itsdangerous = "^2.2.0"
+redis = "^5.2.1"
 
 
 [tool.poetry.group.dev.dependencies]
