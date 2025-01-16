@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest
-from wastory.app.article.dto.responses import ArticleDetailInListResponse, ArticleDetailResponse
+from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleSearchInListResponse
 from wastory.app.article.service import ArticleService
 from wastory.app.blog.service import BlogService
 
@@ -39,7 +39,7 @@ async def update_article(
 async def get_articles_in_blog(
     article_service: Annotated[ArticleService, Depends()],
     blog_id : int,
-) -> list[ArticleDetailInListResponse]:
+) -> list[ArticleSearchInListResponse]:
     return await article_service.get_articles_in_blog(blog_id)
 
 # blog 내 특정 category 내 article 검색
@@ -49,7 +49,7 @@ async def get_articles_in_blog_in_category(
     category_id : int,
     blog_id: int,
 
-) -> list[ArticleDetailInListResponse]:
+) -> list[ArticleSearchInListResponse]:
     return await article_service.get_articles_in_blog_in_category(category_id, blog_id)
 
 # blog_id, words 로 article 검색
@@ -58,7 +58,7 @@ async def get_articles_by_words_and_blog_id(
     article_service: Annotated[ArticleService, Depends()],
     searching_words: str | None = None,
     blog_id : int | None = None,
-) -> list[ArticleDetailInListResponse]:
+) -> list[ArticleSearchInListResponse]:
     return await article_service.get_articles_by_words_and_blog_id(searching_words, blog_id)
 
 # article 삭제

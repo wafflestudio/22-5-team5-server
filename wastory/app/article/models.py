@@ -14,6 +14,8 @@ class Article(Base):
     id : Mapped[intpk]
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
+    description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description
+
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())    
     # ondelete = "CASCADE" 를 통해 Article 삭제 시, Article 과 연결된 레코드에서 자동으로 참조가 제거.
