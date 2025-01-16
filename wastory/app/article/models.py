@@ -7,6 +7,7 @@ from wastory.database.common import Base, intpk
 if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
+    from wastory.app.like.models import Like
 class Article(Base):
     __tablename__ = "Article"
 
@@ -24,5 +25,6 @@ class Article(Base):
     
     blog : Mapped["Blog"] = relationship("Blog", back_populates = "articles")
     category : Mapped["Category"] = relationship("Category", back_populates = "articles")
+
+    likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
     
-    # 이후 댓글 및 tag 구현시 delete-orphan 추가하기기

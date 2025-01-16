@@ -12,8 +12,6 @@ class ArticleStore :
     async def create_article(
         self, atricle_title : str, article_content: str, blog_id : int, category_id : int,
     ) -> Article :
-        print("called article_store")
-        # created_at, updated_at 은 자동반영되기에 따로 전달하지 않음.
         article = Article(
             title = atricle_title, content = article_content, blog_id = blog_id, category_id = category_id
         )
@@ -21,10 +19,6 @@ class ArticleStore :
         # 왜 필요하지?       
         await SESSION.flush()
         await SESSION.refresh(article)
-        if article : 
-            print("article.id", article.id)
-        else :
-            print("article not created")
         return article
     
     @transactional
