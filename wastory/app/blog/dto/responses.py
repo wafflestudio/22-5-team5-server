@@ -12,7 +12,6 @@ class BlogDetailResponse(BaseModel):
     user_id : int
     default_category_id : int
 
-
     class Config:
         orm_mode = True  # SQLAlchemy 모델에서 데이터를 가져올 때 Pydantic 변환 지원
         allow_population_by_field_name = True  # 필드 이름을 정확히 사용하도록 강제

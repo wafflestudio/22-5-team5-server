@@ -29,7 +29,7 @@ class ArticleService:
         self.notification_service = notification_service
     
     async def create_article(
-        self, user: User, blog_id: int, category_id :int, article_title: str, article_content: str
+        self, user: User, category_id :int, article_title: str, article_content: str
     ) -> ArticleDetailResponse :
                 
         # 사용자의 Blog 확인
@@ -37,7 +37,9 @@ class ArticleService:
         if user_blog is None:
             raise BlogNotFoundError()
         
-        new_article = await self.article_store.create_article(blog_id, category_id, article_title, article_content)
+        print("category ID : ", category_id)
+        
+        new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content)
 
         # 새 글 알림
         await self.notification_service.add_notification(

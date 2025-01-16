@@ -23,9 +23,12 @@ class BlogService:
     ) -> BlogDetailResponse:
 
         await self.user_store.update_username(username=name, email=user.email)
+
+        blog = await self.blog_store.add_blog(user_id=user.id, name=name, default_id=0)
+
         default_category=await self.categroy_store.create_category(blog_id=blog.id, categoryname="카테고리 없음", categorylevel=1)
 
-        blog = await self.blog_store.add_blog(user_id=user.id, name=name, default_id=default_category.id)
+        await self.blog_store.update_blog(address_name=blog.address_name, new_default_category_id=default_category.id, new_blog_name=None, description=None)
 
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
     
@@ -51,11 +54,13 @@ class BlogService:
         self,
         address_name : str,
         new_blog_name : str | None,
-        new_description : str |None
+        new_description : str |None,
+        new_default_category_id : int|None
     ) -> BlogDetailResponse:
         updated_blog = await self.blog_store.update_blog(
             address_name=address_name,
             new_blog_name=new_blog_name,
-            description=new_description
+            description=new_description,
+            new_default_category_id=new_default_category_id
         )
         return BlogDetailResponse.model_validate(updated_blog, from_attributes=True)
