@@ -3,6 +3,8 @@ from fastapi import APIRouter, Depends
 from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest, DefaultArticleCreateRequest
 from wastory.app.article.dto.responses import ArticleDetailInListResponse, ArticleDetailResponse
 from wastory.app.article.service import ArticleService
+from wastory.app.blog.service import BlogService
+
 from wastory.app.user.models import User
 from wastory.app.user.views import login_with_header
 
@@ -10,17 +12,23 @@ from wastory.app.user.views import login_with_header
 article_router = APIRouter()
 
 # article 생성
-@article_router.post("", status_code=201)
+@article_router.post("/create", status_code=201)
 async def create_article(
     user: Annotated[User, Depends(login_with_header)],
     article: ArticleCreateRequest,
     article_service: Annotated[ArticleService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
 ) -> ArticleDetailResponse:
+<<<<<<< HEAD
     if(article.category_id)
     return await article_service.create_article(user, article.title, article.content, article.blog_id, article.category_id)
+=======
+    user_blog = await blog_service.get_blog_by_user(user)
+    return await article_service.create_article(user, article.title, article.content, user_blog.id, article.category_id)
+>>>>>>> origin/main
 
 # article 수정
-@article_router.patch("/{article_id}", status_code=200)
+@article_router.patch("/update/{article_id}", status_code=200)
 async def update_article(
     user: Annotated[User, Depends(login_with_header)],
     article_id: int,
@@ -59,7 +67,7 @@ async def get_articles_by_words_and_blog_id(
     return await article_service.get_articles_by_words_and_blog_id(searching_words, blog_id)
 
 # article 삭제
-@article_router.delete("/{article_id}", status_code=204)
+@article_router.delete("/delete/{article_id}", status_code=204)
 async def delete_article(
     user: Annotated[User, Depends(login_with_header)],
     article_id: int,
