@@ -47,8 +47,20 @@ class ArticleCreateRequest(BaseModel):
         AfterValidator(content_max_length_5000),
     ]
     blog_id : int
-    category_id : int
+    category_id : int | None
 
+class DefaultArticleCreateRequest(BaseModel):
+    title: Annotated[
+        str,
+        AfterValidator(title_length_2_and_100),
+        AfterValidator(title_not_empty),
+    ]
+    content: Annotated[
+        str,
+        AfterValidator(content_min_valid_character),
+        AfterValidator(content_max_length_5000),
+    ]
+    blog_id : int
 
 class ArticleUpdateRequest(BaseModel):
     title: Annotated[

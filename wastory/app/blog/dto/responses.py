@@ -10,6 +10,8 @@ class BlogDetailResponse(BaseModel):
     updated_at: datetime
     main_image_url: str | None = None  # 메인 이미지 URL 필드 추가
     user_id : int
+    default_category_id : int
+
 
     class Config:
         orm_mode = True  # SQLAlchemy 모델에서 데이터를 가져올 때 Pydantic 변환 지원

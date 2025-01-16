@@ -15,7 +15,7 @@ from wastory.database.connection import SESSION
 
 class BlogStore:
     @transactional
-    async def add_blog(self, user_id: int, name : str) -> Blog:
+    async def add_blog(self, user_id: int, name : str, default_id : int) -> Blog:
         blog_name = name + "님의 블로그"
         description = name + "님의 블로그입니다."
         if await self.get_blog_by_name(blog_name):
@@ -24,7 +24,8 @@ class BlogStore:
             address_name=name,
             description=description,
             blog_name=blog_name,
-            user_id=user_id
+            user_id=user_id,
+            default_id=default_id
         )
         SESSION.add(blog)
         await SESSION.flush()

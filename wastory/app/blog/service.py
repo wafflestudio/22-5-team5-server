@@ -6,23 +6,26 @@ from wastory.app.user.models import User
 from wastory.app.blog.store import BlogStore
 from wastory.app.blog.dto.responses import BlogDetailResponse
 from wastory.app.blog.errors import BlogNotFoundError
-from wastory.app.user.service import UserStore
+from wastory.app.user.store import UserStore
+from wastory.app.category.store import CategoryStore
 
 
 class BlogService:
-    def __init__(self, blog_store: Annotated[BlogStore, Depends()], user_store: Annotated[UserStore, Depends()]) -> None:
+    def __init__(self, blog_store: Annotated[BlogStore, Depends()], user_store: Annotated[UserStore, Depends()], category_store: Annotated[CategoryStore, Depends()]) -> None:
         self.blog_store = blog_store
         self.user_store = user_store
+        self.categroy_store = category_store
 
     async def create_blog(
         self,
         user : User,
         name : str,
     ) -> BlogDetailResponse:
-        
-        blog = await self.blog_store.add_blog(user_id=user.id, name=name)
 
         await self.user_store.update_username(username=name, email=user.email)
+        default_category=await self.categroy_store.create_category(blog_id=blog.id, categoryname="카테고리 없음", categorylevel=1)
+
+        blog = await self.blog_store.add_blog(user_id=user.id, name=name, default_id=default_category.id)
 
         return BlogDetailResponse.model_validate(blog, from_attributes=True)
     
