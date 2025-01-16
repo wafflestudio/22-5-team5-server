@@ -55,7 +55,7 @@ class NotificationService:
             raise NotificationNotFoundError
         if notification.user_id is not user.id:
             raise NotificationNotFoundError
-        await self.notification_store.delete_notification(notification)
+        await self.notification_store.delete_notification(notification_id)
 
     async def check_notification(self, user : User, notification_id : int) -> None:
         notification = await self.notification_store.get_notification_by_id(notification_id)

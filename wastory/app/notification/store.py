@@ -46,8 +46,10 @@ class NotificationStore:
 
 
     @transactional
-    async def delete_notification(self, notification: Notification) -> None:
+    async def delete_notification(self, notification_id: int) -> None:
+        notification = await self.get_notification_by_id(notification_id=notification_id)
         await SESSION.delete(notification)
+        await SESSION.flush() 
 
 
     @transactional
