@@ -1,8 +1,8 @@
-"""resolve error
+"""comment
 
-Revision ID: 165f683746a9
-Revises: 26ab8e6fe46f
-Create Date: 2025-01-16 11:37:08.212866
+Revision ID: c7b0dc7d783d
+Revises: c2a7a1f933e8
+Create Date: 2025-01-16 14:27:54.498429
 
 """
 from typing import Sequence, Union
@@ -12,8 +12,8 @@ import sqlalchemy as sa
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision: str = '165f683746a9'
-down_revision: Union[str, None] = '26ab8e6fe46f'
+revision: str = 'c7b0dc7d783d'
+down_revision: Union[str, None] = 'c2a7a1f933e8'
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
 
@@ -32,15 +32,27 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_table('blog_like',
+    op.create_table('comment',
     sa.Column('id', sa.BigInteger(), nullable=False),
+    sa.Column('content', sa.String(length=500), nullable=False),
+    sa.Column('level', sa.Integer(), nullable=False),
+    sa.Column('secret', sa.Integer(), nullable=False),
+    sa.Column('user_name', sa.String(length=20), nullable=False),
+    sa.Column('user_id', sa.BigInteger(), nullable=True),
+    sa.Column('article_id', sa.BigInteger(), nullable=True),
+    sa.Column('blog_id', sa.BigInteger(), nullable=True),
+    sa.Column('parent_id', sa.BigInteger(), nullable=True),
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
-    sa.Column('blog_id', sa.BigInteger(), nullable=False),
-    sa.Column('article_id', sa.BigInteger(), nullable=False),
+    sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
+    sa.CheckConstraint('(article_id IS NOT NULL OR blog_id IS NOT NULL)', name='check_article_or_blog'),
     sa.ForeignKeyConstraint(['article_id'], ['Article.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['blog_id'], ['blog.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['parent_id'], ['comment.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+    op.create_index(op.f('ix_comment_blog_id'), 'comment', ['blog_id'], unique=False)
+    op.add_column('Article', sa.Column('description', sa.String(length=100), nullable=False))
     op.add_column('blog', sa.Column('default_category_id', sa.Integer(), nullable=False))
     op.alter_column('user', 'password',
                existing_type=mysql.VARCHAR(length=20),
@@ -54,6 +66,8 @@ def downgrade() -> None:
                existing_type=mysql.VARCHAR(length=20),
                nullable=False)
     op.drop_column('blog', 'default_category_id')
-    op.drop_table('blog_like')
+    op.drop_column('Article', 'description')
+    op.drop_index(op.f('ix_comment_blog_id'), table_name='comment')
+    op.drop_table('comment')
     op.drop_table('notification')
     # ### end Alembic commands ###

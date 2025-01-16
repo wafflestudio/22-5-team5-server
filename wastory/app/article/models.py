@@ -7,6 +7,7 @@ from wastory.database.common import Base, intpk
 if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
+    from wastory.app.comment.models import Comment
     from wastory.app.like.models import Like
 class Article(Base):
     __tablename__ = "Article"
@@ -14,6 +15,8 @@ class Article(Base):
     id : Mapped[intpk]
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
+    description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description
+
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())    
     # ondelete = "CASCADE" 를 통해 Article 삭제 시, Article 과 연결된 레코드에서 자동으로 참조가 제거.
@@ -25,6 +28,13 @@ class Article(Base):
     
     blog : Mapped["Blog"] = relationship("Blog", back_populates = "articles")
     category : Mapped["Category"] = relationship("Category", back_populates = "articles")
+    
+    # 이후 댓글 및 tag 구현시 delete-orphan 추가하기기
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment",
+        back_populates="article",  # Comment 모델의 article 관계명
+        cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
+    )
 
     likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
     

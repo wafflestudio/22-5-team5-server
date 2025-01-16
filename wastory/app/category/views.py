@@ -22,7 +22,7 @@ async def create(
         user=user,
         categoryname=category_create_request.categoryname, 
         categorylevel=category_create_request.categoryLevel,
-        parentId=category_create_request.parentId
+        parentId=category_create_request.parent_id
     )
 
 #현재 유저가 지니고 있는 카테고리들을 불러오는 API
