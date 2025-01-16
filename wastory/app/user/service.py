@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 from uuid import uuid4
-from typing import Annotated
+from typing import Annotated, Optional
 from enum import Enum
 
 from fastapi import Depends
+from wastory.database.settings import PW_SETTINGS
 from wastory.app.user.errors import (
     InvalidUsernameOrPasswordError,
     InvalidTokenError,
@@ -13,14 +14,18 @@ from wastory.app.user.errors import (
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
 import jwt
-
-
-SECRET = "secret_for_jwt"
+import random
+import smtplib
+import redis
+from email.message import EmailMessage
 
 
 class TokenType(Enum):
     ACCESS = "access"
     REFRESH = "refresh"
+
+
+redis_client = redis.StrictRedis(host="localhost", port=6379, db=0)
 
 
 class UserService:
@@ -44,12 +49,13 @@ class UserService:
 
     async def update_user(
         self,
-        username: str,
-        email: str | None,
+        username: str | None,
+        nickname: str | None,
+        email: str,
         address: str | None,
         phone_number: str | None,
     ) -> User:
-        return await self.user_store.update_user(username, email, address, phone_number)
+        return await self.user_store.update_user(username, nickname, email, address, phone_number)
 
     async def update_password(
         self,
@@ -75,10 +81,10 @@ class UserService:
     def issue_tokens(self, email: str) -> tuple[str, str]:
         access_payload = {
             "sub": email,
-            "exp": datetime.now() + timedelta(minutes=60),
+            "exp": datetime.now() + timedelta(minutes=10),
             "typ": TokenType.ACCESS.value,
         }
-        access_token = jwt.encode(access_payload, SECRET, algorithm="HS256")
+        access_token = jwt.encode(access_payload, PW_SETTINGS.secret_for_jwt, algorithm="HS256")
 
         refresh_payload = {
             "sub": email,
@@ -86,7 +92,7 @@ class UserService:
             "exp": datetime.now() + timedelta(days=7),
             "typ": TokenType.REFRESH.value,
         }
-        refresh_token = jwt.encode(refresh_payload, SECRET, algorithm="HS256")
+        refresh_token = jwt.encode(refresh_payload, PW_SETTINGS.secret_for_jwt, algorithm="HS256")
         return access_token, refresh_token
 
     def validate_access_token(self, token: str) -> str:
@@ -95,7 +101,7 @@ class UserService:
         """
         try:
             payload = jwt.decode(
-                token, SECRET, algorithms=["HS256"], options={"require": ["sub"]}
+                token, PW_SETTINGS.secret_for_jwt, algorithms=["HS256"], options={"require": ["sub"]}
             )
             if payload["typ"] != TokenType.ACCESS.value:
                 raise InvalidTokenError()
@@ -112,7 +118,7 @@ class UserService:
         try:
             payload = jwt.decode(
                 token,
-                SECRET,
+                PW_SETTINGS.secret_for_jwt,
                 algorithms=["HS256"],
                 options={"require": ["sub"]},
             )
@@ -134,3 +140,41 @@ class UserService:
         username = await self.validate_refresh_token(refresh_token)
         await self.user_store.block_token(refresh_token, datetime.now())
         return self.issue_tokens(username)
+
+
+    def generate_verification_code(self) -> str:
+        return str(random.randint(100000, 999999))
+
+
+    async def send_verification_code(self, email: str) -> str:
+
+        """무작위 인증 코드 생성 후 이메일 발송"""
+
+        verification_code = self.generate_verification_code()
+
+        # 캐시에 저장
+        redis_client.set(f"verification:{email}", verification_code, ex=180) #3분
+
+        # 이메일 발송
+        msg = EmailMessage()
+        msg["Subject"] = "Your Verification Code for Wastory"
+        msg["From"] = "waffleteam05@gmail.com"
+        msg["To"] = email
+        msg.set_content(f"Your verification code is: {verification_code}")
+
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login("waffleteam05", PW_SETTINGS.gmail_app_password)
+            server.send_message(msg)
+
+        return verification_code
+
+    def verify_code(self, email: str, code: str) -> bool:
+
+        """Redis에서 인증 코드 검증"""
+
+        stored_code: Optional[bytes] = redis_client.get(f"verification:{email}")
+        if stored_code and stored_code.decode() == code:
+            redis_client.delete(f"verification:{email}")  # 사용 후 삭제
+            return True
+        return False

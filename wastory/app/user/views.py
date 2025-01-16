@@ -4,7 +4,8 @@ from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
-from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest
+from wastory.database.settings import PW_SETTINGS
+from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest, UserEmailRequest, UserEmailVerifyRequest
 from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse
 from wastory.app.user.errors import InvalidTokenError
 from wastory.app.user.models import User
@@ -17,24 +18,11 @@ security = HTTPBearer()
 oauth = OAuth()
 oauth.register(
     name="kakao",
-    client_id="1184125",  # 카카오 REST API 키
-    client_secret="YOUR_KAKAO_CLIENT_SECRET",  # 선택 사항
-    access_token_url="https://kauth.kakao.com/oauth/token",
+    client_id=PW_SETTINGS.kakao_rest_api_key,  # 카카오 REST API 키
+    access_token_url="https://kauth.kakao.com/oauth/token",   
     authorize_url="https://kauth.kakao.com/oauth/authorize",
     client_kwargs={"scope": "profile_nickname"},
 )
-
-# async def login_with_header(
-#     x_wapang_username: Annotated[str, Header(...)],
-#     x_wapang_password: Annotated[str, Header(...)],
-#     user_service: Annotated[UserService, Depends()],
-# ) -> User:
-#     user = await user_service.get_user_by_username(x_wapang_username)
-#     if not user or user.password != x_wapang_password:
-#         raise HTTPException(
-#             status_code=HTTP_401_UNAUTHORIZED, detail="Invalid credentials"
-#         )
-#     return user
 
 
 async def login_with_header(
@@ -62,11 +50,34 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
     user_info = user_info.json()
 
     nickname = user_info["properties"]["nickname"]
-    username = await user_service.get_user_by_nickname(nickname)
-    access_token, refresh_token = await user_service.issue_tokens(username)
+    user = await user_service.get_user_by_nickname(nickname)
+    if user == None:
+        await user_service.add_user(
+            nickname, None
+        )
+        await user_service.update_user(
+            nickname, nickname, nickname, None, None
+        )
+    access_token, refresh_token = user_service.issue_tokens(user.email)
 
     return UserSigninResponse(access_token=access_token, refresh_token=refresh_token)
 
+
+@user_router.post("/request-verification")
+async def request_verification(
+    email_request: UserEmailRequest, user_service: Annotated[UserService, Depends()]
+):
+    await user_service.send_verification_code(email_request.email)
+    return "Success"
+
+
+@user_router.post("/verify-email")
+async def verify_email(
+    verification_request: UserEmailVerifyRequest, user_service: Annotated[UserService, Depends()]
+):
+    is_valid = user_service.verify_code(verification_request.email, verification_request.code)
+    return is_valid
+    
 
 @user_router.post("/signup", status_code=HTTP_201_CREATED)
 async def signup(
