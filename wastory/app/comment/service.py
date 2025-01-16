@@ -99,7 +99,7 @@ class CommentService:
         각 댓글의 children은 전부 포함.
         """
         # store에서 level=1 댓글들만 가져옴 (limit/offset)
-        level1_comments = await self.comment_store.get_level1_article_comments_with_children(
+        level1_comments = await self.comment_store.get_article_comments(
             article_id=article_id, 
             page=page, 
             per_page=per_page
@@ -140,7 +140,7 @@ class CommentService:
         각 댓글의 children은 전부 포함.
         """
         # store에서 level=1 댓글들만 가져옴 (limit/offset)
-        level1_comments = await self.comment_store.get_level1_guestbook_comments_with_children(
+        level1_comments = await self.comment_store.get_guestbook_comments(
             blog_id=blog_id, 
             page=page, 
             per_page=per_page

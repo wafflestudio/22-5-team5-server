@@ -15,7 +15,7 @@ class CommentStore:
         comment=await SESSION.scalar(get_comment_query)
         return comment
 
-    async def get_level1_article_comments_with_children(
+    async def get_article_comments(
         self, article_id: int, page: int, per_page: int
     ) -> list[Comment]:
         offset_val = (page - 1) * per_page
@@ -39,7 +39,7 @@ class CommentStore:
         return count or 0
 
 
-    async def get_level1_guestbook_comments_with_children(
+    async def get_guestbook_comments(
         self, blog_id: int, page: int, per_page: int
     ) -> list[Comment]:
         offset_val = (page - 1) * per_page
