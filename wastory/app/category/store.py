@@ -1,6 +1,6 @@
 from functools import cache
 from typing import Annotated
-
+from sqlalchemy.orm import selectinload
 from sqlalchemy import select,and_
 from wastory.app.category.errors import CategoryNameDuplicateError,CategoryNotFoundError,NotOwnerError
 from wastory.app.user.models import User
@@ -57,8 +57,13 @@ class CategoryStore:
         get_category_query=select(Category).filter(
             Category.blog_id==blog_id
         )
-        categories=await SESSION.scalars(get_category_query)
-        return categories
+        stmt=(
+            select(Category)
+            .filter(Category.blog_id==blog_id, Category.level==1)
+            .options(selectinload(Category.children))
+        )
+        categories=await SESSION.scalars(stmt)
+        return list(categories)
 
     @transactional
     async def update_category(
