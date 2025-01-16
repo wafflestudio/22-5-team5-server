@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from fastapi.exception_handlers import request_validation_exception_handler
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 
 from wastory.api import api_router
 from wastory.common.errors import MissingRequiredFieldError
@@ -16,6 +17,8 @@ app.add_middleware(
     allow_methods=["*"],  # 허용할 HTTP 메소드 ("*": 모든 메소드 허용)
     allow_headers=["*"],  # 허용할 헤더 ("*": 모든 헤더 허용)
 )
+
+app.add_middleware(SessionMiddleware, secret_key="secret_for_session")
 
 app.include_router(api_router, prefix="/api")
 

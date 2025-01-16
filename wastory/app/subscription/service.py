@@ -3,21 +3,37 @@ from fastapi import Depends
 from wastory.app.subscription.store import SubscriptionStore
 from wastory.app.subscription.dto.responses import SubscriptionDetailResponse
 from wastory.app.blog.service import BlogService
+from wastory.app.notification.service import NotificationService
 from wastory.app.subscription.errors import BlogNotFoundError
 from wastory.app.user.models import User
 
 
 class SubscriptionService:
-    def __init__(self, subscription_store: Annotated[SubscriptionStore, Depends()], blog_service: Annotated[BlogService, Depends()]) -> None:
+    def __init__(
+            self,
+            subscription_store: Annotated[SubscriptionStore, Depends()],
+            blog_service: Annotated[BlogService, Depends()],
+            notification_service: Annotated[NotificationService, Depends()],
+            ) -> None:
         self.subscription_store = subscription_store
         self.blog_service=blog_service
+        self.notification_service = notification_service
 
     async def add_subscription(self, subscriber_id: int, subscribed_id: int) -> SubscriptionDetailResponse:
         """
         구독 추가 서비스
         """
+        subscribed_blog = await self.blog_service.get_blog_by_id(subscribed_id)
+
         # SubscriptionStore에서 구독 추가 호출
         subscription = await self.subscription_store.add_subscription(subscriber_id, subscribed_id)
+
+        # 구독 알림
+        await self.notification_service.add_notification(
+            blog_address_names = [subscribed_blog.address_name],
+            type=2,
+            description="구독",
+        )
 
         # SubscriptionDetailResponse로 변환하여 반환
         return SubscriptionDetailResponse.model_validate(subscription, from_attributes=True)

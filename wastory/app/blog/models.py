@@ -31,14 +31,12 @@ class Blog(Base):
     user: Mapped["User"] = relationship("User", back_populates="blogs")
     categories: Mapped[list["Category"]] = relationship("Category", back_populates="blog")
     articles: Mapped[list["Article"]] = relationship("Article",  back_populates="blog")
-
     subscriptions: Mapped[list["Subscription"]] = relationship(
         "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
     )  # 이 블로그가 구독한 다른 블로그들
     subscribers: Mapped[list["Subscription"]] = relationship(
         "Subscription", foreign_keys="Subscription.subscribed_id", back_populates="subscribed_blog"
     )  # 이 블로그를 구독한 다른 블로그들
-
     likes: Mapped[list["Like"]] = relationship("Like", back_populates ="blog", cascade = "all,delete-orphan")
     # 이 블로그가 누른 like 의 모음
 
