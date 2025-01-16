@@ -41,6 +41,7 @@ class ArticleStore :
         await SESSION.merge(article)
         await SESSION.flush()
         return article
+    
 
     @transactional
     async def delete_article(self, article: Article) -> None:

@@ -34,6 +34,14 @@ async def update_article(
         user, article_id, article.title, article.content
     )
 
+# article 정보 가져오기
+@article_router.get("/get/{article_id}", status_code=200)
+async def get_article_by_id(
+    article_service: Annotated[ArticleService, Depends()],
+    article_id : int,
+) -> ArticleDetailResponse :
+    return await article_service.get_article_by_id(article_id)
+
 # blog 내 article 검색
 @article_router.get("/blogs/{blog_id}", status_code=200)
 async def get_articles_in_blog(

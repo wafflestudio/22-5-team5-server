@@ -87,6 +87,10 @@ class ArticleService:
         articles = await self.article_store.get_articles_by_words_and_blog_id(searching_words, blog_id)
         return [ArticleSearchInListResponse.from_article(article) for article in articles]
 
+
+    async def get_article_by_id(self, article_id : int) -> ArticleDetailResponse:
+        article = await self.article_store.get_article_by_id(article_id)
+        return ArticleDetailResponse.from_article(article)
     
     async def delete_article(
         self,
