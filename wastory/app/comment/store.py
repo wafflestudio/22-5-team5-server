@@ -30,7 +30,7 @@ class CommentStore:
         results = await SESSION.scalars(stmt)
         return list(results)
 
-    async def get_total_level1_article_comments_count(self, article_id: int) -> int:
+    async def get_article_comments_count(self, article_id: int) -> int:
         stmt = select(func.count(Comment.id)).filter(
             Comment.article_id == article_id,
             Comment.level == 1
@@ -54,7 +54,7 @@ class CommentStore:
         results = await SESSION.scalars(stmt)
         return list(results)
 
-    async def get_total_level1_guestbook_comments_count(self, blog_id: int) -> int:
+    async def get_guestbook_comments_count(self, blog_id: int) -> int:
         stmt = select(func.count(Comment.id)).filter(
             Comment.blog_id == blog_id,
             Comment.level == 1

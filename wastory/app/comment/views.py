@@ -7,7 +7,7 @@ comment_router = APIRouter()
 from wastory.app.user.views import login_with_header
 from wastory.app.comment.service import CommentService
 from wastory.app.comment.dto.requests import CommentCreateRequest, CommentUpdateRequest
-from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse
+from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse,PaginatedCommentListResponse
 
 @comment_router.post("/article/{article_id}", status_code=HTTP_201_CREATED)
 async def create(
@@ -73,9 +73,9 @@ async def get_article_comment_list(
     article_id: int,
     page: int,
     comment_service: Annotated[CommentService, Depends()],
-) -> list[CommentListResponse]:
+) -> PaginatedCommentListResponse:
     per_page = 10  # 페이지당 10개(혹은 쿼리 파라미터로 받아도 됨)
-    return await comment_service.get_article_list_level1_with_children(
+    return await comment_service.get_article_list_pagination(
         article_id=article_id,
         page=page,
         per_page=per_page
@@ -86,12 +86,11 @@ async def get_guestbook_comment_list(
     blog_id: int,
     page: int,
     comment_service: Annotated[CommentService, Depends()],
-) -> list[CommentListResponse]:
+) -> PaginatedCommentListResponse:
     per_page = 10  # 페이지당 10개(혹은 쿼리 파라미터로 받아도 됨)
-    return await comment_service.get_guestbook_list_level1_with_children(
+    return await comment_service.get_guestbook_list_pagination(
         blog_id=blog_id,
         page=page,
         per_page=per_page
     )
-
 

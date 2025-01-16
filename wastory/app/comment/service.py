@@ -4,6 +4,7 @@ from fastapi import Depends
 from wastory.app.comment.store import CommentStore
 from wastory.app.comment.dto.responses import CommentDetailResponse,CommentListResponse,PaginatedCommentListResponse
 from wastory.app.article.errors import ArticleNotFoundError
+from wastory.app.blog.errors import BlogNotFoundError
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
 from wastory.app.article.store import ArticleStore
@@ -52,7 +53,7 @@ class CommentService:
             #article id를 받아서, article 을 받고 넘기자
             blog=await self.blog_store.get_blog_by_id(blog_id)
             if blog==None:
-                raise ArticleNotFoundError()   ##바꿔야 해
+                raise BlogNotFoundError()   ##바꿔야 해
             if level==1:
                 new_comment=await self.comment_store.create_guestbook_comment_1(
                     content=content,
@@ -87,7 +88,7 @@ class CommentService:
             user=user,
             comment_id=comment_id
         )
-
+    '''
     async def get_article_list_level1_with_children(
         self,
         article_id: int,
@@ -107,16 +108,16 @@ class CommentService:
 
         # DTO 변환
         return [CommentListResponse.from_comment(c) for c in level1_comments]
-
+    '''
     # 페이지네이션 정보를 추가로 내려주고 싶으면
-    async def get_article_list_level1_with_pagination(
+    async def get_article_list_pagination(
         self,
         article_id: int,
         page: int,
         per_page: int
     ) -> PaginatedCommentListResponse:
-        total_count = await self.comment_store.get_total_level1_article_comments_count(article_id)
-        level1_comments = await self.comment_store.get_level1_article_comments_with_children(
+        total_count = await self.comment_store.get_article_comments_count(article_id)
+        level1_comments = await self.comment_store.get_article_comments(
             article_id=article_id, 
             page=page, 
             per_page=per_page
@@ -128,7 +129,7 @@ class CommentService:
             comments=[CommentListResponse.from_comment(c) for c in level1_comments]
         )
 
-
+    '''
     async def get_guestbook_list_level1_with_children(
         self,
         blog_id: int,
@@ -148,16 +149,16 @@ class CommentService:
 
         # DTO 변환
         return [CommentListResponse.from_comment(c) for c in level1_comments]
-
+    '''
     # 페이지네이션 정보를 추가로 내려주고 싶으면
-    async def get_guestbook_list_level1_with_pagination(
+    async def get_guestbook_list_pagination(
         self,
         blog_id: int,
         page: int,
         per_page: int
     ) -> PaginatedCommentListResponse:
-        total_count = await self.comment_store.get_total_level1_guestbook_comments_count(article_id)
-        level1_comments = await self.comment_store.get_level1_guestbook_comments_with_children(
+        total_count = await self.comment_store.get_guestbook_comments_count(blog_id)
+        level1_comments = await self.comment_store.get_guestbook_comments(
             blog_id=blog_id, 
             page=page, 
             per_page=per_page
