@@ -22,6 +22,11 @@ class User(Base):
 
 
     blogs = relationship("Blog", lazy="selectin", back_populates="user", uselist=False)
+    comments: Mapped[list["Comment"]] = relationship(
+        "Comment",
+        back_populates="user",  # Comment 모델의 article 관계명
+        cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
+    )
     notification = relationship("Notification", lazy="selectin", back_populates="user", uselist=False)
     
 class BlockedToken(Base):
