@@ -21,7 +21,7 @@ class Comment(Base):
     user: Mapped[Optional["User"]] = relationship("User", back_populates="comments")
 
     # Article에 대한 FK
-    article_id: Mapped[Optional[int]] = mapped_column(ForeignKey("article.id", ondelete="CASCADE"), nullable=True)
+    article_id: Mapped[Optional[int]] = mapped_column(ForeignKey("Article.id", ondelete="CASCADE"), nullable=True)
     article: Mapped[Optional["Article"]] = relationship("Article", back_populates="comments")
 
     blog_id: Mapped[Optional[int]] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=True, index=True)

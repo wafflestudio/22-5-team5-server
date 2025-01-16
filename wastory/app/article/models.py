@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from wastory.app.comment.models import Comment
     from wastory.app.like.models import Like
 class Article(Base):
-    __tablename__ = "article"
+    __tablename__ = "Article"
 
     id : Mapped[intpk]
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)

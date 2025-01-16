@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: 24ae5cfef10f
+Revision ID: c2a7a1f933e8
 Revises: 
-Create Date: 2025-01-15 15:16:55.782054
+Create Date: 2025-01-16 04:03:49.843949
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '24ae5cfef10f'
+revision: str = 'c2a7a1f933e8'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -30,7 +30,7 @@ def upgrade() -> None:
     sa.Column('username', sa.String(length=20), nullable=True),
     sa.Column('nickname', sa.String(length=20), nullable=True),
     sa.Column('email', sa.String(length=100), nullable=False),
-    sa.Column('password', sa.String(length=20), nullable=False),
+    sa.Column('password', sa.String(length=20), nullable=True),
     sa.Column('address', sa.String(length=100), nullable=True),
     sa.Column('phone_number', sa.String(length=20), nullable=True),
     sa.PrimaryKeyConstraint('id')
@@ -46,10 +46,33 @@ def upgrade() -> None:
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
     sa.Column('main_image_url', sa.String(length=255), nullable=True),
+    sa.Column('default_category_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.BigInteger(), nullable=False),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('user_id', name='unique_user_blog')
+    )
+    op.create_table('notification',
+    sa.Column('id', sa.BigInteger(), nullable=False),
+    sa.Column('notification_type', sa.Integer(), nullable=False),
+    sa.Column('description', sa.String(length=255), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('checked', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('user_id', sa.BigInteger(), nullable=False),
+    sa.CheckConstraint('notification_type IN (1, 2, 3, 4, 5)', name='valid_notification_type'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_table('blog_subscription',
+    sa.Column('id', sa.BigInteger(), nullable=False),
+    sa.Column('subscriber_id', sa.BigInteger(), nullable=False),
+    sa.Column('subscribed_id', sa.BigInteger(), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.ForeignKeyConstraint(['subscribed_id'], ['blog.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['subscriber_id'], ['blog.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id'),
+    sa.UniqueConstraint('subscriber_id', 'subscribed_id', name='unique_subscription')
     )
     op.create_table('category',
     sa.Column('id', sa.BigInteger(), nullable=False),
@@ -64,7 +87,7 @@ def upgrade() -> None:
     sa.UniqueConstraint('name', 'blog_id', name='unique_category_per_blog')
     )
     op.create_index(op.f('ix_category_name'), 'category', ['name'], unique=False)
-    op.create_table('article',
+    op.create_table('Article',
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('title', sa.String(length=20), nullable=False),
     sa.Column('content', sa.Text(), nullable=False),
@@ -76,7 +99,16 @@ def upgrade() -> None:
     sa.ForeignKeyConstraint(['category_id'], ['category.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_article_title'), 'article', ['title'], unique=False)
+    op.create_index(op.f('ix_Article_title'), 'Article', ['title'], unique=False)
+    op.create_table('blog_like',
+    sa.Column('id', sa.BigInteger(), nullable=False),
+    sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
+    sa.Column('blog_id', sa.BigInteger(), nullable=False),
+    sa.Column('article_id', sa.BigInteger(), nullable=False),
+    sa.ForeignKeyConstraint(['article_id'], ['Article.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['blog_id'], ['blog.id'], ondelete='CASCADE'),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('comment',
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('content', sa.String(length=500), nullable=False),
@@ -90,7 +122,7 @@ def upgrade() -> None:
     sa.Column('created_at', sa.DateTime(timezone=True), server_default=sa.text('now()'), nullable=False),
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
     sa.CheckConstraint('(article_id IS NOT NULL OR blog_id IS NOT NULL)', name='check_article_or_blog'),
-    sa.ForeignKeyConstraint(['article_id'], ['article.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['article_id'], ['Article.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['blog_id'], ['blog.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['parent_id'], ['comment.id'], ),
     sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
@@ -104,10 +136,13 @@ def downgrade() -> None:
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_index(op.f('ix_comment_blog_id'), table_name='comment')
     op.drop_table('comment')
-    op.drop_index(op.f('ix_article_title'), table_name='article')
-    op.drop_table('article')
+    op.drop_table('blog_like')
+    op.drop_index(op.f('ix_Article_title'), table_name='Article')
+    op.drop_table('Article')
     op.drop_index(op.f('ix_category_name'), table_name='category')
     op.drop_table('category')
+    op.drop_table('blog_subscription')
+    op.drop_table('notification')
     op.drop_table('blog')
     op.drop_index(op.f('ix_user_username'), table_name='user')
     op.drop_index(op.f('ix_user_nickname'), table_name='user')

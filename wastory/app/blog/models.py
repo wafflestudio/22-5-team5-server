@@ -41,7 +41,6 @@ class Blog(Base):
     likes: Mapped[list["Like"]] = relationship("Like", back_populates ="blog", cascade = "all,delete-orphan")
     # 이 블로그가 누른 like 의 모음
 
-<<<<<<< HEAD
     comments: Mapped[list["Comment"]] = relationship(
         "Comment",
         back_populates="blog",  # Comment 모델의 article 관계명
@@ -49,5 +48,3 @@ class Blog(Base):
     )
     def __repr__(self):
         return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"
-=======
->>>>>>> origin/main
