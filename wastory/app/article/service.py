@@ -31,15 +31,12 @@ class ArticleService:
     async def create_article(
         self, user: User, blog_id: int, category_id :int, article_title: str, article_content: str
     ) -> ArticleDetailResponse :
-        
-        print("called article_service")
-        
+                
         # 사용자의 Blog 확인
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
             raise BlogNotFoundError()
         
-        print("user_blog_id : ", user_blog.id)
         new_article = await self.article_store.create_article(blog_id, category_id, article_title, article_content)
 
         # 새 글 알림

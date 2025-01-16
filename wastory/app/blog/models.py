@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.article.models import Article
     from wastory.app.subscription.models import Subscription
+    from wastory.app.like.models import Like
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -37,5 +38,13 @@ class Blog(Base):
         "Subscription", foreign_keys="Subscription.subscribed_id", back_populates="subscribed_blog"
     )  # 이 블로그를 구독한 다른 블로그들
 
-    def __repr__(self):
-        return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"
+    subscriptions: Mapped[list["Subscription"]] = relationship(
+        "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
+    )  # 이 블로그가 구독한 다른 블로그들
+    subscribers: Mapped[list["Subscription"]] = relationship(
+        "Subscription", foreign_keys="Subscription.subscribed_id", back_populates="subscribed_blog"
+    )  # 이 블로그를 구독한 다른 블로그들
+
+    likes: Mapped[list["Like"]] = relationship("Like", back_populates ="blog", cascade = "all,delete-orphan")
+    # 이 블로그가 누른 like 의 모음
+

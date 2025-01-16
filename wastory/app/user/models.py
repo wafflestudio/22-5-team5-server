@@ -1,5 +1,4 @@
 from datetime import datetime
-from datetime import datetime
 from typing import TYPE_CHECKING
 from sqlalchemy import String, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
