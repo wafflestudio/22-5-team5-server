@@ -19,13 +19,11 @@ async def create_article(
     article_service: Annotated[ArticleService, Depends()],
     blog_service: Annotated[BlogService, Depends()],
 ) -> ArticleDetailResponse:
-<<<<<<< HEAD
-    if(article.category_id)
-    return await article_service.create_article(user, article.title, article.content, article.blog_id, article.category_id)
-=======
     user_blog = await blog_service.get_blog_by_user(user)
-    return await article_service.create_article(user, article.title, article.content, user_blog.id, article.category_id)
->>>>>>> origin/main
+    if article.category_id == None:
+        return await article_service.create_article(user, article.title, user_blog.id, user_blog.default_category_id)
+    else:
+        return await article_service.create_article(user, article.title, article.content, user_blog.id, article.category_id)
 
 # article 수정
 @article_router.patch("/update/{article_id}", status_code=200)
@@ -74,12 +72,3 @@ async def delete_article(
     article_service: Annotated[ArticleService, Depends()],
 ) -> None:
     await article_service.delete_article(user, article_id)
-
-@article_router.post("/default", status_code=201)
-async def create_article_in_default_category(
-    user: Annotated[User, Depends(login_with_header)],
-    article: DefaultArticleCreateRequest,
-    article_service: Annotated[ArticleService, Depends()],
-)-> ArticleDetailResponse:
-    print("called create_article")
-    return await article_service.create_article(user, article.title, article.content, article.blog_id, user.blogs.default_category_id)
