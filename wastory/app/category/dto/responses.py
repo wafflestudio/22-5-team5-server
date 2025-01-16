@@ -29,16 +29,14 @@ class CategoryDetailResponse(BaseModel):
 class CategoryListResponse(BaseModel):
     id: int
     category_name: str
-    level: int
+    children: List[CategoryDetailResponse]=[]
+    class Config:
+            orm_mode=True
 
     @staticmethod
     def from_category(category: Category) -> "CategoryListResponse":
-        response = CategoryListResponse(
+        return CategoryListResponse(
             id=category.id,
             category_name=category.name,
-            level=category.level
+            children=[CategoryDetailResponse.from_category(category) for category in category.children]
         )
-        # level == 1이면 하위 카테고리 리스트 변환
-        
-
-        return response

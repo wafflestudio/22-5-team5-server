@@ -19,7 +19,7 @@ def validate_categorylevel(value:int)->int:
 class CategoryCreateRequest(BaseModel):
     categoryname: Annotated[str,AfterValidator(validate_categoryname)]
     categoryLevel: Annotated[int, AfterValidator(validate_categorylevel)]
-    parentId: int|None=None
+    parent_id: int|None=None
 
 class CategoryUpdateRequest(BaseModel):
     categoryname: Annotated[str,AfterValidator(validate_categoryname)]

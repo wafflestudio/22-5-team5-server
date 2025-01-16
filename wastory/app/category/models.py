@@ -21,12 +21,13 @@ class Category(Base):
     level: Mapped[int] = mapped_column(Integer, nullable=False)
 
     blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id"))
-    parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("category.id"), nullable=True)
+    
 
     blog: Mapped["Blog"] = relationship("Blog", back_populates="categories")
     articles : Mapped[list["Article"]] = relationship("Article", back_populates="category")
 
     # 양방향 관계 설정
+    parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("category.id"), nullable=True)
     parent: Mapped["Category"] = relationship(
         "Category",
         back_populates="children",
