@@ -4,6 +4,7 @@ from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdate
 from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleSearchInListResponse
 from wastory.app.article.service import ArticleService
 from wastory.app.blog.service import BlogService
+from wastory.app.blog.errors import BlogNotFoundError
 
 from wastory.app.user.models import User
 from wastory.app.user.views import login_with_header
@@ -20,7 +21,13 @@ async def create_article(
     blog_service: Annotated[BlogService, Depends()],
 ) -> ArticleDetailResponse:
     user_blog = await blog_service.get_blog_by_user(user)
-    return await article_service.create_article(user, article.title, article.content, user_blog.id, article.category_id)
+    if not user_blog:
+        raise BlogNotFoundError
+    print("default : ", user_blog.default_category_id)
+    if article.category_id == 0:
+        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, category_id=user_blog.default_category_id)
+    else:
+        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, category_id=article.category_id)
 
 # article 수정
 @article_router.patch("/update/{article_id}", status_code=200)

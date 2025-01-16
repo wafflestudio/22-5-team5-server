@@ -71,6 +71,15 @@ def validate_phone_number(value: str) -> str:
 class UserSignupRequest(BaseModel):
     email: EmailStr
     password: Annotated[str, AfterValidator(validate_password)]
+    
+
+class UserEmailRequest(BaseModel):
+    email: EmailStr
+
+
+class UserEmailVerifyRequest(BaseModel):
+    email: EmailStr
+    code: str
 
 
 class UserUpdateRequest(BaseModel):
