@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends
-from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleDetailInListResponse, ArticleSearchInListResponse
+from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleSearchInListResponse
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
@@ -29,7 +29,7 @@ class ArticleService:
         self.notification_service = notification_service
     
     async def create_article(
-        self, user: User, category_id :int, article_title: str, article_content: str
+        self, user: User, category_id :int, article_title: str, article_content: str, article_description: str,
     ) -> ArticleDetailResponse :
                 
         # 사용자의 Blog 확인
@@ -39,7 +39,7 @@ class ArticleService:
         
         print("category ID : ", category_id)
         
-        new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content)
+        new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content, article_description = article_description)
 
         # 새 글 알림
         await self.notification_service.add_notification(

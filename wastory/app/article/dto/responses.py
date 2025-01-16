@@ -27,8 +27,8 @@ class ArticleSearchResponse(BaseModel):
     class Config:
         orm_mode = True
     @staticmethod
-    def from_article(article: Article) -> "ArticleDetailResponse":
-        return ArticleDetailResponse(
+    def from_article(article: Article) -> "ArticleSearchResponse":
+        return ArticleSearchResponse(
             id=article.id, title=article.title, content=article.content, created_at=article.created_at, updated_at = article.updated_at
         )
     

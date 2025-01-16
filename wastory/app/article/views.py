@@ -25,9 +25,9 @@ async def create_article(
         raise BlogNotFoundError
     print("default : ", user_blog.default_category_id)
     if article.category_id == 0:
-        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, category_id=user_blog.default_category_id)
+        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, article_description= article.description, category_id=user_blog.default_category_id)
     else:
-        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, category_id=article.category_id)
+        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, article_description = article.description, category_id=article.category_id)
 
 # article 수정
 @article_router.patch("/update/{article_id}", status_code=200)
