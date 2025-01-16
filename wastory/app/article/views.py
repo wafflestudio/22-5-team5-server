@@ -20,7 +20,7 @@ async def create_article(
     blog_service: Annotated[BlogService, Depends()],
 ) -> ArticleDetailResponse:
     user_blog = await blog_service.get_blog_by_user(user)
-    if article.category_id == None:
+    if article.category_id == 0:
         return await article_service.create_article(user, article.title, user_blog.id, user_blog.default_category_id)
     else:
         return await article_service.create_article(user, article.title, article.content, user_blog.id, article.category_id)
