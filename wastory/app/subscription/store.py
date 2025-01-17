@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlalchemy import select
+from sqlalchemy import select, func
 from typing import List
 from wastory.app.subscription.models import Subscription
 from wastory.app.blog.models import Blog
@@ -95,3 +95,53 @@ class SubscriptionStore:
         await SESSION.delete(subscription)
         await SESSION.flush()
         return True
+    
+    async def get_paginated_subscribed_blog_addresses(self, subscriber_id: int, page: int, per_page: int) -> list[Subscription]:
+        """
+        내가 구독 중인 블로그들의 주소 이름 반환(페이지네이션)
+        """
+        
+        offset_val = (page - 1) * per_page
+
+        query={
+            select(Subscription)
+            .join(Subscription, Subscription.subscribed_id == Blog.id)
+            .filter(Subscription.subscriber_id == subscriber_id)
+            .offset(offset_val)
+            .limit(per_page)
+        }
+
+        results = await SESSION.scalars(query)
+        return list(results)
+    
+    async def get_paginated_subscriber_blog_addresses(self, subscribed_id: int, page: int, per_page: int) -> list[Subscription]:
+        """
+        나를 구독 중인 블로그들의 주소 이름 반환(페이지네이션)
+        """
+        
+        offset_val = (page - 1) * per_page
+
+        query={
+            select(Subscription)
+            .join(Subscription, Subscription.subscriber_id == Blog.id)
+            .filter(Subscription.subscribed_id == subscribed_id)
+            .offset(offset_val)
+            .limit(per_page)
+        }
+
+        results = await SESSION.scalars(query)
+        return list(results)
+    
+    async def get_subscribed_blog_count(self, subscriber_id: int) -> int :
+        query={
+            select(func.count(Subscription.id).filter(Subscription.subscriber_id==subscriber_id))
+        }
+        count = await SESSION.scalar(query)
+        return count or 0
+    
+    async def get_subscriber_blog_count(self, subscribed_id: int) -> int :
+        query={
+            select(func.count(Subscription.id).filter(Subscription.subscribed_id==subscribed_id))
+        }
+        count=await SESSION.scalar(query)
+        return count or 0

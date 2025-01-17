@@ -1,7 +1,7 @@
 from typing import Annotated, List
 from fastapi import Depends
 from wastory.app.subscription.store import SubscriptionStore
-from wastory.app.subscription.dto.responses import SubscriptionDetailResponse
+from wastory.app.subscription.dto.responses import SubscriptionDetailResponse, PaginatedSubscriptionResponse
 from wastory.app.blog.service import BlogService
 from wastory.app.notification.service import NotificationService
 from wastory.app.subscription.errors import BlogNotFoundError, SelfSubscriptionError
@@ -68,3 +68,6 @@ class SubscriptionService:
 
         # 구독 관계 삭제
         return await self.subscription_store.delete_subscription(subscriber_blog.id, subscribed_blog.id)
+    
+    async def get_paginated_subscribed_blog_address(self, subscriber: User, page: int, per_page: int)->PaginatedSubscriptionResponse:
+        
