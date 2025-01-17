@@ -56,9 +56,9 @@ async def get_my_subscribers(
     user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
     page: int,
     subscribe_service: Annotated[SubscriptionService, Depends()]
-) -> List[str]:
+) -> PaginatedSubscriptionResponse:
     """
-    나를 구독한 블로그들의 주소 이름을 반환하는 API
+    나를 구독한 블로그들의 정보를 반환하는 API
     """
     per_page=10
     return await subscribe_service.get_paginated_subscriber_blog_address(
