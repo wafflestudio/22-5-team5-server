@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel
 from typing import List
+from wastory.app.blog.dto.responses import BlogDetailResponse
 
 class SubscriptionDetailResponse(BaseModel):
     id: int
@@ -15,4 +16,4 @@ class PaginatedSubscriptionResponse(BaseModel):
     page: int
     per_page: int
     total_count: int
-    comments: List[SubscriptionDetailResponse]
+    blogs: List[BlogDetailResponse]

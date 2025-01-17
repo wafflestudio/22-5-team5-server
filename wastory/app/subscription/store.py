@@ -103,13 +103,13 @@ class SubscriptionStore:
         
         offset_val = (page - 1) * per_page
 
-        query={
+        query=(
             select(Subscription)
             .join(Subscription, Subscription.subscribed_id == Blog.id)
             .filter(Subscription.subscriber_id == subscriber_id)
             .offset(offset_val)
             .limit(per_page)
-        }
+        )
 
         results = await SESSION.scalars(query)
         return list(results)
@@ -121,27 +121,27 @@ class SubscriptionStore:
         
         offset_val = (page - 1) * per_page
 
-        query={
+        query=(
             select(Subscription)
             .join(Subscription, Subscription.subscriber_id == Blog.id)
             .filter(Subscription.subscribed_id == subscribed_id)
             .offset(offset_val)
             .limit(per_page)
-        }
+        )
 
         results = await SESSION.scalars(query)
         return list(results)
     
     async def get_subscribed_blog_count(self, subscriber_id: int) -> int :
-        query={
+        query=(
             select(func.count(Subscription.id).filter(Subscription.subscriber_id==subscriber_id))
-        }
+        )
         count = await SESSION.scalar(query)
         return count or 0
     
     async def get_subscriber_blog_count(self, subscribed_id: int) -> int :
-        query={
+        query=(
             select(func.count(Subscription.id).filter(Subscription.subscribed_id==subscribed_id))
-        }
+        )
         count=await SESSION.scalar(query)
         return count or 0
