@@ -1,5 +1,6 @@
 from datetime import datetime
 from pydantic import BaseModel
+from typing import List
 
 class SubscriptionDetailResponse(BaseModel):
     id: int
@@ -9,3 +10,9 @@ class SubscriptionDetailResponse(BaseModel):
 
     class Config:
         orm_mode = True
+
+class PaginatedSubscriptionResponse(BaseModel):
+    page: int
+    per_page: int
+    total_count: int
+    comments: List[SubscriptionDetailResponse]
