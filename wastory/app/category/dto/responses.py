@@ -40,3 +40,13 @@ class CategoryListResponse(BaseModel):
             category_name=category.name,
             children=[CategoryDetailResponse.from_category(category) for category in category.children]
         )
+
+class CategoryFinalResponse(BaseModel):
+    category_list:List[CategoryListResponse]=[]
+    class Config:
+            orm_mode=True
+    @staticmethod
+    def from_categorylist(category_list:List[CategoryListResponse])->"CategoryFinalResponse":
+        return CategoryFinalResponse(
+            category_list=category_list
+        )
