@@ -8,7 +8,8 @@ from wastory.database.connection import SESSION
 from wastory.app.subscription.errors import (
     SubscriptionAlreadyExistsError,
     BlogNotFoundError,
-    SubscriptionNotFoundError
+    SubscriptionNotFoundError,
+    SelfSubscriptionError
 )
 
 
@@ -18,6 +19,9 @@ class SubscriptionStore:
         """
         구독 추가 기능: 특정 블로그가 다른 블로그를 구독합니다.
         """
+        #자기 자신을 구독할 경우 에러
+        if subscribed_id==subscriber_id:
+            raise SelfSubscriptionError
         # 구독할 블로그와 구독자가 존재하는지 확인
         subscriber_blog = await SESSION.scalar(select(Blog).filter(Blog.id == subscriber_id))
         subscribed_blog = await SESSION.scalar(select(Blog).filter(Blog.id == subscribed_id))
