@@ -4,7 +4,7 @@ from wastory.app.subscription.store import SubscriptionStore
 from wastory.app.subscription.dto.responses import SubscriptionDetailResponse
 from wastory.app.blog.service import BlogService
 from wastory.app.notification.service import NotificationService
-from wastory.app.subscription.errors import BlogNotFoundError
+from wastory.app.subscription.errors import BlogNotFoundError, SelfSubscriptionError
 from wastory.app.user.models import User
 
 
