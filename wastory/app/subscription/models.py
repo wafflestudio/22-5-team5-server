@@ -19,5 +19,5 @@ class Subscription(Base):
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # 생성 시간
 
     # 관계 설정
-    subscriber: Mapped["Blog"] = relationship("Blog", foreign_keys=[subscriber_id], back_populates="subscriptions", cascade="all, delete-orphan")
-    subscribed_blog: Mapped["Blog"] = relationship("Blog", foreign_keys=[subscribed_id], back_populates="subscribers", cascade="all, delete-orphan")
+    subscriber: Mapped["Blog"] = relationship("Blog", foreign_keys=[subscriber_id], back_populates="subscriptions")
+    subscribed_blog: Mapped["Blog"] = relationship("Blog", foreign_keys=[subscribed_id], back_populates="subscribers")

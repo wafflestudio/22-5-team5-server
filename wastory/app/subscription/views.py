@@ -35,7 +35,7 @@ async def add_subscription(
 
     return subscription
 
-@subscription_router.get("/my_subscriptions/{page}", response_model=List[str])
+@subscription_router.get("/my_subscriptions/{page}", response_model=PaginatedSubscriptionResponse)
 async def get_my_subscriptions(
     user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자,
     page: int,
@@ -51,7 +51,7 @@ async def get_my_subscriptions(
         per_page=per_page
     )
 
-@subscription_router.get("/my_subscribers/{page}", response_model=List[str])
+@subscription_router.get("/my_subscribers/{page}", response_model=PaginatedSubscriptionResponse)
 async def get_my_subscribers(
     user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
     page: int,

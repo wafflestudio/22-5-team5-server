@@ -39,24 +39,6 @@ class SubscriptionService:
         # SubscriptionDetailResponse로 변환하여 반환
         return SubscriptionDetailResponse.model_validate(subscription, from_attributes=True)
     
-    async def get_subscribed_blog_addresses(self, subscriber: User) -> List[str]:
-        """
-        내가 구독 중인 블로그들의 주소 이름 반환
-        """
-        subscriber_blog=await self.blog_service.get_blog_by_user(subscriber)
-        if not subscriber_blog:
-            raise BlogNotFoundError
-        return await self.subscription_store.get_subscribed_blog_addresses(subscriber_blog.id)
-    
-    async def get_subscriber_blog_addresses(self, subscribed: User) -> List[str]:
-        """
-        나를 구독한 블로그들의 주소 이름 반환
-        """
-        subscribed_blog=await self.blog_service.get_blog_by_user(subscribed)
-        if not subscribed_blog:
-            raise BlogNotFoundError
-        return await self.subscription_store.get_subscriber_blog_addresses(subscribed_blog.id)
-    
     async def cancel_subscription(self, subscriber_user: User, subscribed_address_name: str) -> bool:
         """
         구독 취소 서비스
@@ -72,11 +54,11 @@ class SubscriptionService:
     
     async def get_paginated_subscribed_blog_address(self, subscriber: User, page: int, per_page: int)->PaginatedSubscriptionResponse:
         """
-        내가 구독 중인 블로그들의 주소 이름 반환(페이지네이션)
+        내가 구독 중인 블로그들의 정보 반환(페이지네이션)
         """
-        total_count=await self.subscription_store.get_subscribed_blog_count(subscriber_id=subscriber.id)
-        subscribed_blogs = await self.subscription_store.get_paginated_subscribed_blog_addresses(subscriber_id=subscriber.id, page=page, per_page=per_page)
-
+        subscriber_blog=await self.blog_service.get_blog_by_user(subscriber)
+        total_count=await self.subscription_store.get_subscribed_blog_count(subscriber_id=subscriber_blog.id)
+        subscribed_blogs = await self.subscription_store.get_paginated_subscribed_blog_addresses(subscriber_id=subscriber_blog.id, page=page, per_page=per_page)
         blog_responses = [
             BlogDetailResponse.model_validate(blog, from_attributes=True) for blog in subscribed_blogs
         ]
@@ -89,10 +71,12 @@ class SubscriptionService:
     
     async def get_paginated_subscriber_blog_address(self, subscribed: User, page: int, per_page: int)->PaginatedSubscriptionResponse:
         """
-        나를 구독 중인 블로그들의 주소 이름 반환(페이지네이션)
+        나를 구독 중인 블로그들의 정보 반환(페이지네이션)
         """
-        total_count=await self.subscription_store.get_subscriber_blog_count(subscribed_id=subscribed.id)
-        subscriber_blogs = await self.subscription_store.get_paginated_subscriber_blog_addresses(subscribed_id=subscribed.id, page=page, per_page=per_page)
+        subscribed_blog=await self.blog_service.get_blog_by_user(subscribed)
+
+        total_count=await self.subscription_store.get_subscriber_blog_count(subscribed_id=subscribed_blog.id)
+        subscriber_blogs = await self.subscription_store.get_paginated_subscriber_blog_addresses(subscribed_id=subscribed_blog.id, page=page, per_page=per_page)
 
         blog_responses = [
             BlogDetailResponse.model_validate(blog, from_attributes=True) for blog in subscriber_blogs

@@ -1,5 +1,5 @@
 from fastapi import Depends
-from sqlalchemy import select, func
+from sqlalchemy import select, func, case
 from typing import List
 from wastory.app.subscription.models import Subscription
 from wastory.app.blog.models import Blog
@@ -27,7 +27,7 @@ class SubscriptionStore:
         subscribed_blog = await SESSION.scalar(select(Blog).filter(Blog.id == subscribed_id))
 
         if not subscriber_blog or not subscribed_blog:
-            raise BlogNotFoundError("Subscriber or Subscribed blog not found")
+            raise BlogNotFoundError
 
         # 이미 존재하는 구독 관계인지 확인
         existing_subscription_query = select(Subscription).filter(
@@ -36,7 +36,7 @@ class SubscriptionStore:
         )
         existing_subscription = await SESSION.scalar(existing_subscription_query)
         if existing_subscription:
-            raise SubscriptionAlreadyExistsError("Subscription already exists")
+            raise SubscriptionAlreadyExistsError
 
         # 새로운 구독 생성
         subscription = Subscription(
@@ -71,15 +71,14 @@ class SubscriptionStore:
         await SESSION.flush()
         return True
     
-    async def get_paginated_subscribed_blog_addresses(self, subscriber_id: int, page: int, per_page: int) -> list[Subscription]:
+    async def get_paginated_subscribed_blog_addresses(self, subscriber_id: int, page: int, per_page: int) -> list[Blog]:
         """
         내가 구독 중인 블로그들의 정보 반환(페이지네이션)
         """
-        
         offset_val = (page - 1) * per_page
 
         query=(
-            select(Subscription)
+            select(Blog)
             .join(Subscription, Subscription.subscribed_id == Blog.id)
             .filter(Subscription.subscriber_id == subscriber_id)
             .offset(offset_val)
@@ -89,7 +88,7 @@ class SubscriptionStore:
         results = await SESSION.scalars(query)
         return list(results)
     
-    async def get_paginated_subscriber_blog_addresses(self, subscribed_id: int, page: int, per_page: int) -> list[Subscription]:
+    async def get_paginated_subscriber_blog_addresses(self, subscribed_id: int, page: int, per_page: int) -> list[Blog]:
         """
         나를 구독 중인 블로그들의 정보 반환(페이지네이션)
         """
@@ -97,7 +96,7 @@ class SubscriptionStore:
         offset_val = (page - 1) * per_page
 
         query=(
-            select(Subscription)
+            select(Blog)
             .join(Subscription, Subscription.subscriber_id == Blog.id)
             .filter(Subscription.subscribed_id == subscribed_id)
             .offset(offset_val)
@@ -108,15 +107,15 @@ class SubscriptionStore:
         return list(results)
     
     async def get_subscribed_blog_count(self, subscriber_id: int) -> int :
-        query=(
-            select(func.count(Subscription.id).filter(Subscription.subscriber_id==subscriber_id))
+        query = (
+            select(func.count(case((Subscription.subscriber_id == subscriber_id, 1))))
         )
         count = await SESSION.scalar(query)
         return count or 0
     
     async def get_subscriber_blog_count(self, subscribed_id: int) -> int :
-        query=(
-            select(func.count(Subscription.id).filter(Subscription.subscribed_id==subscribed_id))
+        query = (
+            select(func.count(case((Subscription.subscribed_id == subscribed_id, 1))))
         )
-        count=await SESSION.scalar(query)
+        count = await SESSION.scalar(query)
         return count or 0
