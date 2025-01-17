@@ -42,20 +42,30 @@ async def get_my_subscriptions(
     subscribe_service: Annotated[SubscriptionService, Depends()]
 ) -> PaginatedSubscriptionResponse:
     """
-    내가 구독 중인 블로그들의 주소 이름을 반환하는 API
+    내가 구독 중인 블로그들의 정보를 반환하는 API
     """
     per_page = 10
-    return await subscribe_service.get_subscribed_blog_addresses(user)
+    return await subscribe_service.get_paginated_subscribed_blog_address(
+        subscriber=user,
+        page=page,
+        per_page=per_page
+    )
 
-@subscription_router.get("/my_subscribers", response_model=List[str])
+@subscription_router.get("/my_subscribers/{page}", response_model=List[str])
 async def get_my_subscribers(
     user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
+    page: int,
     subscribe_service: Annotated[SubscriptionService, Depends()]
 ) -> List[str]:
     """
     나를 구독한 블로그들의 주소 이름을 반환하는 API
     """
-    return await subscribe_service.get_subscriber_blog_addresses(user)
+    per_page=10
+    return await subscribe_service.get_paginated_subscriber_blog_address(
+        subscribed=user,
+        page=page,
+        per_page=per_page
+    )
 
 @subscription_router.delete("", status_code=HTTP_200_OK)
 async def cancel_subscription(

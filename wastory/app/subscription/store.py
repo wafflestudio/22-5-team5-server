@@ -48,31 +48,6 @@ class SubscriptionStore:
         await SESSION.refresh(subscription)
 
         return subscription
-
-    async def get_subscribed_blog_addresses(self, subscriber_id: int) -> List[str]:
-        """
-        내가 구독 중인 블로그들의 주소 이름 반환
-        """
-        print(subscriber_id)
-        query = (
-            select(Blog.address_name)
-            .join(Subscription, Subscription.subscribed_id == Blog.id)
-            .filter(Subscription.subscriber_id == subscriber_id)
-        )
-        result = await SESSION.scalars(query)
-        return result.all()  # 리스트로 반환
-    
-    async def get_subscriber_blog_addresses(self, subscribed_id: int) -> List[str]:
-        """
-        나를 구독한 블로그들의 주소 이름 반환
-        """
-        query = (
-            select(Blog.address_name)
-            .join(Subscription, Subscription.subscriber_id == Blog.id)
-            .filter(Subscription.subscribed_id == subscribed_id)
-        )
-        result = await SESSION.scalars(query)
-        return result.all()  # 리스트로 반환
     
     @transactional
     async def delete_subscription(self, subscriber_id: int, subscribed_id: int) -> bool:
@@ -98,7 +73,7 @@ class SubscriptionStore:
     
     async def get_paginated_subscribed_blog_addresses(self, subscriber_id: int, page: int, per_page: int) -> list[Subscription]:
         """
-        내가 구독 중인 블로그들의 주소 이름 반환(페이지네이션)
+        내가 구독 중인 블로그들의 정보 반환(페이지네이션)
         """
         
         offset_val = (page - 1) * per_page
@@ -116,7 +91,7 @@ class SubscriptionStore:
     
     async def get_paginated_subscriber_blog_addresses(self, subscribed_id: int, page: int, per_page: int) -> list[Subscription]:
         """
-        나를 구독 중인 블로그들의 주소 이름 반환(페이지네이션)
+        나를 구독 중인 블로그들의 정보 반환(페이지네이션)
         """
         
         offset_val = (page - 1) * per_page
