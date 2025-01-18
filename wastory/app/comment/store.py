@@ -25,7 +25,8 @@ class CommentStore:
             .filter(Comment.article_id == article_id, Comment.level == 1)
             .options(
                 selectinload(Comment.children),
-                selectinload(Comment.blog)
+                selectinload(Comment.blog),
+                selectinload(Comment.article)
             )  # 자식 로드
             .offset(offset_val)
             .limit(per_page)
@@ -50,7 +51,12 @@ class CommentStore:
         stmt = (
             select(Comment)
             .filter(Comment.blog_id == blog_id, Comment.level == 1)
-            .options(selectinload(Comment.children))  # 자식 로드
+            .options(
+                selectinload(Comment.children),
+                selectinload(Comment.article),     # Article 미리 로드
+                selectinload(Comment.blog) 
+            )  # 자식 로드
+            
             .offset(offset_val)
             .limit(per_page)
         )
@@ -86,16 +92,23 @@ class CommentStore:
             print(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
         
     @transactional
     async def create_article_comment_2(
         self, content:str,secret:int,user:User,article_id:int,parent_id:int
         )->Comment:
+            parent_comment=await self.get_comment_by_id(parent_id)
+            if not parent_comment:
+                raise CommentNotFoundError()
+            secret_here=secret
+            if parent_comment.secret==1:
+                secret_here=1
             comment= Comment(
                 content=content,
                 level=2,
-                secret=secret,
+                secret=secret_here,
                 user_id=user.id,
                 user_name=user.username,
                 article_id=article_id,
@@ -108,6 +121,7 @@ class CommentStore:
             SESSION.add(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
 
     @transactional
@@ -130,24 +144,28 @@ class CommentStore:
             print(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
         
     @transactional
     async def create_guestbook_comment_2(
         self, content:str,secret:int,user:User,blog_id:int,parent_id:int
         )->Comment:
+            parent_comment=await self.get_comment_by_id(parent_id)
+            if not parent_comment:
+                raise CommentNotFoundError()
+            secret_here=secret
+            if parent_comment.secret==1:
+                secret_here=1
             comment= Comment(
                 content=content,
                 level=2,
-                secret=secret,
+                secret=secret_here,
                 user_id=user.id,
                 user_name=user.username,
                 blog_id=blog_id,
                 parent_id=parent_id
             )
-            parent_comment=await self.get_comment_by_id(parent_id)
-            if not parent_comment:
-                raise CommentNotFoundError()
             comment.parent = parent_comment
             SESSION.add(comment)
             await SESSION.flush()

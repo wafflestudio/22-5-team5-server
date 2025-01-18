@@ -19,15 +19,22 @@ class CommentDetailResponse(BaseModel):
         content_to_show = comment.content
 
         if comment.secret == 1:
+            # 비밀 댓글 → 권한 체크
             if not current_user:
+                # 로그인 안 함 → 무조건 "비밀 댓글입니다"
                 content_to_show = "비밀 댓글입니다"
             else:
                 is_author = (comment.user_id == current_user.id)
-                is_blog_owner = False
-                if comment.blog and comment.blog.user_id == current_user.id:
-                    is_blog_owner = True
 
-                if not (is_author or is_blog_owner):
+                # 블로그 주인 or 게시글(Article) 주인 판별
+                is_resource_owner = False
+                if comment.blog and comment.blog.user_id == current_user.id:
+                    is_resource_owner = True
+                elif comment.article and comment.article.blog_id == current_user.blogs.id:
+                    is_resource_owner = True
+
+                # 최종 체크
+                if not (is_author or is_resource_owner):
                     content_to_show = "비밀 댓글입니다"
 
         return CommentDetailResponse(
@@ -54,27 +61,23 @@ class CommentListResponse(BaseModel):
 
     @staticmethod
     def from_comment(comment: Comment, current_user: Optional["User"]) -> "CommentListResponse":
-        # 기본적으로 댓글 내용을 보여주되,
-        # secret이 1이면 권한을 확인해서 없으면 "비밀 댓글입니다"
         content_to_show = comment.content
 
         if comment.secret == 1:
-            # 비밀 댓글일 때, 권한 판별
             if not current_user:
-                # 비로그인 상태 -> 무조건 비밀 처리
                 content_to_show = "비밀 댓글입니다"
             else:
                 is_author = (comment.user_id == current_user.id)
-                # 블로그 주인 판별 (blog.user_id가 current_user.id인지)
-                is_blog_owner = False
-                if comment.blog and comment.blog.user_id == current_user.id:
-                    is_blog_owner = True
 
-                if not (is_author or is_blog_owner):
-                    # 작성자도 아니고 블로그 주인도 아니라면
+                is_resource_owner = False
+                if comment.blog and comment.blog.user_id == current_user.id:
+                    is_resource_owner = True
+                elif comment.article and comment.article.blog_id == current_user.blogs.id:
+                    is_resource_owner = True
+
+                if not (is_author or is_resource_owner):
                     content_to_show = "비밀 댓글입니다"
 
-        # children도 같은 로직을 적용해야 하므로 재귀적으로 넘겨줌
         children_responses = [
             CommentDetailResponse.from_comment(child, current_user)
             for child in comment.children

@@ -89,11 +89,13 @@ async def get_guestbook_comment_list(
     blog_id: int,
     page: int,
     comment_service: Annotated[CommentService, Depends()],
+    user: Optional[User] = Depends(optional_login_with_header)
 ) -> PaginatedCommentListResponse:
     per_page = 10  # 페이지당 10개(혹은 쿼리 파라미터로 받아도 됨)
     return await comment_service.get_guestbook_list_pagination(
         blog_id=blog_id,
         page=page,
-        per_page=per_page
+        per_page=per_page,
+        user=user
     )
 
