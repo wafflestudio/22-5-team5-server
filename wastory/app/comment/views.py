@@ -77,12 +77,12 @@ async def get_article_comment_list(
 ):
     per_page = 10
     
-    if user is None:
-        # 비로그인 로직
-        return await comment_service.get_article_list_pagination(article_id, page, per_page)
-    else:
-        # 로그인 로직
-        return await comment_service.get_article_list_pagination(article_id, page, per_page)
+    return await comment_service.get_article_list_pagination(
+        article_id=article_id,
+        page=page,
+        per_page=per_page,
+        current_user=user 
+        )
 
 @comment_router.get("/guestbook/{blog_id}/{page}", status_code=HTTP_200_OK)
 async def get_guestbook_comment_list(
