@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends
-from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleSearchInListResponse
+from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleSearchInListResponse, PaginatedArticleListResponse
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
@@ -83,25 +83,31 @@ class ArticleService:
     async def get_articles_in_blog(
         self,
         blog_id: int,
-    ) -> list[ArticleSearchInListResponse]:
-        articles = await self.article_store.get_articles_in_blog(blog_id)
-        return [ArticleSearchInListResponse.from_article(article) for article in articles]
+        page: int,
+        per_page: int
+    ) -> PaginatedArticleListResponse:
+        return await self.article_store.get_articles_in_blog(blog_id=blog_id, page=page, per_page=per_page)
     
     async def get_articles_in_blog_in_category(
         self,
-        category_id: int,
         blog_id: int,
-    ) -> list[ArticleSearchInListResponse]:
-        articles = await self.article_store.get_articles_in_blog_in_category(category_id, blog_id)
-        return [ArticleSearchInListResponse.from_article(article) for article in articles]    
-
+        category_id: int,
+        page: int,
+        per_page: int
+    ) -> PaginatedArticleListResponse:
+        return await self.article_store.get_articles_in_blog_in_category(
+            category_id=category_id, blog_id=blog_id, page=page, per_page=per_page
+        )
     async def get_articles_by_words_and_blog_id(
         self,
-        searching_words: str | None = None,
-        blog_id: int | None = None
-    ) -> list[ArticleSearchInListResponse]:
-        articles = await self.article_store.get_articles_by_words_and_blog_id(searching_words, blog_id)
-        return [ArticleSearchInListResponse.from_article(article) for article in articles]
+        searching_words: str | None,
+        blog_id: int | None,
+        page: int,
+        per_page: int
+    ) -> PaginatedArticleListResponse:
+        return await self.article_store.get_articles_by_words_and_blog_id(
+            searching_words=searching_words, blog_id=blog_id, page=page, per_page=per_page
+        )
 
 
     async def get_article_by_id(self, article_id : int) -> ArticleDetailResponse:

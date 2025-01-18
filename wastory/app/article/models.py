@@ -29,7 +29,7 @@ class Article(Base):
     blog : Mapped["Blog"] = relationship("Blog", back_populates = "articles")
     category : Mapped["Category"] = relationship("Category", back_populates = "articles")
     
-    # 이후 댓글 및 tag 구현시 delete-orphan 추가하기기
+    # 이후 댓글 및 tag 구현시 delete-orphan 추가하기
     comments: Mapped[list["Comment"]] = relationship(
         "Comment",
         back_populates="article",  # Comment 모델의 article 관계명
