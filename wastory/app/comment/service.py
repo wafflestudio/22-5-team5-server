@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import Depends
 from wastory.app.comment.store import CommentStore
@@ -111,23 +111,32 @@ class CommentService:
     '''
     # 페이지네이션 정보를 추가로 내려주고 싶으면
     async def get_article_list_pagination(
-        self,
-        article_id: int,
-        page: int,
-        per_page: int
-    ) -> PaginatedCommentListResponse:
+    self,
+    article_id: int,
+    page: int,
+    per_page: int,
+    current_user: Optional[User] = None  # ← 추가
+) -> PaginatedCommentListResponse:
         total_count = await self.comment_store.get_article_comments_count(article_id)
         level1_comments = await self.comment_store.get_article_comments(
             article_id=article_id, 
             page=page, 
             per_page=per_page
         )
+
+        # 현재 유저를 `from_comment`에 넘겨주어야 함
+        comments_list = [
+            CommentListResponse.from_comment(c, current_user)
+            for c in level1_comments
+        ]
+
         return PaginatedCommentListResponse(
             page=page,
             per_page=per_page,
             total_count=total_count,
-            comments=[CommentListResponse.from_comment(c) for c in level1_comments]
+            comments=comments_list
         )
+    
 
     '''
     async def get_guestbook_list_level1_with_children(

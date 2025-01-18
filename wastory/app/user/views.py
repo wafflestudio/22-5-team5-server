@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
@@ -14,7 +14,7 @@ from wastory.app.user.service import UserService
 user_router = APIRouter()
 
 security = HTTPBearer()
-
+security_optional = HTTPBearer(auto_error=False)
 oauth = OAuth()
 oauth.register(
     name="kakao",
@@ -24,6 +24,20 @@ oauth.register(
     client_kwargs={"scope": "profile_nickname"},
 )
 
+#로그인을 한  경우랑 안  한 경우에 대 다른 처리를위해 추가했습니다.
+async def optional_login_with_header(
+    user_service: Annotated[UserService, Depends()],
+    credentials: Annotated[Optional[HTTPAuthorizationCredentials], Depends(security_optional)]
+) -> Optional[User]:
+    if credentials is None:
+        return None
+    
+    token = credentials.credentials
+    email = user_service.validate_access_token(token)
+    user = await user_service.get_user_by_email(email)
+    if not user:
+        raise InvalidTokenError()
+    return user
 
 async def login_with_header(
     user_service: Annotated[UserService, Depends()],

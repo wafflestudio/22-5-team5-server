@@ -23,7 +23,10 @@ class CommentStore:
         stmt = (
             select(Comment)
             .filter(Comment.article_id == article_id, Comment.level == 1)
-            .options(selectinload(Comment.children))  # 자식 로드
+            .options(
+                selectinload(Comment.children),
+                selectinload(Comment.blog)
+            )  # 자식 로드
             .offset(offset_val)
             .limit(per_page)
         )
