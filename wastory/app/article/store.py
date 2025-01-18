@@ -1,7 +1,7 @@
 from functools import cache
 from typing import Annotated, Sequence
 
-from sqlalchemy import select, or_, and_, func
+from sqlalchemy import select, or_, and_, func, update
 from wastory.app.article.models import Article
 from wastory.app.like.models import Like
 from wastory.app.comment.models import Comment
@@ -48,7 +48,17 @@ class ArticleStore :
     @transactional
     async def delete_article(self, article: Article) -> None:
         await SESSION.delete(article)
-        await SESSION.flush()       
+        await SESSION.flush()   
+
+    @transactional
+    async def increment_article_views(self, article_id: int) -> None:
+        stmt = (
+            update(Article)
+            .where(Article.id == article_id)
+            .values(views=Article.views + 1)
+        )
+        await SESSION.execute(stmt)
+        await SESSION.flush()
 
     @transactional
     async def get_article_by_id(self, article_id : int) -> Article | None:
@@ -108,7 +118,7 @@ class ArticleStore :
     async def get_top_articles_in_blog(
         self,
         blog_id: int,
-        sort_by: str = "likes",  # 기본 정렬 기준은 "likes" 
+        sort_by: str = "views",  # 기본 정렬 기준은 "likes" 
         top_n: int = 20          # 기본 상위 20개 가져오기
     ) -> PaginatedArticleListResponse:
         # 정렬 기준 설정
@@ -116,8 +126,10 @@ class ArticleStore :
             sort_column = func.count(Like.id).desc()
         elif sort_by == "comments":
             sort_column = func.count(Comment.id).desc()
+        elif sort_by == "views":
+            sort_column = Article.views.desc()  # 조회수를 기준으로 정렬
         else:
-            raise ValueError("Invalid sort_by value. Use 'likes' or 'comments'.")
+            raise ValueError("Invalid sort_by value. Use 'likes' or 'comments' or 'views'.")
 
         # 쿼리 작성: 특정 블로그에서 좋아요 또는 댓글 기준으로 상위 N개 가져오기
         stmt = (

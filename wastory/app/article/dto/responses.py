@@ -11,16 +11,21 @@ class ArticleDetailResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
 
+    views: int
+
     @staticmethod
     def from_article(article: Article) -> "ArticleDetailResponse":
         return ArticleDetailResponse(
-            id=article.id, title=article.title, content=article.content, created_at=article.created_at, updated_at = article.updated_at
+            id=article.id, title=article.title, content=article.content, created_at=article.created_at, updated_at = article.updated_at, views = article.views
         )
 
 class ArticleSearchResponse(BaseModel):
     id: int
     title: str
     description: str
+
+    views:int 
+
     created_at: datetime
     updated_at: datetime
 
@@ -29,7 +34,7 @@ class ArticleSearchResponse(BaseModel):
     @staticmethod
     def from_article(article: Article) -> "ArticleSearchResponse":
         return ArticleSearchResponse(
-            id=article.id, title=article.title, content=article.content, created_at=article.created_at, updated_at = article.updated_at
+            id=article.id, title=article.title, content=article.content, created_at=article.created_at, updated_at = article.updated_at, views = article.views
         )
     
 class ArticleSearchInListResponse(BaseModel):
@@ -40,6 +45,8 @@ class ArticleSearchInListResponse(BaseModel):
     updated_at: datetime
 
     blog_id: int
+
+    views: int
 
     article_likes: int
     article_comments : int
@@ -57,6 +64,7 @@ class ArticleSearchInListResponse(BaseModel):
             description=article.description, 
             created_at=article.created_at, 
             updated_at = article.updated_at,
+            views = article.views,
             blog_id = article.blog_id,
             article_likes = article_likes,
             article_comments = article_comments
