@@ -134,6 +134,9 @@ class ArticleService:
 
 
     async def get_article_by_id(self, article_id : int) -> ArticleDetailResponse:
+        # 조회수 증가
+        await self.article_store.increment_article_views(article_id)
+
         article = await self.article_store.get_article_by_id(article_id)
         return ArticleDetailResponse.from_article(article)
     
