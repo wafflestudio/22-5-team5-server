@@ -5,6 +5,7 @@ from sqlalchemy import select, or_, and_, func
 from wastory.app.article.models import Article
 from wastory.app.like.models import Like
 from wastory.app.comment.models import Comment
+from wastory.app.subscription.models import Subscription
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 
@@ -75,6 +76,7 @@ class ArticleStore :
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .filter(Article.blog_id == blog_id)
             .group_by(Article.id)
+            .order_by(Article.created_at.desc())
             .offset(offset_val)
             .limit(per_page)
         )
@@ -102,7 +104,56 @@ class ArticleStore :
             total_count=total_count or 0,
             articles=articles,
         )
-    
+    @transactional
+    async def get_top_articles_in_blog(
+        self,
+        blog_id: int,
+        sort_by: str = "likes",  # 기본 정렬 기준은 "likes" 
+        top_n: int = 20          # 기본 상위 20개 가져오기
+    ) -> PaginatedArticleListResponse:
+        # 정렬 기준 설정
+        if sort_by == "likes":
+            sort_column = func.count(Like.id).desc()
+        elif sort_by == "comments":
+            sort_column = func.count(Comment.id).desc()
+        else:
+            raise ValueError("Invalid sort_by value. Use 'likes' or 'comments'.")
+
+        # 쿼리 작성: 특정 블로그에서 좋아요 또는 댓글 기준으로 상위 N개 가져오기
+        stmt = (
+            select(
+                Article,
+                func.count(Like.id).label("likes"),
+                func.count(Comment.id).label("comments"),
+            )
+            .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
+            .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
+            .filter(Article.blog_id == blog_id)  # 특정 블로그에서 필터링
+            .group_by(Article.id)
+            .order_by(sort_column)  # 좋아요 순 또는 댓글 순으로 정렬
+            .limit(top_n)           # 상위 N개 제한
+        )
+
+        result = await SESSION.execute(stmt)
+        rows = result.all()
+
+        # Pydantic 모델로 변환하여 필요한 데이터만 반환
+        articles = [
+            ArticleSearchInListResponse.from_article(
+                article=row.Article,
+                article_likes=row.likes,
+                article_comments=row.comments,
+            )
+            for row in rows
+        ]
+
+        return PaginatedArticleListResponse(
+            page=1,  # 인기글은 페이지 구분 없이 한 번에 반환
+            per_page=top_n,
+            total_count=len(articles),
+            articles=articles,
+        )
+        
     @transactional
     async def get_articles_in_blog_in_category(
         self,
@@ -127,6 +178,7 @@ class ArticleStore :
                 Article.blog_id == blog_id           # blog_id 필터
             )
             .group_by(Article.id)
+            .order_by(Article.created_at.desc())
             .offset(offset_val)
             .limit(per_page)
         )
@@ -206,6 +258,7 @@ class ArticleStore :
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .where(and_(*search_conditions))  # 검색 조건 적용
             .group_by(Article.id)
+            .order_by(Article.created_at.desc())
             .offset(offset_val)
             .limit(per_page)
         )
@@ -226,6 +279,69 @@ class ArticleStore :
 
         # 전체 개수 계산
         total_count_stmt = select(func.count(Article.id)).where(and_(*search_conditions))
+        total_count = await SESSION.scalar(total_count_stmt)
+
+        return PaginatedArticleListResponse(
+            page=page,
+            per_page=per_page,
+            total_count=total_count or 0,
+            articles=articles,
+        )
+    
+    @transactional
+    async def get_articles_of_subscriptions(
+        self, blog_id: int, page: int, per_page: int
+    ) -> PaginatedArticleListResponse:
+        offset_val = (page - 1) * per_page
+
+        # 구독한 블로그 ID 가져오기
+        subscribed_blogs_stmt = (
+            select(Subscription.subscribed_id)
+            .filter(Subscription.subscriber_id == blog_id)
+        )
+        subscribed_ids_result = await SESSION.scalars(subscribed_blogs_stmt)
+        subscribed_ids = subscribed_ids_result.all()
+
+        if not subscribed_ids:
+            # 구독한 블로그가 없으면 빈 결과 반환
+            return PaginatedArticleListResponse(
+                page=page,
+                per_page=per_page,
+                total_count=0,
+                articles=[]
+            )
+
+        # 구독한 블로그들의 Article 가져오기
+        stmt = (
+            select(
+                Article,
+                func.count(Like.id).label("likes"),
+                func.count(Comment.id).label("comments"),
+            )
+            .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
+            .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
+            .filter(Article.blog_id.in_(subscribed_ids))  # 구독한 블로그의 Article만 필터
+            .group_by(Article.id)
+            .order_by(Article.created_at.desc())  # 최신순 정렬
+            .offset(offset_val)
+            .limit(per_page)
+        )
+
+        result = await SESSION.execute(stmt)
+        rows = result.all()
+
+        # Pydantic 모델로 변환하여 필요한 데이터만 반환
+        articles = [
+            ArticleSearchInListResponse.from_article(
+                article=row.Article,
+                article_likes=row.likes,
+                article_comments=row.comments,
+            )
+            for row in rows
+        ]
+
+        # 전체 개수 계산
+        total_count_stmt = select(func.count(Article.id)).filter(Article.blog_id.in_(subscribed_ids))
         total_count = await SESSION.scalar(total_count_stmt)
 
         return PaginatedArticleListResponse(
