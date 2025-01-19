@@ -28,13 +28,11 @@ class NotificationService:
         type : int,
         description : str | None,
     ) -> None:
-        print("address_name", blog_address_names)
         blogs = [
             await self.blog_store.get_blog_by_address_name(address_name)
             for address_name in blog_address_names
         ]
         ids = [(blog.user_id, blog.id) for blog in blogs if blog is not None]
-        print(ids)
         await self.notification_store.add_notification(ids=ids, type=type, description=description)
     
     async def get_notification_by_id(self, notification_id : int) -> NotificationResponse:
