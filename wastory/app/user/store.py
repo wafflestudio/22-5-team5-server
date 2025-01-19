@@ -86,6 +86,14 @@ class UserStore:
 
 
     @transactional
+    async def delete_user(self, user_id: int) -> User | None:
+        deleted_user = await SESSION.scalar(select(User).where(User.id == user_id))
+        await SESSION.delete(deleted_user)  
+        await SESSION.flush()
+        return deleted_user
+        
+
+    @transactional
     async def block_token(self, token_id: str, expired_at: datetime) -> None:
         blocked_token = BlockedToken(token_id=token_id, expired_at=expired_at)
         SESSION.add(blocked_token)

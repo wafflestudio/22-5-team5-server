@@ -140,6 +140,15 @@ async def update_me(
     return "Success"
 
 
+@user_router.delete("/me")
+async def delete_me(
+    user: Annotated[User, Depends(login_with_header)],
+    user_service: Annotated[UserService, Depends()],
+):
+    await user_service.delete_user(user.id)
+    return "Success"
+
+
 @user_router.patch("/change_password", status_code=HTTP_200_OK)
 async def update_me(
     user: Annotated[User, Depends(login_with_header)],

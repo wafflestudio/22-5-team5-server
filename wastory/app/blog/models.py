@@ -31,23 +31,31 @@ class Blog(Base):
 
     # 관계 설정
     user: Mapped["User"] = relationship("User", back_populates="blogs")
-    categories: Mapped[list["Category"]] = relationship("Category", back_populates="blog")
-    articles: Mapped[list["Article"]] = relationship("Article",  back_populates="blog")
+
+    categories: Mapped[list["Category"]] = relationship(
+        "Category", back_populates="blog", cascade="all, delete-orphan"
+        )
+
+    articles: Mapped[list["Article"]] = relationship(
+        "Article",  back_populates="blog", cascade="all, delete-orphan"
+        )
+
     subscriptions: Mapped[list["Subscription"]] = relationship(
         "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
     )  # 이 블로그가 구독한 다른 블로그들
+
     subscribers: Mapped[list["Subscription"]] = relationship(
         "Subscription", foreign_keys="Subscription.subscribed_id", back_populates="subscribed_blog"
     )  # 이 블로그를 구독한 다른 블로그들
+
     likes: Mapped[list["Like"]] = relationship("Like", back_populates ="blog", cascade = "all,delete-orphan")
     # 이 블로그가 누른 like 의 모음
 
     notification: Mapped[list["Notification"]] = relationship("Notification", back_populates ="blog", cascade = "all,delete-orphan")
 
     comments: Mapped[list["Comment"]] = relationship(
-        "Comment",
-        back_populates="blog",  # Comment 모델의 article 관계명
-        cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
+        "Comment", back_populates="blog", cascade="all, delete-orphan"
     )
+
     def __repr__(self):
         return f"<Blog id={self.id}, blog_name={self.blog_name}, user_id={self.user_id}>"
