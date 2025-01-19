@@ -50,7 +50,13 @@ class CategoryService:
         user:User
     )->CategoryFinalResponse:
         categories=await self.category_store.get_category_of_blog(user.blogs.id)
-        category_list= [CategoryListResponse.from_category(category,self.category_store.get_article_count(category.id)) for category in categories]
+        category_list= [
+            CategoryListResponse.from_category(
+                category,
+                await self.category_store.get_article_count(category.id)
+                ) 
+                for category in categories
+            ]
         return CategoryFinalResponse.from_categorylist(category_list)
 
 

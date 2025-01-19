@@ -35,7 +35,7 @@ class CategoryListResponse(BaseModel):
             orm_mode=True
 
     @staticmethod
-    def from_category(category: Category,count) -> "CategoryListResponse":
+    def from_category(category: Category,count:int) -> "CategoryListResponse":
         return CategoryListResponse(
             id=category.id,
             category_name=category.name,

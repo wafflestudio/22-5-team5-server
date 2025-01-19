@@ -1,6 +1,7 @@
 from functools import cache
 from typing import Annotated
 from sqlalchemy.orm import selectinload
+from sqlalchemy.sql import func
 from sqlalchemy import select,and_
 from wastory.app.category.errors import CategoryNameDuplicateError,CategoryNotFoundError,NotOwnerError
 from wastory.app.user.models import User
@@ -32,10 +33,10 @@ class CategoryStore:
         category=await SESSION.scalar(get_category_query)
         return category
     
-    async def get_article_count(self, category_id:int)-> int|0:
-        get_article_query=select(Article).filter(Article.category_id==category_id)
-        categories=await SESSION.scalars(get_article_query)
-        return len(categories)
+    async def get_article_count(self, category_id: int) -> int:
+        stmt = select(func.count(Article.id)).filter(Article.category_id == category_id)
+        count = await SESSION.scalar(stmt)
+        return count or 0
         
     async def get_category_by_id(self, id:int)->Category|None:
         get_category_query=select(Category).filter(Category.id==id)
