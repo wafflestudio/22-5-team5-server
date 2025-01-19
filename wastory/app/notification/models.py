@@ -5,6 +5,7 @@ from wastory.database.common import Base, intpk
 
 if TYPE_CHECKING:
     from wastory.app.user.models import User
+    from wastory.app.blog.models import Blog
     from wastory.app.category.models import Category
     from wastory.app.article.models import Article
 
@@ -23,6 +24,8 @@ class Notification(Base):
 
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  # 알림 소유자
+    blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=False)  # 알림 소유자
 
     # 관계 설정
     user: Mapped["User"] = relationship("User", back_populates="notification")
+    blog: Mapped["Blog"] = relationship("Blog", back_populates="notification")

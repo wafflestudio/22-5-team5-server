@@ -5,7 +5,7 @@ from wastory.app.notification.models import Notification
 from wastory.app.user.models import User
 from wastory.app.blog.models import Blog
 from wastory.app.notification.store import NotificationStore
-from wastory.app.notification.dto.responses import NotificationResponse
+from wastory.app.notification.dto.responses import NotificationResponse, PaginatedNotificationListResponse
 from wastory.app.notification.errors import NotificationNotFoundError
 from wastory.app.user.service import UserStore
 from wastory.app.blog.service import BlogStore
@@ -33,21 +33,27 @@ class NotificationService:
             await self.blog_store.get_blog_by_address_name(address_name)
             for address_name in blog_address_names
         ]
-        user_ids = [blog.user_id for blog in blogs]
-        print(user_ids)
-        await self.notification_store.add_notification(user_ids=user_ids, type=type, description=description)
+        ids = [(blog.user_id, blog.id) for blog in blogs if blog is not None]
+        print(ids)
+        await self.notification_store.add_notification(ids=ids, type=type, description=description)
     
     async def get_notification_by_id(self, notification_id : int) -> NotificationResponse:
         notification=await self.notification_store.get_notification_by_id(notification_id)
         if notification is None:
             raise NotificationNotFoundError
         return NotificationResponse.from_notification(notification)
-    
-    async def get_notifications_by_user(self, user : User) -> list[Notification] | None:
-        notifications = await self.notification_store.get_notifications_of_user(user.id)
+
+    async def get_notifications_by_user(self, user : User, page : int, per_page : int) -> PaginatedNotificationListResponse:
+        notifications = await self.notification_store.get_notifications_of_user(user.id, page, per_page)
         if notifications is None:
             raise NotificationNotFoundError
         return notifications
+    
+    # async def get_notifications_by_user(self, user : User) -> list[Notification] | None:
+    #     notifications = await self.notification_store.get_notifications_of_user(user.id)
+    #     if notifications is None:
+    #         raise NotificationNotFoundError
+    #     return notifications
 
     async def delete_notification_by_id(self, user : User, notification_id: int) -> None:
         notification = await self.notification_store.get_notification_by_id(notification_id)

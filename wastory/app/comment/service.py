@@ -8,6 +8,7 @@ from wastory.app.blog.errors import BlogNotFoundError
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
 from wastory.app.article.store import ArticleStore
+from wastory.app.notification.service import NotificationService
 from wastory.app.blog.store import BlogStore
 class CommentService:
     def __init__(
@@ -15,10 +16,12 @@ class CommentService:
         comment_store: Annotated[CommentStore, Depends()],
         user_store:Annotated[UserStore,Depends()],
         article_store:Annotated[ArticleStore,Depends()],
+        notification_service:Annotated[NotificationService,Depends()],
         blog_store:Annotated[BlogStore,Depends()]) -> None:
         self.comment_store = comment_store
         self.user_store=user_store
         self.article_store=article_store
+        self.notification_service=notification_service
         self.blog_store=blog_store
 
 
@@ -27,6 +30,8 @@ class CommentService:
         )-> CommentDetailResponse:
             #article id를 받아서, article 을 받고 넘기자
             article=await self.article_store.get_article_by_id(article_id)
+            blog=await self.blog_store.get_blog_by_id(article.blog_id)
+            user_blog=await self.blog_store.get_blog_of_user(user.id)
             if article==None:
                 raise ArticleNotFoundError()
             if level==1:
@@ -37,6 +42,12 @@ class CommentService:
                     
                     article_id=article_id
                 )
+                # 댓글 알림
+                await self.notification_service.add_notification(
+                    blog_address_names = [blog.address_name],
+                    type=3,
+                    description="댓글",
+                )
             elif level==2:
                 new_comment=await self.comment_store.create_article_comment_2(
                     content=content,
@@ -45,6 +56,12 @@ class CommentService:
                     article_id=article_id,
                     parent_id=parent_id
                 )
+                # 댓글 알림
+                await self.notification_service.add_notification(
+                    blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
+                    type=3,
+                    description="댓글",
+                )
             return CommentDetailResponse.from_comment(new_comment)
 
     async def create_guestbook_comment(
@@ -52,6 +69,7 @@ class CommentService:
         )-> CommentDetailResponse:
             #article id를 받아서, article 을 받고 넘기자
             blog=await self.blog_store.get_blog_by_id(blog_id)
+            user_blog=await self.blog_store.get_blog_of_user(user.id)
             if blog==None:
                 raise BlogNotFoundError()   ##바꿔야 해
             if level==1:
@@ -61,6 +79,12 @@ class CommentService:
                     user=user,
                     blog_id=blog_id
                 )
+                # 방명록 알림
+                await self.notification_service.add_notification(
+                    blog_address_names = [blog.address_name],
+                    type=4,
+                    description="방명록",
+                )
             elif level==2:
                 new_comment=await self.comment_store.create_guestbook_comment_2(
                     content=content,
@@ -68,6 +92,12 @@ class CommentService:
                     user=user,
                     blog_id=blog_id,
                     parent_id=parent_id
+                )
+                # 방명록 알림
+                await self.notification_service.add_notification(
+                    blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
+                    type=4,
+                    description="방명록",
                 )
             return CommentDetailResponse.from_comment(new_comment)
 

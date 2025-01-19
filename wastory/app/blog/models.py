@@ -10,6 +10,7 @@ if TYPE_CHECKING:
     from wastory.app.comment.models import Comment
     from wastory.app.subscription.models import Subscription
     from wastory.app.like.models import Like
+    from wastory.app.notification.models import Notification
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -40,6 +41,8 @@ class Blog(Base):
     )  # 이 블로그를 구독한 다른 블로그들
     likes: Mapped[list["Like"]] = relationship("Like", back_populates ="blog", cascade = "all,delete-orphan")
     # 이 블로그가 누른 like 의 모음
+
+    notification: Mapped[list["Notification"]] = relationship("Notification", back_populates ="blog", cascade = "all,delete-orphan")
 
     comments: Mapped[list["Comment"]] = relationship(
         "Comment",
