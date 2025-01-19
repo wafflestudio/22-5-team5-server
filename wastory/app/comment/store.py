@@ -2,7 +2,7 @@ from functools import cache
 from typing import Annotated
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select,and_,func
-from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError
+from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError,InvalidLevelError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
@@ -102,6 +102,8 @@ class CommentStore:
             parent_comment=await self.get_comment_by_id(parent_id)
             if not parent_comment:
                 raise CommentNotFoundError()
+            if parent_comment.level==2:
+                raise InvalidLevelError()
             secret_here=secret
             if parent_comment.secret==1:
                 secret_here=1
@@ -154,6 +156,8 @@ class CommentStore:
             parent_comment=await self.get_comment_by_id(parent_id)
             if not parent_comment:
                 raise CommentNotFoundError()
+            if parent_comment.level==2:
+                raise InvalidLevelError()
             secret_here=secret
             if parent_comment.secret==1:
                 secret_here=1

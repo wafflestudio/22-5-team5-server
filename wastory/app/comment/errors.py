@@ -18,6 +18,9 @@ class InvalidFieldFormatError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=400,detail= "Invalid field format")
 
+class InvalidLevelError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=400,detail= "parent_should be level 1")
 
 class MissingRequiredFieldError(WastoryHttpException):
     def __init__(self) -> None:
