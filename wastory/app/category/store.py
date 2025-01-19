@@ -7,6 +7,7 @@ from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.category.models import Category
+from wastory.app.article.models import Article
 
 class CategoryStore:
 
@@ -31,7 +32,11 @@ class CategoryStore:
         category=await SESSION.scalar(get_category_query)
         return category
     
-
+    async def get_article_count(self, category_id:int)-> int|0:
+        get_article_query=select(Article).filter(Article.category_id==category_id)
+        categories=await SESSION.scalars(get_article_query)
+        return len(categories)
+        
     async def get_category_by_id(self, id:int)->Category|None:
         get_category_query=select(Category).filter(Category.id==id)
         category=await SESSION.scalar(get_category_query)

@@ -30,15 +30,17 @@ class CategoryListResponse(BaseModel):
     id: int
     category_name: str
     children: List[CategoryDetailResponse]=[]
+    article_count:int
     class Config:
             orm_mode=True
 
     @staticmethod
-    def from_category(category: Category) -> "CategoryListResponse":
+    def from_category(category: Category,count) -> "CategoryListResponse":
         return CategoryListResponse(
             id=category.id,
             category_name=category.name,
-            children=[CategoryDetailResponse.from_category(category) for category in category.children]
+            children=[CategoryDetailResponse.from_category(category) for category in category.children],
+            article_count=count
         )
 
 class CategoryFinalResponse(BaseModel):
