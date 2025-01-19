@@ -26,3 +26,6 @@ class UserSigninResponse(BaseModel):
 
 class UserVerifyResponse(BaseModel):
     verification: bool
+
+class EmailVerifyResponse(BaseModel):
+    verification: bool

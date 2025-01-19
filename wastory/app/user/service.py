@@ -35,9 +35,6 @@ class UserService:
     async def add_user(self, email: str, password: str):
         await self.user_store.add_user(email=email, password=password)
 
-    async def add_user_via_kakao(self, nickname: str):
-        await self.user_store.add_user_via_kakao(nickname=nickname)
-
     async def get_user_by_username(self, username: str) -> User | None:
         return await self.user_store.get_user_by_username(username)
 

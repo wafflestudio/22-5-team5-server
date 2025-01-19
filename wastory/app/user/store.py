@@ -21,15 +21,6 @@ class UserStore:
         SESSION.add(user)
         return user
 
-    @transactional
-    async def add_user_via_kakao(self, nickname: str) -> User:
-        user = await self.get_user_by_nickname(nickname)
-        if user:
-            return user
-        user = User(username=nickname, nickname=nickname, password=0000, email=None)
-        SESSION.add(user)
-        return user
-
     async def get_user_by_username(self, username: str) -> User | None:
         return await SESSION.scalar(select(User).where(User.username == username))
 

@@ -43,11 +43,12 @@ class CommentService:
                     article_id=article_id
                 )
                 # 댓글 알림
-                await self.notification_service.add_notification(
-                    blog_address_names = [blog.address_name],
-                    type=3,
-                    description="댓글",
-                )
+                if (blog.user_id != user.id):
+                    await self.notification_service.add_notification(
+                        blog_address_names = [blog.address_name],
+                        type=3,
+                        description="댓글",
+                    )
             elif level==2:
                 new_comment=await self.comment_store.create_article_comment_2(
                     content=content,
@@ -80,11 +81,12 @@ class CommentService:
                     blog_id=blog_id
                 )
                 # 방명록 알림
-                await self.notification_service.add_notification(
-                    blog_address_names = [blog.address_name],
-                    type=4,
-                    description="방명록",
-                )
+                if (blog.user_id != user.id):
+                    await self.notification_service.add_notification(
+                        blog_address_names = [blog.address_name],
+                        type=4,
+                        description="방명록",
+                    )
             elif level==2:
                 new_comment=await self.comment_store.create_guestbook_comment_2(
                     content=content,
