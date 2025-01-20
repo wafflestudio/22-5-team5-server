@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from wastory.app.category.store import CategoryStore
-from wastory.app.category.dto.responses import CategoryDetailResponse,CategoryListResponse
+from wastory.app.category.dto.responses import CategoryDetailResponse,CategoryListResponse,CategoryFinalResponse
 from wastory.app.category.errors import BlogNotFoundError
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
@@ -48,6 +48,15 @@ class CategoryService:
     async def list_categories(
         self,
         user:User
-    )->list[CategoryListResponse]:
+    )->CategoryFinalResponse:
         categories=await self.category_store.get_category_of_blog(user.blogs.id)
-        return [CategoryListResponse.from_category(category) for category in categories]
+        category_list= [
+            CategoryListResponse.from_category(
+                category,
+                await self.category_store.get_article_count(category.id)
+                ) 
+                for category in categories
+            ]
+        return CategoryFinalResponse.from_categorylist(category_list)
+
+
