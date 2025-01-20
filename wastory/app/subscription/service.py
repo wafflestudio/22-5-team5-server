@@ -87,3 +87,21 @@ class SubscriptionService:
             total_count=total_count,
             blogs=blog_responses
         )
+    
+    async def get_subscribed_blog_addresses(self, subscriber: User) -> List[str]:
+        """
+        내가 구독 중인 블로그들의 주소 이름 반환
+        """
+        subscriber_blog=await self.blog_service.get_blog_by_user(subscriber)
+        if not subscriber_blog:
+            raise BlogNotFoundError
+        return await self.subscription_store.get_subscribed_blog_addresses(subscriber_blog.id)
+    
+    async def get_subscriber_blog_addresses(self, subscribed: User) -> List[str]:
+        """
+        나를 구독한 블로그들의 주소 이름 반환
+        """
+        subscribed_blog=await self.blog_service.get_blog_by_user(subscribed)
+        if not subscribed_blog:
+            raise BlogNotFoundError
+        return await self.subscription_store.get_subscriber_blog_addresses(subscribed_blog.id)
