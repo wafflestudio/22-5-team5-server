@@ -76,6 +76,32 @@ async def get_articles_in_blog_in_category(
         page = page,
         per_page = per_page
     )
+# blog 내 subscription 목록에서 article 가져오기
+@article_router.get("/blogs/{blog_id}/subscription", status_code=200)
+async def get_articles_of_subscription(
+    user: Annotated[User, Depends(login_with_header)],
+    article_service: Annotated[ArticleService, Depends()],
+    page: int
+) -> PaginatedArticleListResponse:
+    per_page = 10
+    return await article_service.get_articles_of_subscriptions(
+        user = user,
+        page = page,
+        per_page = per_page
+    )
+
+# blog 내 인기글 가져오기
+@article_router.get("/blogs/{blog_id}/sort_by/{sort_by}", status_code=200)
+async def get_top_articles_in_blog(
+    article_service: Annotated[ArticleService, Depends()],
+    blog_id : int,
+    sort_by: str
+) ->PaginatedArticleListResponse:
+    return await article_service.get_top_articles_in_blog(
+        blog_id = blog_id,
+        sort_by = sort_by
+    )
+
 
 # 특정 blog 내에서의 검색 기능 지원
 @article_router.get("/search/{blog_id}/{searching_words}", status_code=200)

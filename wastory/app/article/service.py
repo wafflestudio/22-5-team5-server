@@ -36,7 +36,7 @@ class ArticleService:
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
             raise BlogNotFoundError()
-        
+            
         new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content, article_description = article_description)
 
         # 새 글 알림
@@ -61,8 +61,6 @@ class ArticleService:
         if user_blog is None:
             raise BlogNotFoundError()
 
-       
-        
         # Article 존재 확인
         article = await self.article_store.get_article_by_id(article_id)
         if article is None: 
@@ -106,9 +104,38 @@ class ArticleService:
         return await self.article_store.get_articles_by_words_and_blog_id(
             searching_words=searching_words, blog_id=blog_id, page=page, per_page=per_page
         )
+    
+    async def get_articles_of_subscriptions(
+        self,
+        user : User,
+        page: int,
+        per_page: int
+    ) -> PaginatedArticleListResponse : 
+        
+        # 사용자의 Blog 확인
+        user_blog = await self.blog_store.get_blog_of_user(user.id)
+        if user_blog is None:
+            raise BlogNotFoundError()
+        
+        return await self.article_store.get_articles_of_subscriptions(
+            blog_id = user_blog.id, page = page, per_page = per_page
+        )
+    
+    async def get_top_articles_in_blog(
+        self,
+        blog_id: int,
+        sort_by: str,
+
+    ) -> PaginatedArticleListResponse:
+        return await self.article_store.get_top_articles_in_blog(
+            blog_id=blog_id, sort_by=sort_by)
+
 
 
     async def get_article_by_id(self, article_id : int) -> ArticleDetailResponse:
+        # 조회수 증가
+        await self.article_store.increment_article_views(article_id)
+
         article = await self.article_store.get_article_by_id(article_id)
         return ArticleDetailResponse.from_article(article)
     
@@ -136,3 +163,5 @@ class ArticleService:
 
         # Article 삭제
         await self.article_store.delete_article(article)  # await 추가
+
+    
