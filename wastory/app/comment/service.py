@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 
 from fastapi import Depends
 from wastory.app.comment.store import CommentStore
@@ -63,7 +63,7 @@ class CommentService:
                     type=3,
                     description="댓글",
                 )
-            return CommentDetailResponse.from_comment(new_comment)
+            return CommentDetailResponse.from_comment(new_comment, user)
 
     async def create_guestbook_comment(
         self, content:str,level:int,secret:int,user:User,blog_id:int,parent_id:int
@@ -101,7 +101,7 @@ class CommentService:
                     type=4,
                     description="방명록",
                 )
-            return CommentDetailResponse.from_comment(new_comment)
+            return CommentDetailResponse.from_comment(new_comment, user)
 
     async def update_comment(
         self,user:User,comment_id:int,content:str
@@ -111,7 +111,7 @@ class CommentService:
             comment_id=comment_id,
             content=content
         )
-        return CommentDetailResponse.from_comment(comment)
+        return CommentDetailResponse.from_comment(comment,user)
 
     async def delete_comment(
         self, user:User, comment_id:int
@@ -146,7 +146,8 @@ class CommentService:
         self,
         article_id: int,
         page: int,
-        per_page: int
+        per_page: int,
+        current_user: Optional[User] = None  # ← 추가
     ) -> PaginatedCommentListResponse:
         total_count = await self.comment_store.get_article_comments_count(article_id)
         level1_comments = await self.comment_store.get_article_comments(
@@ -154,12 +155,20 @@ class CommentService:
             page=page, 
             per_page=per_page
         )
+
+        # 현재 유저를 `from_comment`에 넘겨주어야 함
+        comments_list = [
+            CommentListResponse.from_comment(c, current_user)
+            for c in level1_comments
+        ]
+
         return PaginatedCommentListResponse(
             page=page,
             per_page=per_page,
             total_count=total_count,
-            comments=[CommentListResponse.from_comment(c) for c in level1_comments]
+            comments=comments_list
         )
+    
 
     '''
     async def get_guestbook_list_level1_with_children(
@@ -187,17 +196,25 @@ class CommentService:
         self,
         blog_id: int,
         page: int,
-        per_page: int
+        per_page: int,
+        current_user: Optional[User] = None  # ← 추가
     ) -> PaginatedCommentListResponse:
-        total_count = await self.comment_store.get_guestbook_comments_count(blog_id)
+        total_count = await self.comment_store.get_guestbook_comments_count(article_id)
         level1_comments = await self.comment_store.get_guestbook_comments(
             blog_id=blog_id, 
             page=page, 
             per_page=per_page
         )
+
+        # 현재 유저를 `from_comment`에 넘겨주어야 함
+        comments_list = [
+            CommentListResponse.from_comment(c, current_user)
+            for c in level1_comments
+        ]
+
         return PaginatedCommentListResponse(
             page=page,
             per_page=per_page,
             total_count=total_count,
-            comments=[CommentListResponse.from_comment(c) for c in level1_comments]
+            comments=comments_list
         )
