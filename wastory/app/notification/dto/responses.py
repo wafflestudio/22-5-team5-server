@@ -10,19 +10,16 @@ class NotificationResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     checked: bool = False
-    user_id : int
-    @staticmethod
-    def from_notification(notification: Notification) -> "NotificationResponse":
-        return NotificationResponse(
-            id=notification.id,
-            notification_type=notification.notification_type,
-            description=notification.description,
-            created_at=notification.created_at,
-            updated_at=notification.updated_at,
-            checked=notification.checked,
-            user_id=notification.user_id
-        )
+    username: str
+    blog_name: str
+    blog_main_image_url: str | None
 
 class NotificationListResponse(BaseModel):
+    total_count: int
+    notifications: List[NotificationResponse]
+
+class PaginatedNotificationListResponse(BaseModel):
+    page: int
+    per_page: int
     total_count: int
     notifications: List[NotificationResponse]
