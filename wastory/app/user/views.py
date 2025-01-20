@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import APIRouter, Request, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
@@ -6,7 +6,7 @@ from starlette.status import HTTP_200_OK, HTTP_201_CREATED
 
 from wastory.database.settings import PW_SETTINGS
 from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest, UserEmailRequest, UserEmailVerifyRequest
-from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse
+from wastory.app.user.dto.responses import MyProfileResponse, UserSigninResponse, EmailVerifyResponse
 from wastory.app.user.errors import InvalidTokenError
 from wastory.app.user.models import User
 from wastory.app.user.service import UserService
@@ -14,7 +14,7 @@ from wastory.app.user.service import UserService
 user_router = APIRouter()
 
 security = HTTPBearer()
-
+security_optional = HTTPBearer(auto_error=False)
 oauth = OAuth()
 oauth.register(
     name="kakao",
@@ -24,6 +24,20 @@ oauth.register(
     client_kwargs={"scope": "profile_nickname"},
 )
 
+#로그인을 한  경우랑 안  한 경우에 대 다른 처리를위해 추가했습니다.
+async def optional_login_with_header(
+    user_service: Annotated[UserService, Depends()],
+    credentials: Annotated[Optional[HTTPAuthorizationCredentials], Depends(security_optional)]
+) -> Optional[User]:
+    if credentials is None:
+        return None
+    
+    token = credentials.credentials
+    email = user_service.validate_access_token(token)
+    user = await user_service.get_user_by_email(email)
+    if not user:
+        raise InvalidTokenError()
+    return user
 
 async def login_with_header(
     user_service: Annotated[UserService, Depends()],
@@ -58,7 +72,9 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
         await user_service.update_user(
             nickname, nickname, nickname, None, None
         )
-    access_token, refresh_token = user_service.issue_tokens(user.email)
+        access_token, refresh_token = user_service.issue_tokens(nickname)
+    else:
+        access_token, refresh_token = user_service.issue_tokens(user.email)
 
     return UserSigninResponse(access_token=access_token, refresh_token=refresh_token)
 
@@ -78,6 +94,14 @@ async def verify_email(
     is_valid = user_service.verify_code(verification_request.email, verification_request.code)
     return is_valid
     
+
+@user_router.post("/email-exists")
+async def email_exists(
+    email_request: UserEmailRequest, user_service: Annotated[UserService, Depends()]
+) -> EmailVerifyResponse:
+    user = await user_service.get_user_by_email(email_request.email)
+    return EmailVerifyResponse(verification=(user is not None))
+
 
 @user_router.post("/signup", status_code=HTTP_201_CREATED)
 async def signup(
@@ -127,6 +151,15 @@ async def update_me(
         address=update_request.address,
         phone_number=update_request.phone_number,
     )
+    return "Success"
+
+
+@user_router.delete("/me")
+async def delete_me(
+    user: Annotated[User, Depends(login_with_header)],
+    user_service: Annotated[UserService, Depends()],
+):
+    await user_service.delete_user(user.id)
     return "Success"
 
 

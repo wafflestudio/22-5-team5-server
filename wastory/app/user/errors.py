@@ -30,6 +30,10 @@ class UserUnsignedError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=401, detail="User is not signed in")
 
+class UserNotFoundError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=401, detail="User not found")
+
 class InvalidUsernameOrPasswordError(HTTPException):
     def __init__(self) -> None:
         super().__init__(status_code=401, detail="Invalid username or password")

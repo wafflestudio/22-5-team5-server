@@ -36,8 +36,7 @@ class ArticleService:
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
             raise BlogNotFoundError()
-        
-        
+            
         new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content, article_description = article_description)
 
         # 새 글 알림
