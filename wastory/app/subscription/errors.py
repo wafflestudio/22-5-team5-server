@@ -12,3 +12,7 @@ class BlogNotFoundError(WastoryHttpException):
 class SubscriptionNotFoundError(WastoryHttpException):
     def __init__(self):
         super().__init__(status_code=404, detail="Subscription not found")
+
+class SelfSubscriptionError(WastoryHttpException):
+    def __init__(self):
+        super().__init__(status_code=400, detail="self subscription error")

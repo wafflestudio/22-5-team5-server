@@ -10,6 +10,7 @@ from wastory.app.user.errors import (
     InvalidTokenError,
     ExpiredSignatureError,
     BlockedTokenError,
+    UserNotFoundError
 )
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
@@ -34,9 +35,6 @@ class UserService:
 
     async def add_user(self, email: str, password: str):
         await self.user_store.add_user(email=email, password=password)
-
-    async def add_user_via_kakao(self, nickname: str):
-        await self.user_store.add_user_via_kakao(nickname=nickname)
 
     async def get_user_by_username(self, username: str) -> User | None:
         return await self.user_store.get_user_by_username(username)
@@ -71,6 +69,12 @@ class UserService:
         email: str,
     ) -> User:
         return await self.user_store.update_username(username, email)
+
+    async def delete_user(self, user_id: int):
+        deleted_user = await self.user_store.delete_user(user_id)
+        if deleted_user is None:
+            raise UserNotFoundError()
+        return deleted_user
 
     async def signin(self, email: str, password: str) -> tuple[str, str]:
         user = await self.get_user_by_email(email)
