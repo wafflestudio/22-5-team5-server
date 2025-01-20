@@ -13,7 +13,7 @@ class BlogDetailResponse(BaseModel):
     default_category_id : int
 
     class Config:
-        orm_mode = True  # SQLAlchemy 모델에서 데이터를 가져올 때 Pydantic 변환 지원
-        allow_population_by_field_name = True  # 필드 이름을 정확히 사용하도록 강제
-        extra = "allow"  # 모델에 없는 필드도 허용
+        from_attributes = True  # SQLAlchemy 모델에서 데이터를 가져올 때 변환 지원
+        populate_by_name = True  # 필드 이름을 기반으로 데이터 채우기
+        extra = "allow"  # 모델에 없는 필드 허용
         exclude_none = False  # None 값도 포함
