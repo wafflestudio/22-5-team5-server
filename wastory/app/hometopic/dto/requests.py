@@ -6,19 +6,15 @@ from wastory.app.hometopic.errors import InvalidFieldFormatError
 
 
 
-def validate_categoryname(value:str)->str:
+def validate_topicname(value:str)->str:
     if(len(value)>50):
         raise InvalidFieldFormatError()
     return value
 
-def validate_categorylevel(value:int)->int:
-    if value < 0 or value > 2:
-        raise InvalidFieldFormatError()
-    return value
 
 class HometopicCreateRequest(BaseModel):
-    categoryname: Annotated[str,AfterValidator(validate_categoryname)]
+    topicname: Annotated[str,AfterValidator(validate_topicname)]
 
 class HometopicUpdateRequest(BaseModel):
-    categoryname: Annotated[str,AfterValidator(validate_categoryname)]
+    topicname: Annotated[str,AfterValidator(validate_topicname)]
 
