@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 
 from wastory.app.blog.dto.requests import BlogCreateRequest, BlogUpdateRequest
-from wastory.app.blog.dto.responses import BlogDetailResponse
+from wastory.app.blog.dto.responses import BlogDetailResponse, PaginatedBlogDetailResponse
 from wastory.app.user.models import User
 from wastory.app.blog.service import BlogService
 from wastory.app.user.views import login_with_header
@@ -69,3 +69,15 @@ async def get_blog_by_email(
     유저 이메일로 블로그 조회 API
     """
     return await blog_service.get_blog_by_user_email(email)
+
+@blog_router.get("/search", response_model=PaginatedBlogDetailResponse, status_code=HTTP_200_OK)
+async def search_blogs(
+    keywords: str,
+    page: int,
+    blog_service: Annotated[BlogService, Depends()]
+) -> PaginatedBlogDetailResponse:
+    """
+    키워드로 블로그 검색 API
+    """
+    per_page=10
+    return await blog_service.search_blog_by_keywords(keywords=keywords, page=page, per_page=per_page)
