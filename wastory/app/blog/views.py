@@ -49,3 +49,23 @@ async def update_blog(
     blog_update_request: BlogUpdateRequest
 ) -> BlogDetailResponse:
     return await blog_service.update_blog(address_name=address_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)
+
+@blog_router.get("/by_id/{blog_id}", response_model=BlogDetailResponse, status_code=HTTP_200_OK)
+async def get_blog_by_id(
+    blog_id: int,
+    blog_service: Annotated[BlogService, Depends()]
+) -> BlogDetailResponse:
+    """
+    블로그 아이디로 블로그 조회 API
+    """
+    return await blog_service.get_blog_by_id(blog_id)
+
+@blog_router.get("/by_email/{email}", response_model=BlogDetailResponse, status_code=HTTP_200_OK)
+async def get_blog_by_email(
+    email: str,
+    blog_service: Annotated[BlogService, Depends()]
+) -> BlogDetailResponse:
+    """
+    유저 이메일로 블로그 조회 API
+    """
+    return await blog_service.get_blog_by_user_email(email)
