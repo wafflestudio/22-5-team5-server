@@ -21,13 +21,25 @@ class User(Base):
     phone_number: Mapped[str | None] = mapped_column(String(20))
 
 
-    blogs = relationship("Blog", lazy="selectin", back_populates="user", uselist=False)
+    blogs = relationship(
+        "Blog",
+        lazy="selectin", 
+        back_populates="user", 
+        cascade="all, delete-orphan",
+        uselist=False
+        )
     comments: Mapped[list["Comment"]] = relationship(
         "Comment",
         back_populates="user",  # Comment 모델의 article 관계명
         cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
     )
-    notification = relationship("Notification", lazy="selectin", back_populates="user", uselist=False)
+    notification = relationship(
+        "Notification", 
+        lazy="selectin", 
+        back_populates="user", 
+        cascade="all, delete-orphan",
+        uselist=False
+        )
     
 class BlockedToken(Base):
     __tablename__ = "blocked_token"

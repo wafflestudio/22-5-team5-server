@@ -1,11 +1,12 @@
 from functools import cache
 from typing import Annotated
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select,and_,func
+from sqlalchemy import select,and_,func, or_
 from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
+from wastory.app.blog.models import Blog
 from wastory.app.article.models import Article
 from wastory.app.comment.models import Comment
 
@@ -192,4 +193,20 @@ class CommentStore:
         await SESSION.delete(comment)
         await SESSION.flush()
 
-    
+    # 답글이 달린 댓글 작성자들의 address_name을 반환
+    async def get_replies_blog_address_name(self, address_name: str, parent_id: int) -> list[str]:
+        stmt = (
+            select(Blog.address_name)
+            .select_from(Comment)
+            .join(User, User.id == Comment.user_id) # User와 Comment 조인
+            .join(Blog, Blog.user_id == User.id) # User와 Blog 조인
+            # .filter(or_(Comment.parent_id == parent_id, Comment.id == parent_id))  # parent_id 필터
+            .where(
+                (Comment.parent_id == parent_id) | (Comment.id == parent_id)
+            )
+            .distinct()  # 중복 제거
+        )
+        result = await SESSION.execute(stmt)
+        replies = result.all()
+        print(replies)
+        return [reply[0] for reply in replies if reply[0] != address_name] 
