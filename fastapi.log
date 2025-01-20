@@ -1,103 +1,27 @@
 nohup: ignoring input
 /home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
-* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-INFO:     Started server process [26440]
+INFO:     Started server process [46860]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
-INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
-INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao/callback?code=AFvFqYA8Im5dBpYdk5_3ixd11DgwISav8lj20FLMs68k95znrhFZ0wAAAAQKKwzTAAABlG1IB5insOtctwzlGQ&state=j0eM72PGObwkP6W1tZc1p0eO7AYfYU HTTP/1.0" 500 Internal Server Error
+INFO:     147.47.147.134:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     147.47.147.134:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     147.47.147.134:0 - "POST /api/users/signup HTTP/1.0" 500 Internal Server Error
 ERROR:    Exception in ASGI application
-  + Exception Group Traceback (most recent call last):
-  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
-  |     yield
-  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 186, in __call__
-  |     async with anyio.create_task_group() as task_group:
-  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 767, in __aexit__
-  |     raise BaseExceptionGroup(
-  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
-  +-+---------------- 1 ----------------
-    | Traceback (most recent call last):
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
-    |     result = await app(  # type: ignore[func-returns-value]
-    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
-    |     return await self.app(scope, receive, send)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
-    |     await super().__call__(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
-    |     raise exc
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
-    |     await self.app(scope, receive, _send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
-    |     with collapse_excgroups():
-    |   File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
-    |     self.gen.throw(value)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
-    |     raise exc
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
-    |     response = await self.dispatch_func(request, call_next)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
-    |     raise e
-    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
-    |     response = await call_next(request)
-    |                ^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
-    |     raise app_exc
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
-    |     await self.app(scope, receive_or_disconnect, send_no_error)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
-    |     await self.app(scope, receive, send_wrapper)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
-    |     await self.app(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
-    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     raise exc
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
-    |     await self.middleware_stack(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
-    |     await route.handle(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
-    |     await self.app(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
-    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
-    |     raise exc
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
-    |     await app(scope, receive, sender)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
-    |     response = await f(request)
-    |                ^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
-    |     raw_response = await run_endpoint_function(
-    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
-    |     return await dependant.call(**values)
-    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 61, in auth_kakao_callback
-    |     access_token, refresh_token = user_service.issue_tokens(user.email)
-    |                                                             ^^^^^^^^^^
-    | AttributeError: 'NoneType' object has no attribute 'email'
-    +------------------------------------
+Traceback (most recent call last):
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/relationships.py", line 2423, in _determine_joins
+    self.primaryjoin = join_condition(
+                       ^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/util.py", line 123, in join_condition
+    return Join._join_condition(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/selectable.py", line 1380, in _join_condition
+    raise exc.NoForeignKeysError(
+sqlalchemy.exc.NoForeignKeysError: Can't find any foreign key relationships between 'hometopic' and 'Article'.
 
-During handling of the above exception, another exception occurred:
+The above exception was the direct cause of the following exception:
 
 Traceback (most recent call last):
   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
@@ -134,7 +58,9 @@ Traceback (most recent call last):
     await self.app(scope, receive_or_disconnect, send_no_error)
   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
     await self.app(scope, receive, send_wrapper)
-  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 144, in simple_response
     await self.app(scope, receive, send)
   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
@@ -163,214 +89,105 @@ Traceback (most recent call last):
   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
     return await dependant.call(**values)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 61, in auth_kakao_callback
-    access_token, refresh_token = user_service.issue_tokens(user.email)
-                                                            ^^^^^^^^^^
-AttributeError: 'NoneType' object has no attribute 'email'
-INFO:     117.111.14.1:0 - "POST /api/users/signup HTTP/1.0" 400 Bad Request
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "POST /api/users/signup HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
-INFO:     121.140.210.67:0 - "GET /api/users/auth/kakao/callback?code=-WExY2JvSXRKGLYolnWwjigvtWiuM2Cx_sbzfpNcHkRu1NHrQEYWQwAAAAQKKwzTAAABlG1IWF3C3p98Pd5TpQ&state=gGXMwGN9aOj7qfmVbxamggTOQPE7II HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf4a32840>
-main_image_url: None
-/home/ubuntu/22-5-team5-server/wastory/app/blog/store.py:90: RuntimeWarning: coroutine 'async_scoped_session.merge' was never awaited
-  SESSION.merge(blog)
-RuntimeWarning: Enable tracemalloc to get the object allocation traceback
-INFO:     117.111.14.1:0 - "POST /api/blogs HTTP/1.0" 201 Created
-default :  14
-category ID :  14
-address_name []
-[]
-INFO:     117.111.14.1:0 - "POST /api/articles/create HTTP/1.0" 201 Created
-INFO:     117.111.14.1:0 - "GET /api/articles/blogs/50 HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
-INFO:     121.140.210.67:0 - "POST /api/users/signup HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
-Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf46bc2f0>
-main_image_url: None
-INFO:     121.140.210.67:0 - "POST /api/blogs HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     172.69.136.171:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
-INFO:     172.69.136.171:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     172.69.136.180:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     172.69.136.212:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
-INFO:     121.140.210.67:0 - "POST /api/users/signup HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
-Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf4a30dd0>
-main_image_url: None
-INFO:     121.140.210.67:0 - "POST /api/blogs HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-called get_blog
-Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf4816c90>
-main_image_url: None
-INFO:     117.111.14.1:0 - "GET /api/blogs/aaaa HTTP/1.0" 200 OK
-called get_blog
-Debug: Blog=<wastory.app.blog.models.Blog object at 0x723bf48175f0>
-main_image_url: None
-INFO:     117.111.14.1:0 - "GET /api/blogs/aaaa HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "POST /api/users/signup HTTP/1.0" 409 Conflict
-INFO:     117.111.14.1:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/articles HTTP/1.0" 404 Not Found
-INFO:     117.111.14.1:0 - "GET /api/blogs/my_blog HTTP/1.0" 401 Unauthorized
-user found
-INFO:     117.111.14.1:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-default :  1
-category ID :  1
-address_name []
-[]
-INFO:     117.111.14.1:0 - "POST /api/articles/create HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-default :  1
-category ID :  1
-address_name []
-[]
-INFO:     121.140.210.67:0 - "POST /api/articles/create HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-default :  1
-category ID :  1
-address_name []
-[]
-INFO:     121.140.210.67:0 - "POST /api/articles/create HTTP/1.0" 201 Created
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-default :  1
-category ID :  1
-address_name []
-[]
-INFO:     121.140.210.67:0 - "POST /api/articles/create HTTP/1.0" 201 Created
-INFO:     103.203.57.20:48036 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33460 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:33460 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58352 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:58352 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59792 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59792 - "GET /favicon.ico HTTP/1.1" 404 Not Found
-INFO:     127.0.0.1:59792 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:59792 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50672 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50672 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50436 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50436 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39452 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:39452 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52914 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52914 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52914 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52914 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52914 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52914 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52916 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:52916 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     127.0.0.1:45206 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:45206 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46404 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:46400 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47550 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:47550 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     172.71.182.84:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     172.71.99.189:0 - "GET /wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     172.71.184.150:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     172.71.184.150:0 - "GET /wordpress/wp-admin/setup-config.php HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-user found
-INFO:     121.140.210.67:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
-INFO:     127.0.0.1:41676 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41676 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41676 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41676 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:41684 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60796 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37836 - "GET /docs HTTP/1.1" 200 OK
-INFO:     127.0.0.1:37836 - "GET /openapi.json HTTP/1.1" 200 OK
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET / HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     195.178.110.163:0 - "GET /.svn/entries HTTP/1.0" 404 Not Found
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     121.140.210.67:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /docs HTTP/1.0" 200 OK
-INFO:     117.111.14.1:0 - "GET /openapi.json HTTP/1.0" 200 OK
+  File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 110, in signup
+    await user_service.add_user(
+  File "/home/ubuntu/22-5-team5-server/wastory/app/user/service.py", line 37, in add_user
+    await self.user_store.add_user(email=email, password=password)
+  File "/home/ubuntu/22-5-team5-server/wastory/database/annotation.py", line 22, in wrapper
+    raise e
+  File "/home/ubuntu/22-5-team5-server/wastory/database/annotation.py", line 19, in wrapper
+    ret = await f(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/app/user/store.py", line 17, in add_user
+    if await self.get_user_by_email(email):
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/app/user/store.py", line 31, in get_user_by_email
+    return await SESSION.scalar(select(User).where(User.email == email))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/scoping.py", line 1051, in scalar
+    return await self._proxied.scalar(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/ext/asyncio/session.py", line 517, in scalar
+    return await greenlet_spawn(
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/util/_concurrency_py3k.py", line 203, in greenlet_spawn
+    result = context.switch(value)
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2410, in scalar
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/session.py", line 2247, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 305, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1418, in execute
+    return meth(
+           ^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 515, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/engine/base.py", line 1632, in _execute_clauseelement
+    compiled_sql, extracted_params, cache_hit = elem._compile_w_cache(
+                                                ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 703, in _compile_w_cache
+    compiled_sql = self._compiler(
+                   ^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/elements.py", line 316, in _compiler
+    return dialect.statement_compiler(dialect, self, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/compiler.py", line 1429, in __init__
+    Compiled.__init__(self, dialect, statement, **kwargs)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/compiler.py", line 870, in __init__
+    self.string = self.process(self.statement, **compile_kwargs)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/compiler.py", line 915, in process
+    return obj._compiler_dispatch(self, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/visitors.py", line 141, in _compiler_dispatch
+    return meth(self, **kw)  # type: ignore  # noqa: E501
+           ^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/compiler.py", line 4679, in visit_select
+    compile_state = select_stmt._compile_state_factory(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/sql/base.py", line 683, in create_for_statement
+    return klass.create_for_statement(statement, compiler, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 1110, in create_for_statement
+    _QueryEntity.to_compile_state(
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 2565, in to_compile_state
+    _MapperEntity(
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/context.py", line 2645, in __init__
+    entity._post_inspect
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/util/langhelpers.py", line 1253, in __get__
+    obj.__dict__[self.__name__] = result = self.fget(obj)
+                                           ^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/mapper.py", line 2722, in _post_inspect
+    self._check_configure()
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/mapper.py", line 2399, in _check_configure
+    _configure_registries({self.registry}, cascade=True)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/mapper.py", line 4215, in _configure_registries
+    _do_configure_registries(registries, cascade)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/mapper.py", line 4256, in _do_configure_registries
+    mapper._post_configure_properties()
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/mapper.py", line 2416, in _post_configure_properties
+    prop.init()
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/interfaces.py", line 589, in init
+    self.do_init()
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/relationships.py", line 1644, in do_init
+    self._setup_join_conditions()
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/relationships.py", line 1884, in _setup_join_conditions
+    self._join_condition = jc = JoinCondition(
+                                ^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/relationships.py", line 2310, in __init__
+    self._determine_joins()
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/sqlalchemy/orm/relationships.py", line 2444, in _determine_joins
+    raise sa_exc.NoForeignKeysError(
+sqlalchemy.exc.NoForeignKeysError: Could not determine join condition between parent/child tables on relationship Hometopic.articles - there are no foreign keys linking these tables.  Ensure that referencing columns are associated with a ForeignKey or ForeignKeyConstraint, or specify a 'primaryjoin' expression.
+WARNING:  Invalid HTTP request received.
+INFO:     118.194.236.126:55920 - "GET / HTTP/1.1" 200 OK
+INFO:     118.194.236.126:55942 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     118.194.236.126:55944 - "GET /robots.txt HTTP/1.1" 404 Not Found
+INFO:     118.194.236.126:55956 - "GET /sitemap.xml HTTP/1.1" 404 Not Found
+INFO:     118.194.236.126:55964 - "GET /config.json HTTP/1.1" 404 Not Found
