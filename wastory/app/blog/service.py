@@ -64,3 +64,19 @@ class BlogService:
             new_default_category_id=new_default_category_id
         )
         return BlogDetailResponse.model_validate(updated_blog, from_attributes=True)
+    
+    async def get_blog_by_user_email(self, email: str) -> BlogDetailResponse:
+        """
+        이메일을 통해 유저의 블로그 조회
+        """
+        # 이메일로 유저 정보 조회
+        user = await self.user_store.get_user_by_email(email)
+        if not user:
+            raise BlogNotFoundError
+
+        # 유저의 블로그 조회
+        blog = await self.blog_store.get_blog_of_user(user_id=user.id)
+        if not blog:
+            raise BlogNotFoundError
+
+        return BlogDetailResponse.model_validate(blog, from_attributes=True)
