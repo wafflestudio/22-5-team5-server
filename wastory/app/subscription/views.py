@@ -16,13 +16,13 @@ async def add_subscription(
     user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
     subscribe_service: Annotated[SubscriptionService, Depends()],
     blog_service: Annotated[BlogService, Depends()],
-    subscribed_address_name: str,  # 구독할 블로그의 주소 이름
+    subscribed_id: int,  # 구독할 블로그의 주소 이름
 ) -> SubscriptionDetailResponse:
     """
     새로운 구독 추가 API
     """
     # 구독 대상 블로그의 ID 가져오기
-    subscribed_blog = await blog_service.get_blog_by_address_name(subscribed_address_name)
+    subscribed_blog = await blog_service.get_blog_by_id(subscribed_id)
     subscriber_blog = await blog_service.get_blog_by_user(user=user)
     if not subscribed_blog or not subscriber_blog:
         raise BlogNotFoundError
