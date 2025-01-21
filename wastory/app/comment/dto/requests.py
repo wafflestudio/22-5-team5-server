@@ -23,11 +23,11 @@ class CommentCreateRequest(BaseModel):
     @model_validator(mode="after")
     def validate_level_and_parent_id(self) -> "CommentCreateRequest":
         if self.level not in (1, 2):  # level 값이 1 또는 2가 아닐 경우 에러 처리
-            raise InvalidFieldFormatError("Level must be either 1 or 2.")
+            raise InvalidFieldFormatError()
         if self.level == 2 and self.parent_id is None:
-            raise InvalidFieldFormatError("Parent ID must be provided when level is 2.")
+            raise InvalidFieldFormatError()
         if self.level == 1 and self.parent_id is not None:
-            raise InvalidFieldFormatError("Parent ID must not be provided when level is 1.")
+            raise InvalidFieldFormatError()
         return self
 
     

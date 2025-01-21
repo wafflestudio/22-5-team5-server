@@ -37,6 +37,5 @@ class Article(Base):
         cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
     )
     likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
-    hometopic_id : Mapped[int] = mapped_column(ForeignKey("hometopic.id", ondelete = "CASCADE"))  # 외래 키 정의
-
+    hometopic_id : Mapped[int] = mapped_column(ForeignKey("hometopic.id", ondelete = "CASCADE"),nullable =True)  # 외래 키 정의
     hometopic : Mapped["Hometopic"] = relationship("Hometopic", back_populates = "articles")
