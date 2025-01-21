@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 
 from wastory.app.notification.dto.requests import NotificationDeleteRequest, NotificationCheckRequest
-from wastory.app.notification.dto.responses import NotificationResponse, NotificationListResponse
+from wastory.app.notification.dto.responses import NotificationResponse, NotificationListResponse, PaginatedNotificationListResponse
 from wastory.app.user.models import User
 from wastory.app.notification.models import Notification
 from wastory.app.notification.service import NotificationService
@@ -12,17 +12,29 @@ from wastory.app.user.views import login_with_header
 notification_router = APIRouter()
 
 
+# @notification_router.get("/my_notifications")
+# async def get_notifications_by_user(
+#     user: Annotated[User, Depends(login_with_header)],
+#     notification_service: Annotated[NotificationService, Depends()]
+# ):
+#     notifications: list[Notification] = await notification_service.get_notifications_by_user(user)
+#     response = NotificationListResponse(
+#         total_count=len(notifications),
+#         notifications=[NotificationResponse.from_notification(n) for n in notifications]
+#     )
+#     return response
 @notification_router.get("/my_notifications")
 async def get_notifications_by_user(
     user: Annotated[User, Depends(login_with_header)],
-    notification_service: Annotated[NotificationService, Depends()]
-):
-    notifications: list[Notification] = await notification_service.get_notifications_by_user(user)
-    response = NotificationListResponse(
-        total_count=len(notifications),
-        notifications=[NotificationResponse.from_notification(n) for n in notifications]
-    )
-    return response
+    notification_service: Annotated[NotificationService, Depends()],
+    page: int
+) -> PaginatedNotificationListResponse:
+    per_page = 10
+    return await notification_service.get_notifications_by_user(
+        user=user,
+        page=page,
+        per_page=per_page
+        )
 
 @notification_router.delete("/my_notifications")
 async def delete_notification(

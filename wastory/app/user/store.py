@@ -21,15 +21,6 @@ class UserStore:
         SESSION.add(user)
         return user
 
-    @transactional
-    async def add_user_via_kakao(self, nickname: str) -> User:
-        user = await self.get_user_by_nickname(nickname)
-        if user:
-            return user
-        user = User(username=nickname, nickname=nickname, password=0000, email=None)
-        SESSION.add(user)
-        return user
-
     async def get_user_by_username(self, username: str) -> User | None:
         return await SESSION.scalar(select(User).where(User.username == username))
 
@@ -93,6 +84,14 @@ class UserStore:
 
         return user
 
+
+    @transactional
+    async def delete_user(self, user_id: int) -> User | None:
+        deleted_user = await SESSION.scalar(select(User).where(User.id == user_id))
+        await SESSION.delete(deleted_user)  
+        await SESSION.flush()
+        return deleted_user
+        
 
     @transactional
     async def block_token(self, token_id: str, expired_at: datetime) -> None:
