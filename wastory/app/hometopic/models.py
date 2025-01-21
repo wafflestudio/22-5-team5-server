@@ -13,8 +13,10 @@ class Hometopic(Base):
 
     id: Mapped[intpk]
     name: Mapped[str] = mapped_column(String(50), index=True)
-    articles : Mapped[list["Article"]] = relationship("Article", back_populates="category")
-
+    articles: Mapped[list["Article"]] = relationship(
+        "Article",
+        back_populates="hometopic",  # Article의 hometopic과 연결
+    )
 
 
     

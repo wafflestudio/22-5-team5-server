@@ -16,7 +16,6 @@ async def create(
     Hometopic_create_request:HometopicCreateRequest,
     Hometopic_service: Annotated[HometopicService, Depends()],
 )-> HometopicDetailResponse:
-    return await Hometopic_service.create_category(
-        user=user,
-        topicname=Hometopic_create_request.topicname
+    return await Hometopic_service.create_hometopic(
+        topic_name=Hometopic_create_request.topicname
     )
