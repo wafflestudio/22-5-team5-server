@@ -6,7 +6,8 @@ from sqlalchemy import select, or_, and_, func
 from sqlalchemy.orm import Session
 from wastory.app.blog.errors import (
     BlogNotFoundError,
-    BlognameAlreadyExistsError
+    BlognameAlreadyExistsError,
+    BlogAlreadyExistsError
 )
 from wastory.app.blog.models import Blog
 from wastory.database.annotation import transactional
@@ -20,6 +21,8 @@ class BlogStore:
         description = name + "님의 블로그입니다."
         if await self.get_blog_by_name(blog_name):
             raise BlognameAlreadyExistsError
+        if await self.get_blog_of_user(user_id=user_id):
+            raise BlogAlreadyExistsError
         blog=Blog(
             address_name=name,
             description=description,

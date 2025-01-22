@@ -17,6 +17,3 @@ class Hometopic(Base):
         "Article",
         back_populates="hometopic",  # Article의 hometopic과 연결
     )
-
-
-    
