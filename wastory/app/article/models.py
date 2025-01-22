@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from wastory.app.blog.models import Blog
     from wastory.app.comment.models import Comment
     from wastory.app.like.models import Like
+
 class Article(Base):
     __tablename__ = "Article"
 
@@ -19,6 +20,7 @@ class Article(Base):
 
     views: Mapped[int] = mapped_column(Integer, default=0, nullable=False) # 조회수
 
+    main_image_url: Mapped[str | None] = mapped_column(String(255), default=None, nullable=True)
 
     created_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())    
@@ -28,8 +30,9 @@ class Article(Base):
     ## 식으로 정의해주면, blog 또는 category 삭제시 하위 항목도 같이 삭제됨.
     blog_id : Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete = "CASCADE"))
     category_id : Mapped[int] = mapped_column(ForeignKey("category.id", ondelete = "CASCADE"))
-
-    
+    """
+    images : Mapped[list["Image"]] = relationship("Image", back_populates = "article", cascade = "all, delete-orphan")    
+    """
     blog : Mapped["Blog"] = relationship("Blog", back_populates = "articles")
     category : Mapped["Category"] = relationship("Category", back_populates = "articles")
     

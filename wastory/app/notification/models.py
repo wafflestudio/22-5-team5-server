@@ -24,7 +24,7 @@ class Notification(Base):
 
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  # 알림 소유자
-    blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=False)  # 알림 소유자
+    blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id"), nullable=False)  # 알림 소유자
 
     # 관계 설정
     user: Mapped["User"] = relationship("User", back_populates="notification")
