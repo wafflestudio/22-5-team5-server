@@ -17,3 +17,12 @@ class BlogDetailResponse(BaseModel):
         populate_by_name = True  # 필드 이름을 기반으로 데이터 채우기
         extra = "allow"  # 모델에 없는 필드 허용
         exclude_none = False  # None 값도 포함
+
+class PaginatedBlogDetailResponse(BaseModel):
+    page: int
+    per_page: int
+    total_count: int
+    blogs: list[BlogDetailResponse]
+
+    class Config:
+        orm_mode = True  # SQLAlchemy ORM 모델을 지원하도록 설정
