@@ -28,11 +28,12 @@ class CommentDetailResponse(BaseModel):
 
                 # 블로그 주인 or 게시글(Article) 주인 판별
                 is_resource_owner = False
-                if comment.blog and comment.blog.user_id == current_user.id:
-                    is_resource_owner = True
-                elif comment.article and comment.article.blog_id == current_user.blogs.id:
-                    is_resource_owner = True
-
+                if hasattr(comment, "article") and comment.article:
+                    if comment.article.blog_id == current_user.blogs.id:
+                        is_resource_owner = True
+                if hasattr(comment, "blog") and comment.blog:
+                    if comment.blog.user_id == current_user.id:
+                        is_resource_owner = True
                 # 최종 체크
                 if not (is_author or is_resource_owner):
                     content_to_show = "비밀 댓글입니다"
