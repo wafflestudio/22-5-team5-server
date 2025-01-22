@@ -144,3 +144,13 @@ class SubscriptionStore:
         )
         result = await SESSION.scalars(query)
         return result.all()  # 리스트로 반환
+    
+    async def get_subscription(self, subscriber_id: int, subscribed_id: int) -> Subscription | None:
+        """
+        특정 구독 관계 반환
+        """
+        query = select(Subscription).filter(
+            Subscription.subscriber_id == subscriber_id,
+            Subscription.subscribed_id == subscribed_id
+        )
+        return await SESSION.scalar(query)

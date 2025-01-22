@@ -7,6 +7,7 @@ from wastory.database.common import Base, intpk
 if TYPE_CHECKING:
     from wastory.app.blog.models import Blog
     from wastory.app.notification.models import Notification
+    from wastory.app.comment.models import Comment
 
 class User(Base):
     __tablename__ = "user"

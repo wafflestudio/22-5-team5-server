@@ -4,7 +4,7 @@ from fastapi import Depends
 from wastory.app.blog.models import Blog
 from wastory.app.user.models import User
 from wastory.app.blog.store import BlogStore
-from wastory.app.blog.dto.responses import BlogDetailResponse
+from wastory.app.blog.dto.responses import BlogDetailResponse, PaginatedBlogDetailResponse
 from wastory.app.blog.errors import BlogNotFoundError
 from wastory.app.user.store import UserStore
 from wastory.app.category.store import CategoryStore
@@ -64,3 +64,40 @@ class BlogService:
             new_default_category_id=new_default_category_id
         )
         return BlogDetailResponse.model_validate(updated_blog, from_attributes=True)
+    
+    async def get_blog_by_user_email(self, email: str) -> BlogDetailResponse:
+        """
+        이메일을 통해 유저의 블로그 조회
+        """
+        # 이메일로 유저 정보 조회
+        user = await self.user_store.get_user_by_email(email)
+        if not user:
+            raise BlogNotFoundError
+
+        # 유저의 블로그 조회
+        blog = await self.blog_store.get_blog_of_user(user_id=user.id)
+        if not blog:
+            raise BlogNotFoundError
+
+        return BlogDetailResponse.model_validate(blog, from_attributes=True)
+    
+    async def search_blog_by_keywords(self, keywords: str, page: int, per_page: int) -> PaginatedBlogDetailResponse:
+        """
+        키워드로 블로그 검색
+        """
+        # 검색된 블로그와 총 개수를 반환
+        blogs = await self.blog_store.search_blogs_by_keywords(keywords, page, per_page)
+        total_count = await self.blog_store.count_search_result_by_keywords(keywords)
+
+        # 블로그 목록을 DTO로 변환
+        blog_responses = [
+            BlogDetailResponse.model_validate(blog, from_attributes=True) for blog in blogs
+        ]
+
+        # 페이지네이션 응답 생성
+        return PaginatedBlogDetailResponse(
+            page=page,
+            per_page=per_page,
+            total_count=total_count,
+            blogs=blog_responses,
+        )

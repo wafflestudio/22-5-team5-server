@@ -8,7 +8,7 @@ from wastory.app.category.models import Category
 from wastory.app.category.service import CategoryService
 from wastory.app.user.models import User
 category_router = APIRouter()
-from wastory.app.user.views import login_with_header
+from wastory.app.user.views import login_with_header,optional_login_with_header
 
 #카테고리를 생성하는 API
 @category_router.post("/create", status_code=HTTP_201_CREATED)
@@ -28,7 +28,7 @@ async def create(
 #현재 유저가 지니고 있는 카테고리들을 불러오는 API
 @category_router.get("/list", status_code=HTTP_200_OK)
 async def get_list(
-    user:Annotated[User,Depends(login_with_header)],
+    user:Annotated[User,Depends(optional_login_with_header)],
     category_service:Annotated[CategoryService,Depends()],
 )-> CategoryFinalResponse:
     return await category_service.list_categories(user)

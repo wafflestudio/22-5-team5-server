@@ -2,7 +2,7 @@ from functools import cache
 from typing import Annotated
 
 from fastapi import Depends
-from sqlalchemy import select
+from sqlalchemy import select, or_, and_, func
 from sqlalchemy.orm import Session
 from wastory.app.blog.errors import (
     BlogNotFoundError,
@@ -93,3 +93,69 @@ class BlogStore:
 
 
         return blog
+    
+    async def search_blogs_by_keywords(self, keywords: str, page: int, per_page: int) -> list[Blog]:
+        """
+        키워드로 블로그 검색
+        """
+        # 검색어 유효성 확인
+        keywords = keywords.strip()
+        if not keywords:
+            return []
+
+        # 오프셋 계산
+        offset_val = (page - 1) * per_page
+
+        # 검색어를 공백으로 분리
+        words = keywords.split()
+
+        # 이름과 설명 중 하나라도 단어를 포함해야 함
+        search_conditions = [
+            or_(
+                Blog.blog_name.ilike(f"%{word}%"),
+                Blog.description.ilike(f"%{word}%")
+            )
+            for word in words
+        ]
+
+        # 조건에 따른 쿼리 작성
+        query = (
+            select(Blog)
+            .where(and_(*search_conditions))  # 하나라도 매칭되는 경우 반환
+            .offset(offset_val)
+            .limit(per_page)
+        )
+
+        # 쿼리 실행
+        results = await SESSION.scalars(query)
+        return list(results)
+    
+    async def count_search_result_by_keywords(self, keywords: str)-> int:
+         # 검색어 유효성 확인
+        keywords = keywords.strip()
+        if not keywords:
+            return 0
+
+        # 검색어를 공백으로 분리
+        words = keywords.split()
+
+        # 검색 조건 생성
+        search_conditions = [
+            or_(
+                Blog.blog_name.ilike(f"%{word}%"),
+                Blog.description.ilike(f"%{word}%")
+            )
+            for word in words
+        ]
+
+        # 검색 조건 결합
+        query = (
+            select(func.count(Blog.id))
+            .where(and_(*search_conditions))  # 모든 검색 조건 충족
+        )
+
+        # 쿼리 실행 및 결과 반환
+        count = await SESSION.scalar(query)
+        return count or 0
+
+

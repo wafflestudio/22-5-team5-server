@@ -1,8 +1,8 @@
 """Initial migration
 
-Revision ID: ca2911583c0f
+Revision ID: 933831dda7d6
 Revises: 
-Create Date: 2025-01-18 13:40:37.317434
+Create Date: 2025-01-21 07:40:52.236410
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'ca2911583c0f'
+revision: str = '933831dda7d6'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -25,6 +25,12 @@ def upgrade() -> None:
     sa.Column('expired_at', sa.DateTime(), nullable=False),
     sa.PrimaryKeyConstraint('token_id')
     )
+    op.create_table('hometopic',
+    sa.Column('id', sa.BigInteger(), nullable=False),
+    sa.Column('name', sa.String(length=50), nullable=False),
+    sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_hometopic_name'), 'hometopic', ['name'], unique=False)
     op.create_table('user',
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('username', sa.String(length=20), nullable=True),
@@ -52,25 +58,13 @@ def upgrade() -> None:
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('user_id', name='unique_user_blog')
     )
-    op.create_table('notification',
-    sa.Column('id', sa.BigInteger(), nullable=False),
-    sa.Column('notification_type', sa.Integer(), nullable=False),
-    sa.Column('description', sa.String(length=255), nullable=True),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
-    sa.Column('checked', sa.Boolean(), server_default='0', nullable=False),
-    sa.Column('user_id', sa.BigInteger(), nullable=False),
-    sa.CheckConstraint('notification_type IN (1, 2, 3, 4, 5)', name='valid_notification_type'),
-    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
-    sa.PrimaryKeyConstraint('id')
-    )
     op.create_table('blog_subscription',
     sa.Column('id', sa.BigInteger(), nullable=False),
-    sa.Column('subscriber_id', sa.BigInteger(), nullable=False),
-    sa.Column('subscribed_id', sa.BigInteger(), nullable=False),
+    sa.Column('subscriber_id', sa.BigInteger(), nullable=True),
+    sa.Column('subscribed_id', sa.BigInteger(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
-    sa.ForeignKeyConstraint(['subscribed_id'], ['blog.id'], ondelete='CASCADE'),
-    sa.ForeignKeyConstraint(['subscriber_id'], ['blog.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['subscribed_id'], ['blog.id'], ondelete='SET NULL'),
+    sa.ForeignKeyConstraint(['subscriber_id'], ['blog.id'], ondelete='SET NULL'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('subscriber_id', 'subscribed_id', name='unique_subscription')
     )
@@ -87,6 +81,20 @@ def upgrade() -> None:
     sa.UniqueConstraint('name', 'blog_id', name='unique_category_per_blog')
     )
     op.create_index(op.f('ix_category_name'), 'category', ['name'], unique=False)
+    op.create_table('notification',
+    sa.Column('id', sa.BigInteger(), nullable=False),
+    sa.Column('notification_type', sa.Integer(), nullable=False),
+    sa.Column('description', sa.String(length=255), nullable=True),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('updated_at', sa.DateTime(), server_default=sa.text('now()'), nullable=False),
+    sa.Column('checked', sa.Boolean(), server_default='0', nullable=False),
+    sa.Column('user_id', sa.BigInteger(), nullable=False),
+    sa.Column('blog_id', sa.BigInteger(), nullable=False),
+    sa.CheckConstraint('notification_type IN (1, 2, 3, 4, 5)', name='valid_notification_type'),
+    sa.ForeignKeyConstraint(['blog_id'], ['blog.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['user_id'], ['user.id'], ),
+    sa.PrimaryKeyConstraint('id')
+    )
     op.create_table('Article',
     sa.Column('id', sa.BigInteger(), nullable=False),
     sa.Column('title', sa.String(length=20), nullable=False),
@@ -96,8 +104,10 @@ def upgrade() -> None:
     sa.Column('updated_at', sa.DateTime(timezone=True), nullable=False),
     sa.Column('blog_id', sa.BigInteger(), nullable=False),
     sa.Column('category_id', sa.BigInteger(), nullable=False),
+    sa.Column('hometopic_id', sa.BigInteger(), nullable=False),
     sa.ForeignKeyConstraint(['blog_id'], ['blog.id'], ondelete='CASCADE'),
     sa.ForeignKeyConstraint(['category_id'], ['category.id'], ondelete='CASCADE'),
+    sa.ForeignKeyConstraint(['hometopic_id'], ['hometopic.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_Article_title'), 'Article', ['title'], unique=False)
@@ -140,14 +150,16 @@ def downgrade() -> None:
     op.drop_table('blog_like')
     op.drop_index(op.f('ix_Article_title'), table_name='Article')
     op.drop_table('Article')
+    op.drop_table('notification')
     op.drop_index(op.f('ix_category_name'), table_name='category')
     op.drop_table('category')
     op.drop_table('blog_subscription')
-    op.drop_table('notification')
     op.drop_table('blog')
     op.drop_index(op.f('ix_user_username'), table_name='user')
     op.drop_index(op.f('ix_user_nickname'), table_name='user')
     op.drop_index(op.f('ix_user_email'), table_name='user')
     op.drop_table('user')
+    op.drop_index(op.f('ix_hometopic_name'), table_name='hometopic')
+    op.drop_table('hometopic')
     op.drop_table('blocked_token')
     # ### end Alembic commands ###
