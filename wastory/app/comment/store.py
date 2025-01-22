@@ -2,7 +2,7 @@ from functools import cache
 from typing import Annotated
 from sqlalchemy.orm import selectinload
 from sqlalchemy import select,and_,func, or_
-from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError, InvalidLevelError
+from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError, InvalidLevelError, ParentOtherSectionError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
@@ -77,9 +77,6 @@ class CommentStore:
     async def create_article_comment_1(
         self, content:str,secret:int,user:User,article_id:int
         )->Comment:
-            print(content)
-            print(user.username)
-            print(secret)
             comment= Comment(
                 content=content,
                 level=1,
@@ -105,6 +102,8 @@ class CommentStore:
                 raise CommentNotFoundError()
             if parent_comment.level==2:
                 raise InvalidLevelError()
+            if parent_comment.article_id==None or parent_comment.article_id!=article_id:
+                raise ParentOtherSectionError()
             secret_here=secret
             if parent_comment.secret==1:
                 secret_here=1
@@ -159,6 +158,8 @@ class CommentStore:
                 raise CommentNotFoundError()
             if parent_comment.level==2:
                 raise InvalidLevelError()
+            if parent_comment.blog_id==None or parent_comment.blog_id!=blog_id:
+                raise ParentOtherSectionError()
             secret_here=secret
             if parent_comment.secret==1:
                 secret_here=1
@@ -175,6 +176,7 @@ class CommentStore:
             SESSION.add(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
 
 
