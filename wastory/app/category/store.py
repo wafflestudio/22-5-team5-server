@@ -1,12 +1,14 @@
 from functools import cache
 from typing import Annotated
 from sqlalchemy.orm import selectinload
+from sqlalchemy.sql import func
 from sqlalchemy import select,and_
 from wastory.app.category.errors import CategoryNameDuplicateError,CategoryNotFoundError,NotOwnerError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.category.models import Category
+from wastory.app.article.models import Article
 
 class CategoryStore:
 
@@ -14,6 +16,8 @@ class CategoryStore:
     async def create_category(
         self, blog_id:int,categoryname:str, categorylevel:int, parentId:int|None=None
         )->Category:
+            if await self.get_category_by_blog_and_name(blog_id=blog_id,name=categoryname):
+                raise CategoryNameDuplicateError()
             category= Category(
                 blog_id=blog_id,
                 name=categoryname,
@@ -26,12 +30,25 @@ class CategoryStore:
             await SESSION.refresh(category)
             return category
         
+    async def get_category_by_blog_and_name(self, blog_id: int, name: str) -> Category | None:
+        stmt = (
+            select(Category)
+            .filter(Category.blog_id == blog_id)
+            .filter(Category.name == name)
+        )
+        category = await SESSION.scalar(stmt)
+        return category
+
     async def get_category_by_categoryname(self, name:str) ->Category|None:
         get_category_query=select(Category).filter(Category.name==name)
         category=await SESSION.scalar(get_category_query)
         return category
     
-
+    async def get_article_count(self, category_id: int) -> int:
+        stmt = select(func.count(Article.id)).filter(Article.category_id == category_id)
+        count = await SESSION.scalar(stmt)
+        return count or 0
+        
     async def get_category_by_id(self, id:int)->Category|None:
         get_category_query=select(Category).filter(Category.id==id)
         category=await SESSION.scalar(get_category_query)

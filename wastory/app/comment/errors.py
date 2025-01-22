@@ -1,35 +1,32 @@
-from fastapi import HTTPException
-from starlette.status import (
-    HTTP_400_BAD_REQUEST,
-    HTTP_401_UNAUTHORIZED,
-    HTTP_409_CONFLICT,
-    HTTP_404_NOT_FOUND
-)
+from wastory.common.errors import WastoryHttpException
 
 
-class BlogNotFoundError(HTTPException):
+class BlogNotFoundError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_404_NOT_FOUND, "blog not found")
+        super().__init__(status_code=404, detail="blog not found")
 
-class CommentNotFoundError(HTTPException):
+class CommentNotFoundError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_404_NOT_FOUND, "category not found")
+        super().__init__(status_code=404,detail= "comment not found")
 
-class CategoryNameDuplicateError(HTTPException):
+class ParentOtherSectionError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_409_CONFLICT, "category already exists")
+        super().__init__(status_code=409,detail= "parent와 children 위치가 다릅니다")
 
 
-class InvalidFieldFormatError(HTTPException):
+class InvalidFieldFormatError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_400_BAD_REQUEST, "Invalid field format")
+        super().__init__(status_code=400,detail= "Invalid field format")
 
-
-class MissingRequiredFieldError(HTTPException):
+class InvalidLevelError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_400_BAD_REQUEST, "Missing required fields")
+        super().__init__(status_code=400,detail= "parent_should be level 1")
 
-
-class NotOwnerError(HTTPException):
+class MissingRequiredFieldError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(HTTP_401_UNAUTHORIZED, "category owner is not user")
+        super().__init__(status_code=400,detail= "Missing required fields")
+
+
+class NotOwnerError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=401,detail= "User Not Allowed")

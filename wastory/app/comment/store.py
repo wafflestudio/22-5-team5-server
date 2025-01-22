@@ -1,11 +1,12 @@
 from functools import cache
 from typing import Annotated
 from sqlalchemy.orm import selectinload
-from sqlalchemy import select,and_,func
-from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError
+from sqlalchemy import select,and_,func, or_
+from wastory.app.comment.errors import CommentNotFoundError,NotOwnerError, InvalidLevelError, ParentOtherSectionError
 from wastory.app.user.models import User
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
+from wastory.app.blog.models import Blog
 from wastory.app.article.models import Article
 from wastory.app.comment.models import Comment
 
@@ -23,7 +24,11 @@ class CommentStore:
         stmt = (
             select(Comment)
             .filter(Comment.article_id == article_id, Comment.level == 1)
-            .options(selectinload(Comment.children))  # 자식 로드
+            .options(
+                selectinload(Comment.children),
+                selectinload(Comment.blog),
+                selectinload(Comment.article)
+            )  # 자식 로드
             .offset(offset_val)
             .limit(per_page)
         )
@@ -47,7 +52,12 @@ class CommentStore:
         stmt = (
             select(Comment)
             .filter(Comment.blog_id == blog_id, Comment.level == 1)
-            .options(selectinload(Comment.children))  # 자식 로드
+            .options(
+                selectinload(Comment.children),
+                selectinload(Comment.article),     # Article 미리 로드
+                selectinload(Comment.blog) 
+            )  # 자식 로드
+            
             .offset(offset_val)
             .limit(per_page)
         )
@@ -67,9 +77,6 @@ class CommentStore:
     async def create_article_comment_1(
         self, content:str,secret:int,user:User,article_id:int
         )->Comment:
-            print(content)
-            print(user.username)
-            print(secret)
             comment= Comment(
                 content=content,
                 level=1,
@@ -83,16 +90,27 @@ class CommentStore:
             print(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
         
     @transactional
     async def create_article_comment_2(
         self, content:str,secret:int,user:User,article_id:int,parent_id:int
         )->Comment:
+            parent_comment=await self.get_comment_by_id(parent_id)
+            if not parent_comment:
+                raise CommentNotFoundError()
+            if parent_comment.level==2:
+                raise InvalidLevelError()
+            if parent_comment.article_id==None or parent_comment.article_id!=article_id:
+                raise ParentOtherSectionError()
+            secret_here=secret
+            if parent_comment.secret==1:
+                secret_here=1
             comment= Comment(
                 content=content,
                 level=2,
-                secret=secret,
+                secret=secret_here,
                 user_id=user.id,
                 user_name=user.username,
                 article_id=article_id,
@@ -105,6 +123,7 @@ class CommentStore:
             SESSION.add(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
 
     @transactional
@@ -127,28 +146,37 @@ class CommentStore:
             print(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
         
     @transactional
     async def create_guestbook_comment_2(
         self, content:str,secret:int,user:User,blog_id:int,parent_id:int
         )->Comment:
+            parent_comment=await self.get_comment_by_id(parent_id)
+            if not parent_comment:
+                raise CommentNotFoundError()
+            if parent_comment.level==2:
+                raise InvalidLevelError()
+            if parent_comment.blog_id==None or parent_comment.blog_id!=blog_id:
+                raise ParentOtherSectionError()
+            secret_here=secret
+            if parent_comment.secret==1:
+                secret_here=1
             comment= Comment(
                 content=content,
                 level=2,
-                secret=secret,
+                secret=secret_here,
                 user_id=user.id,
                 user_name=user.username,
                 blog_id=blog_id,
                 parent_id=parent_id
             )
-            parent_comment=await self.get_comment_by_id(parent_id)
-            if not parent_comment:
-                raise CommentNotFoundError()
             comment.parent = parent_comment
             SESSION.add(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
+            await SESSION.refresh(comment, ["blog", "article"])
             return comment
 
 
@@ -192,4 +220,20 @@ class CommentStore:
         await SESSION.delete(comment)
         await SESSION.flush()
 
-    
+    # 답글이 달린 댓글 작성자들의 address_name을 반환
+    async def get_replies_blog_address_name(self, address_name: str, parent_id: int) -> list[str]:
+        stmt = (
+            select(Blog.address_name)
+            .select_from(Comment)
+            .join(User, User.id == Comment.user_id) # User와 Comment 조인
+            .join(Blog, Blog.user_id == User.id) # User와 Blog 조인
+            # .filter(or_(Comment.parent_id == parent_id, Comment.id == parent_id))  # parent_id 필터
+            .where(
+                (Comment.parent_id == parent_id) | (Comment.id == parent_id)
+            )
+            .distinct()  # 중복 제거
+        )
+        result = await SESSION.execute(stmt)
+        replies = result.all()
+        print(replies)
+        return [reply[0] for reply in replies if reply[0] != address_name] 
