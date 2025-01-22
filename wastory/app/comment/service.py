@@ -47,7 +47,9 @@ class CommentService:
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
                         type=3,
-                        description="댓글",
+                        username=user.username,
+                        notification_blogname=user_blog.blog_name,
+                        description=content,
                     )
             elif level==2:
                 new_comment=await self.comment_store.create_article_comment_2(
@@ -61,7 +63,9 @@ class CommentService:
                 await self.notification_service.add_notification(
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
                     type=3,
-                    description="댓글",
+                    username=user.username,
+                    notification_blogname=user_blog.blog_name,
+                    description=content,
                 )
             return CommentDetailResponse.from_comment(new_comment, user)
 
@@ -85,7 +89,9 @@ class CommentService:
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
                         type=4,
-                        description="방명록",
+                        username=user.username,
+                        notification_blogname=user_blog.blog_name,
+                        description=content,
                     )
             elif level==2:
                 new_comment=await self.comment_store.create_guestbook_comment_2(
@@ -99,7 +105,9 @@ class CommentService:
                 await self.notification_service.add_notification(
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
                     type=4,
-                    description="방명록",
+                    username=user.username,
+                    notification_blogname=user_blog.blog_name,
+                    description=content,
                 )
             return CommentDetailResponse.from_comment(new_comment, user)
 

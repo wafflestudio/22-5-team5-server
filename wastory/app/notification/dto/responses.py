@@ -6,12 +6,12 @@ from wastory.app.notification.models import Notification
 class NotificationResponse(BaseModel):
     id: int
     notification_type: int
+    notification_title: str
     description: str | None = None
     created_at: datetime
     updated_at: datetime
     checked: bool = False
     username: str
-    blog_name: str
     blog_main_image_url: str | None
 
 class NotificationListResponse(BaseModel):

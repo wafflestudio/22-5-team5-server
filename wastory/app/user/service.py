@@ -36,6 +36,9 @@ class UserService:
     async def add_user(self, email: str, password: str):
         await self.user_store.add_user(email=email, password=password)
 
+    async def get_user_by_id(self, id: int) -> User | None:
+        return await self.user_store.get_user_by_id(id)
+
     async def get_user_by_username(self, username: str) -> User | None:
         return await self.user_store.get_user_by_username(username)
 
@@ -50,10 +53,8 @@ class UserService:
         username: str | None,
         nickname: str | None,
         email: str,
-        address: str | None,
-        phone_number: str | None,
     ) -> User:
-        return await self.user_store.update_user(username, nickname, email, address, phone_number)
+        return await self.user_store.update_user(username, nickname, email)
 
     async def update_password(
         self,
@@ -69,6 +70,9 @@ class UserService:
         email: str,
     ) -> User:
         return await self.user_store.update_username(username, email)
+
+    async def is_kakao_user(self, user: User) -> bool:
+        return user.nickname is not None
 
     async def delete_user(self, user_id: int):
         deleted_user = await self.user_store.delete_user(user_id)
@@ -151,9 +155,9 @@ class UserService:
 
 
     async def send_verification_code(self, email: str) -> str:
-
-        """무작위 인증 코드 생성 후 이메일 발송"""
-
+        """
+        무작위 인증 코드 생성 후 이메일 발송
+        """
         verification_code = self.generate_verification_code()
 
         # 캐시에 저장
@@ -174,9 +178,9 @@ class UserService:
         return verification_code
 
     def verify_code(self, email: str, code: str) -> bool:
-
-        """Redis에서 인증 코드 검증"""
-
+        """
+        Redis에서 인증 코드 검증
+        """
         stored_code: Optional[bytes] = redis_client.get(f"verification:{email}")
         if stored_code and stored_code.decode() == code:
             redis_client.delete(f"verification:{email}")  # 사용 후 삭제
