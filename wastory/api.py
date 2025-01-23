@@ -8,7 +8,8 @@ from wastory.app.comment.views import comment_router
 from wastory.app.notification.views import notification_router
 from wastory.app.subscription.views import subscription_router
 from wastory.app.like.views import like_router
-from wastory.app.image.views import image_routerfrom wastory.app.hometopic.views import hometopic_router
+from wastory.app.image.views import image_router
+from wastory.app.hometopic.views import hometopic_router
 
 api_router = APIRouter()
 
