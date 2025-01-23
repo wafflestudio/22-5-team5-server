@@ -18,7 +18,6 @@ class CategoryService:
         self.user_store=user_store
         self.blog_store=blog_store
 
-
     async def create_category(
         self, categoryname:str, categorylevel:int, parentId:int,user:User
         )-> CategoryDetailResponse:
@@ -77,13 +76,13 @@ class CategoryService:
         category_list_responses = []
         for cat in categories:
             # 상위 카테고리의 article_count
-            parent_article_count = await self.comment_store.get_article_count(cat.id)
+            parent_article_count = await self.category_store.get_article_count(cat.id)
             parent_resp = CategoryListResponse.from_category(cat, parent_article_count)
 
             # 자식 카테고리( level=2 ) 처리
             child_resp_list = []
             for child_cat in cat.children:
-                child_article_count = await self.comment_store.get_article_count(child_cat.id)
+                child_article_count = await self.category_store.get_article_count(child_cat.id)
                 child_resp = CategoryListResponse.from_category(child_cat, child_article_count)
                 child_resp_list.append(child_resp)
 
