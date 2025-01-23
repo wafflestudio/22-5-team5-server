@@ -199,7 +199,7 @@ class CommentService:
         per_page: int,
         current_user: Optional[User] = None  # ← 추가
     ) -> PaginatedCommentListResponse:
-        total_count = await self.comment_store.get_guestbook_comments_count(article_id)
+        total_count = await self.comment_store.get_guestbook_comments_count(blog_id)
         level1_comments = await self.comment_store.get_guestbook_comments(
             blog_id=blog_id, 
             page=page, 
