@@ -53,6 +53,8 @@ class CategoryStore:
         get_category_query=select(Category).filter(Category.id==id)
         category=await SESSION.scalar(get_category_query)
         return category
+
+    
     
 
     #여기가 많은 개선이 필요함!!

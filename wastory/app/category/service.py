@@ -18,6 +18,12 @@ class CategoryService:
         self.user_store=user_store
         self.blog_store=blog_store
 
+    async def get_category(
+        self, category_id:int
+    )->CategoryDetailResponse:
+        category=await self.category_store.get_category_by_id(category_id)
+        return CategoryDetailResponse.from_category(category)
+
     async def create_category(
         self, categoryname:str, categorylevel:int, parentId:int,user:User
         )-> CategoryDetailResponse:
