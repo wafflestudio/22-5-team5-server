@@ -7,10 +7,11 @@ class HometopicStore:
 
     @transactional
     async def create_hometopic(
-        self, topicname:str
+        self, topicname:str,high_category:int
         )->Hometopic:
             hometopic=Hometopic(
-                name=topicname
+                name=topicname,
+                high_categry=high_category
             )
             SESSION.add(hometopic)
             await SESSION.flush()

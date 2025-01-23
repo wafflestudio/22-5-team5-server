@@ -14,6 +14,7 @@ def validate_topicname(value:str)->str:
 
 class HometopicCreateRequest(BaseModel):
     topicname: Annotated[str,AfterValidator(validate_topicname)]
+    high_category: int
 
 class HometopicUpdateRequest(BaseModel):
     topicname: Annotated[str,AfterValidator(validate_topicname)]
