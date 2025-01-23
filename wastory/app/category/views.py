@@ -17,12 +17,19 @@ async def create(
     category_create_request:CategoryCreateRequest,
     category_service: Annotated[CategoryService, Depends()],
 )-> CategoryDetailResponse:
-    print(category_create_request.categoryname)
     return await category_service.create_category(
         user=user,
         categoryname=category_create_request.categoryname, 
         categorylevel=category_create_request.categoryLevel,
         parentId=category_create_request.parent_id
+    )
+@category_router.get("/{category_id}", status_code=HTTP_201_CREATED)
+async def create(
+    category_id:int,
+    category_service: Annotated[CategoryService, Depends()],
+)-> CategoryDetailResponse:
+    return await category_service.get_category(
+        category_id=category_id
     )
 
 #현재 유저가 지니고 있는 카테고리들을 불러오는 API
