@@ -11,11 +11,12 @@ class HometopicService:
 
 
     async def create_hometopic(
-        self, topic_name:str
+        self, topic_name:str, high_category:int
         )-> HometopicDetailResponse:
             
             new_topic= await self.hometopic_store.create_hometopic(
-                topicname=topic_name
+                topicname=topic_name,
+                high_category=high_category
             )
             return HometopicDetailResponse.from_hometopic(new_topic)
    

@@ -33,6 +33,13 @@ async def get_list(
 )-> CategoryFinalResponse:
     return await category_service.list_categories(user)
 
+@category_router.get("/list/{blog_id}", status_code=HTTP_200_OK)
+async def get_list_by_blog(
+    blog_id:int,
+    category_service:Annotated[CategoryService,Depends()],
+)-> CategoryFinalResponse:
+    return await category_service.list_categories_by_blog(blog_id)
+
 #특정 카테고리의 이름을 바꾸는 API
 @category_router.patch("/{category_id}", status_code=HTTP_200_OK)
 async def update_category(
