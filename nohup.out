@@ -1,4 +1,3 @@
-nohup: ignoring input
 /home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
@@ -6,10 +5,18 @@ nohup: ignoring input
 * 'allow_population_by_field_name' has been renamed to 'populate_by_name'
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [64354]
+INFO:     Started server process [64244]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+called get_blog
+Debug: Blog=<Blog id=2, blog_name=asdf님의 블로그, user_id=3>
+main_image_url: None
+INFO:     218.149.163.247:0 - "GET /api/blogs/asdf HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     218.149.163.247:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
 INFO:     218.149.163.247:0 - "PATCH /api/blogs/test HTTP/1.0" 500 Internal Server Error
 ERROR:    Exception in ASGI application
   + Exception Group Traceback (most recent call last):
@@ -165,3 +172,16 @@ Traceback (most recent call last):
     return await blog_service.update_blog(address_name=address_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)
                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 TypeError: BlogService.update_blog() missing 1 required positional argument: 'new_default_category_id'
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64244]
+Exception ignored in: <function Connection.__del__ at 0x7bca82c5c5e0>
+Traceback (most recent call last):
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/aiomysql/connection.py", line 1131, in __del__
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/aiomysql/connection.py", line 339, in close
+  File "/usr/lib/python3.12/asyncio/selector_events.py", line 1211, in close
+  File "/usr/lib/python3.12/asyncio/selector_events.py", line 875, in close
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 795, in call_soon
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 541, in _check_closed
+RuntimeError: Event loop is closed
