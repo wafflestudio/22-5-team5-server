@@ -30,6 +30,8 @@ class Article(Base):
     ## 식으로 정의해주면, blog 또는 category 삭제시 하위 항목도 같이 삭제됨.
     blog_id : Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete = "CASCADE"))
     category_id : Mapped[int] = mapped_column(ForeignKey("category.id", ondelete = "CASCADE"))
+    hometopic_id : Mapped[int] = mapped_column(ForeignKey("hometopic.id", ondelete = "CASCADE"),nullable =True)  # 외래 키 정의
+
     """
     images : Mapped[list["Image"]] = relationship("Image", back_populates = "article", cascade = "all, delete-orphan")    
     """
@@ -43,5 +45,4 @@ class Article(Base):
         cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
     )
     likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
-    hometopic_id : Mapped[int] = mapped_column(ForeignKey("hometopic.id", ondelete = "CASCADE"),nullable =True)  # 외래 키 정의
     hometopic : Mapped["Hometopic"] = relationship("Hometopic", back_populates = "articles")
