@@ -2,7 +2,6 @@ from functools import cache
 from typing import Annotated, Sequence, Optional
 
 from sqlalchemy import select, or_, and_
-from wastory.app.like.errors import LikeNotFoundError
 from wastory.app.like.models import Like
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
@@ -24,9 +23,7 @@ class LikeStore :
         return like
     
     @transactional
-    async def delete_like(self, like: Like) -> None:
-        if like is None: 
-            raise LikeNotFoundError()
+    async def delete_like_in_article(self, like: Like) -> None:
         await SESSION.delete(like)
         await SESSION.flush()       
 
@@ -34,6 +31,16 @@ class LikeStore :
     async def get_like_by_id(self, like_id : int) -> Like | None:
         like = await SESSION.get(Like, like_id)
         return like
+    
+    # article 이 받은 like 조회
+    @transactional
+    async def get_like_by_blog_in_article(self, blog_id: int, article_id: int) -> Sequence[Like]:
+        query = select(Like).where(
+            Like.article_id == article_id, 
+            Like.blog_id == blog_id
+        )
+        result = await SESSION.scalars(query)  # await 추가
+        return result.all()   
     
     # 특정 blog 가 누른 like 를 얻는 method
     @transactional

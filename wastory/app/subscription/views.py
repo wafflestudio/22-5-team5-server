@@ -16,13 +16,13 @@ async def add_subscription(
     user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
     subscribe_service: Annotated[SubscriptionService, Depends()],
     blog_service: Annotated[BlogService, Depends()],
-    subscribed_address_name: str,  # 구독할 블로그의 주소 이름
+    subscribed_id: int,  # 구독할 블로그의 주소 이름
 ) -> SubscriptionDetailResponse:
     """
     새로운 구독 추가 API
     """
     # 구독 대상 블로그의 ID 가져오기
-    subscribed_blog = await blog_service.get_blog_by_address_name(subscribed_address_name)
+    subscribed_blog = await blog_service.get_blog_by_id(subscribed_id)
     subscriber_blog = await blog_service.get_blog_by_user(user=user)
     if not subscribed_blog or not subscriber_blog:
         raise BlogNotFoundError
@@ -79,3 +79,48 @@ async def cancel_subscription(
     await subscribe_service.cancel_subscription(subscriber_user=user, subscribed_address_name=subscribed_address_name)
 
     return {"message": "Subscription canceled successfully."}
+
+@subscription_router.get("/is_subscribed", status_code=HTTP_200_OK)
+async def is_blog_subscribing(
+    user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
+    subscribe_service: Annotated[SubscriptionService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
+    subscriber_id: int  # 구독 여부를 확인할 블로그 ID
+) -> dict:
+    """
+    특정 블로그가 내 블로그를 구독하고 있는지 확인하는 API
+    """
+    # 현재 사용자의 블로그 정보 가져오기
+    subscribed_blog = await blog_service.get_blog_by_user(user=user)
+    if not subscribed_blog:
+        raise BlogNotFoundError
+
+    # 구독 여부 확인
+    is_subscribed = await subscribe_service.is_blog_subscribed(subscriber_id, subscribed_blog.id)
+
+    return {"is_subscribed": is_subscribed}
+
+@subscription_router.get("/is_subscribing", status_code=HTTP_200_OK)
+async def is_subscribing(
+    user: Annotated[User, Depends(login_with_header)],  # 로그인한 사용자
+    subscribe_service: Annotated[SubscriptionService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
+    subscribed_id: int  # 구독 여부를 확인할 블로그 ID
+) -> dict:
+    """
+    현재 사용자가 특정 블로그를 구독하고 있는지 확인하는 API
+    """
+    # 현재 사용자의 블로그 정보 가져오기
+    subscriber_blog = await blog_service.get_blog_by_user(user=user)
+    if not subscriber_blog:
+        raise BlogNotFoundError
+
+    # 구독 여부 확인
+    is_subscribed = await subscribe_service.is_blog_subscribed(
+        subscriber_id=subscriber_blog.id,
+        subscribed_id=subscribed_id
+    )
+
+    return {"is_subscribing": is_subscribed}
+
+

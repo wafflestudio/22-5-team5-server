@@ -4,10 +4,10 @@ from pydantic import AfterValidator, BaseModel
 from wastory.common.errors import InvalidFieldFormatError
 
 
-def title_length_2_and_100(title: str | None) -> str | None:
+def title_length_1_and_80(title: str | None) -> str | None:
     if title is None:
         return None  # None은 허용
-    if len(title) < 2 or len(title) > 100:
+    if len(title) < 1 or len(title) > 80:
         raise InvalidFieldFormatError("제목은 2자 이상 100자 이하로 작성해야 합니다.")
     return title
 
@@ -27,24 +27,17 @@ def content_min_valid_character(content: str | None) -> str | None:
     return content
 
 
-def content_max_length_5000(content: str | None) -> str | None:
-    if content is None:
-        return None  # None은 허용
-    if len(content) > 5000:
-        raise InvalidFieldFormatError("내용은 5000자를 초과할 수 없습니다.")
-    return content
 
 
 class ArticleCreateRequest(BaseModel):
     title: Annotated[
-        str,
-        AfterValidator(title_length_2_and_100),
-        AfterValidator(title_not_empty),
+        str | None,
+        AfterValidator(title_length_1_and_80),
+        AfterValidator(title_not_empty)
     ]
     content: Annotated[
-        str,
-        AfterValidator(content_min_valid_character),
-        AfterValidator(content_max_length_5000),
+        str | None,
+        AfterValidator(content_min_valid_character)
     ]
     description : str
     category_id : int
@@ -53,12 +46,11 @@ class ArticleCreateRequest(BaseModel):
 class ArticleUpdateRequest(BaseModel):
     title: Annotated[
         str | None,
-        AfterValidator(title_length_2_and_100),
-        AfterValidator(title_not_empty),
+        AfterValidator(title_length_1_and_80),
+        AfterValidator(title_not_empty)
     ] = None
     content: Annotated[
         str | None,
-        AfterValidator(content_min_valid_character),
-        AfterValidator(content_max_length_5000),
+        AfterValidator(content_min_valid_character)
     ] = None
     description :str

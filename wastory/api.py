@@ -8,7 +8,8 @@ from wastory.app.comment.views import comment_router
 from wastory.app.notification.views import notification_router
 from wastory.app.subscription.views import subscription_router
 from wastory.app.like.views import like_router
-from wastory.app.image.views import image_router
+from wastory.app.image.views import image_routerfrom wastory.app.hometopic.views import hometopic_router
+
 api_router = APIRouter()
 
 api_router.include_router(user_router, prefix="/users", tags=["users"])
@@ -19,4 +20,3 @@ api_router.include_router(comment_router, prefix="/comments", tags=["comments"])
 api_router.include_router(notification_router, prefix="/notifications", tags=["notifications"])
 api_router.include_router(subscription_router, prefix="/subscription", tags=["subscriptions"])
 api_router.include_router(like_router, prefix="/likes", tags=["likes"])
-api_router.include_router(image_router, prefix = "/images", tags = ["images"])

@@ -14,8 +14,8 @@ class Subscription(Base):
     )
 
     id: Mapped[intpk]  # 구독 관계의 고유 ID
-    subscriber_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="SET NULL"), nullable=True)  # 구독자
-    subscribed_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="SET NULL"), nullable=True)  # 피구독자
+    subscriber_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=True)  # 구독자
+    subscribed_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=True)  # 피구독자
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # 생성 시간
 
     # 관계 설정
