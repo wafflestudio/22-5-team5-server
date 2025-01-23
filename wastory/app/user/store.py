@@ -69,18 +69,6 @@ class UserStore:
 
 
     @transactional
-    async def update_username(self, username:str, email:str) -> User:
-        user = await self.get_user_by_email(email)
-        if user is None:
-            raise UserUnsignedError()
-
-        if username is not None:
-            user.username = username
-
-        return user
-
-
-    @transactional
     async def delete_user(self, user_id: int) -> User | None:
         deleted_user = await SESSION.scalar(select(User).where(User.id == user_id))
         await SESSION.delete(deleted_user)  

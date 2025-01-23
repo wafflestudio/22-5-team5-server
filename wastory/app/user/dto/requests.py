@@ -83,7 +83,7 @@ class UserEmailVerifyRequest(BaseModel):
 
 
 class UserUpdateRequest(BaseModel):
-    email: EmailStr | None = None
+    username: str
 
 
 class PasswordUpdateRequest(BaseModel):

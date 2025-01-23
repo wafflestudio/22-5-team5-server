@@ -146,8 +146,9 @@ async def update_me(
     user_service: Annotated[UserService, Depends()],
 ):
     await user_service.update_user(
-        user.username,
-        email=update_request.email,
+        username=update_request.username,
+        email=user.email,
+        nickname=user.nickname
     )
     return "Success"
 

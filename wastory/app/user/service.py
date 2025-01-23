@@ -54,7 +54,7 @@ class UserService:
         nickname: str | None,
         email: str,
     ) -> User:
-        return await self.user_store.update_user(username, nickname, email)
+        return await self.user_store.update_user(username=username, nickname=nickname, email=email)
 
     async def update_password(
         self,
@@ -63,13 +63,6 @@ class UserService:
         new_password: str,
     ) -> User:
         return await self.user_store.update_password(email, old_password, new_password)
-
-    async def update_username(
-        self,
-        username: str,
-        email: str,
-    ) -> User:
-        return await self.user_store.update_username(username, email)
 
     async def is_kakao_user(self, user: User) -> bool:
         return user.nickname is not None
