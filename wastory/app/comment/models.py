@@ -19,7 +19,7 @@ class Comment(Base):
     user_name:Mapped[str]=mapped_column(String(20), nullable=False)
     user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("user.id"), nullable=True)
     user: Mapped[Optional["User"]] = relationship("User", back_populates="comments")
-
+    user_blog_id:Mapped[int]= mapped_column(Integer, nullable=False, default=False)
     # Article에 대한 FK
     article_id: Mapped[Optional[int]] = mapped_column(ForeignKey("Article.id", ondelete="CASCADE"), nullable=True, index=True)
     article: Mapped[Optional["Article"]] = relationship("Article", back_populates="comments")

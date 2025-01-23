@@ -30,3 +30,7 @@ class MissingRequiredFieldError(WastoryHttpException):
 class NotOwnerError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=401,detail= "User Not Allowed")
+
+class UserHasNoBlogError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=404, detail="User doesn't have blog")
