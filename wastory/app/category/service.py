@@ -58,5 +58,19 @@ class CategoryService:
                 for category in categories
             ]
         return CategoryFinalResponse.from_categorylist(category_list)
+    
+    async def list_categories_by_blog(
+        self,
+        blog_id:int
+    )->CategoryFinalResponse:
+        categories=await self.category_store.get_category_of_blog(blog_id)
+        category_list= [
+            CategoryListResponse.from_category(
+                category,
+                await self.category_store.get_article_count(category.id)
+                ) 
+                for category in categories
+            ]
+        return CategoryFinalResponse.from_categorylist(category_list)
 
 
