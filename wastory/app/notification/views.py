@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, Optional
 from fastapi import APIRouter, Depends, HTTPException, Header
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_401_UNAUTHORIZED
 
@@ -27,13 +27,15 @@ notification_router = APIRouter()
 async def get_notifications_by_user(
     user: Annotated[User, Depends(login_with_header)],
     notification_service: Annotated[NotificationService, Depends()],
-    page: int
+    page: int,
+    type: Optional[int] = None,
 ) -> PaginatedNotificationListResponse:
     per_page = 10
     return await notification_service.get_notifications_by_user(
         user=user,
         page=page,
-        per_page=per_page
+        per_page=per_page,
+        type=type
         )
 
 @notification_router.delete("/my_notifications")

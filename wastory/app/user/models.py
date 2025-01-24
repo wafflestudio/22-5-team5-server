@@ -6,7 +6,9 @@ from wastory.database.common import Base, intpk
 
 if TYPE_CHECKING:
     from wastory.app.blog.models import Blog
+    from wastory.app.comment.models import Comment
     from wastory.app.notification.models import Notification
+    from wastory.app.message.models import Message
     from wastory.app.comment.models import Comment
 
 class User(Base):
@@ -18,8 +20,6 @@ class User(Base):
     nickname: Mapped[str | None] = mapped_column(String(20), unique=True, index=True)
     email: Mapped[str] = mapped_column(String(100), unique=True, index=True)
     password: Mapped[str | None] = mapped_column(String(20))
-    address: Mapped[str | None] = mapped_column(String(100))
-    phone_number: Mapped[str | None] = mapped_column(String(20))
 
 
     blogs: Mapped["Blog"] = relationship(
@@ -29,6 +29,7 @@ class User(Base):
         cascade="all, delete-orphan",
         uselist=False
         )
+
     comments: Mapped[list["Comment"]] = relationship(
         "Comment",
         back_populates="user",  # Comment 모델의 article 관계명
@@ -41,6 +42,22 @@ class User(Base):
         cascade="all, delete-orphan",
         uselist=False
         )
+
+    # 쪽지 송신
+    sent_messages: Mapped[list["Message"]] = relationship(
+        "Message",
+        foreign_keys="Message.sender_id",
+        back_populates="sender",
+        cascade="all, delete-orphan"
+    )
+
+    # 쪽지 수신
+    received_messages: Mapped[list["Message"]] = relationship(
+        "Message",
+        foreign_keys="Message.recipient_id",
+        back_populates="recipient",
+        cascade="all, delete-orphan"
+    )
     
 class BlockedToken(Base):
     __tablename__ = "blocked_token"

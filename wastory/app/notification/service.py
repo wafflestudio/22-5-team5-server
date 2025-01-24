@@ -1,4 +1,4 @@
-from typing import Annotated, List
+from typing import Annotated, List, Optional
 
 from fastapi import Depends
 from wastory.app.notification.models import Notification
@@ -26,6 +26,8 @@ class NotificationService:
         self,
         blog_address_names : List[str],
         type : int,
+        username : str,
+        notification_blogname : str | None,
         description : str | None,
     ) -> None:
         blogs = [
@@ -33,7 +35,9 @@ class NotificationService:
             for address_name in blog_address_names
         ]
         ids = [(blog.user_id, blog.id) for blog in blogs if blog is not None]
-        await self.notification_store.add_notification(ids=ids, type=type, description=description)
+        await self.notification_store.add_notification(
+            ids=ids, type=type, username=username, notification_blogname=notification_blogname, description=description
+            )
     
     async def get_notification_by_id(self, notification_id : int) -> NotificationResponse:
         notification=await self.notification_store.get_notification_by_id(notification_id)
@@ -41,8 +45,8 @@ class NotificationService:
             raise NotificationNotFoundError
         return NotificationResponse.from_notification(notification)
 
-    async def get_notifications_by_user(self, user : User, page : int, per_page : int) -> PaginatedNotificationListResponse:
-        notifications = await self.notification_store.get_notifications_of_user(user.id, page, per_page)
+    async def get_notifications_by_user(self, user : User, page : int, per_page : int, type : Optional[int] = None) -> PaginatedNotificationListResponse:
+        notifications = await self.notification_store.get_notifications_of_user(user.id, page, per_page, type)
         if notifications is None:
             raise NotificationNotFoundError
         return notifications
