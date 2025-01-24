@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from wastory.app.hometopic.store import HometopicStore
-from wastory.app.hometopic.dto.responses import HometopicDetailResponse
+from wastory.app.hometopic.dto.responses import HometopicDetailResponse, PaginatedHometopicListResponse
 class HometopicService:
     def __init__(
         self, 
@@ -19,4 +19,7 @@ class HometopicService:
                 high_category=high_category
             )
             return HometopicDetailResponse.from_hometopic(new_topic)
+    
+    async def get_hometopic_list(self) -> PaginatedHometopicListResponse :
+        return await self.hometopic_store.get_hometopic_list()
    

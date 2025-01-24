@@ -1,7 +1,7 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
 from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest
-from wastory.app.article.dto.responses import PaginatedArticleListResponse, ArticleDetailResponse, ArticleSearchInListResponse
+from wastory.app.article.dto.responses import PaginatedArticleListResponse, ArticleDetailResponse, ArticleInformationResponse
 from wastory.app.article.service import ArticleService
 from wastory.app.blog.service import BlogService
 
@@ -20,11 +20,25 @@ async def create_article(
     blog_service: Annotated[BlogService, Depends()],
 ) -> ArticleDetailResponse:
     user_blog = await blog_service.get_blog_by_user(user)
-    print("default : ", user_blog.default_category_id)
+
     if article.category_id == 0:
-        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, article_description= article.description, category_id=user_blog.default_category_id)
+        return await article_service.create_article(
+            user=user, 
+            article_title=article.title, 
+            article_content=article.content, 
+            article_description= article.description, 
+            category_id=user_blog.default_category_id,
+            hometopic_id = article.hometopic_id
+            )
     else:
-        return await article_service.create_article(user=user, article_title=article.title, article_content=article.content, article_description = article.description, category_id=article.category_id)
+        return await article_service.create_article(
+            user=user, 
+            article_title=article.title, 
+            article_content=article.content, 
+            article_description = article.description, 
+            category_id=article.category_id,
+            hometopic_id = article.hometopic_id
+            )
 
 # article 수정
 @article_router.patch("/update/{article_id}", status_code=200)
@@ -40,11 +54,52 @@ async def update_article(
 
 # article 정보 가져오기
 @article_router.get("/get/{article_id}", status_code=200)
-async def get_article_by_id(
+async def get_article_information_by_id(
     article_service: Annotated[ArticleService, Depends()],
     article_id : int,
-) -> ArticleDetailResponse :
-    return await article_service.get_article_by_id(article_id)
+) -> ArticleInformationResponse :
+    return await article_service.get_article_information_by_id(article_id)
+
+# blog 내 인기글 가져오기
+@article_router.get("/today_wastory", status_code=200)
+async def get_today_most_viewed(
+    article_service: Annotated[ArticleService, Depends()],
+    page : int
+) ->PaginatedArticleListResponse:
+    return await article_service.get_today_most_viewed(
+        page = page
+    )
+# blog 내 인기글 가져오기
+@article_router.get("/weekly_wastory", status_code=200)
+async def get_weekly_most_viewed(
+    article_service: Annotated[ArticleService, Depends()],
+) ->PaginatedArticleListResponse:
+    return await article_service.get_weekly_most_viewed()
+
+# blog 내 인기글 가져오기
+@article_router.get("/blogs/{blog_id}/sort_by/{sort_by}", status_code=200)
+async def get_top_articles_in_blog(
+    article_service: Annotated[ArticleService, Depends()],
+    blog_id : int,
+    sort_by: str
+) ->PaginatedArticleListResponse:
+    return await article_service.get_top_articles_in_blog(
+        blog_id = blog_id,
+        sort_by = sort_by
+    )
+
+# hometopic 인기글 가져오기기
+@article_router.get("/hometopic/{hometopic_id}", status_code=200)
+async def get_most_viewed_in_hometopic(
+    article_service: Annotated[ArticleService, Depends()],
+    high_hometopic_id : int,
+    page: int
+) ->PaginatedArticleListResponse:
+    return await article_service.get_most_viewed_in_hometopic(
+        high_hometopic_id = high_hometopic_id,
+        page = page
+    )
+
 
 # blog 내 article 목록 가져오기
 @article_router.get("/blogs/{blog_id}", status_code=200)

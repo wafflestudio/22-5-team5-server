@@ -1,23 +1,24 @@
 from functools import cache
 from typing import Annotated, Sequence
-
+from datetime import datetime, timedelta
 from sqlalchemy import select, or_, and_, func, update
+
 from wastory.app.article.models import Article
+from wastory.app.blog.models import Blog
 from wastory.app.like.models import Like
 from wastory.app.comment.models import Comment
 from wastory.app.subscription.models import Subscription
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
-
-from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse
+from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse, ArticleInformationResponse
 
 class ArticleStore :
     @transactional
     async def create_article(
-        self, atricle_title : str, article_content: str, article_description: str, blog_id : int, category_id : int,
+        self, atricle_title : str, article_content: str, article_description: str, blog_id : int, category_id : int, hometopic_id : int 
     ) -> Article :
         article = Article(
-            title = atricle_title, content = article_content, description = article_description, blog_id = blog_id, category_id = category_id
+            title = atricle_title, content = article_content, description = article_description, blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id
         )
         SESSION.add(article)
         # 왜 필요하지?       
@@ -64,12 +65,221 @@ class ArticleStore :
     async def get_article_by_id(self, article_id : int) -> Article | None:
         article = await SESSION.get(Article, article_id)
         return article
+
+    @transactional
+    async def get_article_information_by_id(self, article_id : int) -> ArticleInformationResponse:
+
+        stmt = (
+            select(
+                Article,
+                func.count(Like.id).label("likes"),
+                func.count(Comment.id).label("comments"),
+            )
+            .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
+            .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
+            .filter(Article.id == article_id)
+        )
+        result = await SESSION.execute(stmt)
+
+        row = result.one_or_none()
+        article = ArticleInformationResponse.from_article(
+                article=row.Article,
+                article_likes=row.likes,
+                article_comments=row.comments,
+            )
+        
+        # category_id가 blog 에 저장된 default_category_id일 경우, response 는 0으로 임의로 조정정
+        blog = await SESSION.get(Blog, article.blog_id)
+        if article.category_id == blog.default_category_id:
+            article.category_id = 0
+
+        return article
     
     @transactional
     async def get_articles_by_ids(self, article_ids: list[int]) -> Sequence[Article]:
         article_list_query = select(Article).where(Article.id.in_(article_ids))
         result = await SESSION.scalars(article_list_query)  # await 추가
         return result.all()
+    
+    @transactional
+    async def get_today_most_viewed(
+        self,
+        page: int,
+    ) -> PaginatedArticleListResponse:
+        # 정렬 기준: 조회수 내림차순
+        sort_column = Article.views.desc()
+        per_page = 1  # 페이지당 기사 수 (1개로 설정)
+        offset = (page - 1) * per_page  # 페이지 오프셋 계산
+
+        # 오늘 날짜의 시작과 끝 계산
+        today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_end = today_start + timedelta(days=1)
+
+        print("today_start:", today_start)
+        print("today_end:", today_end)
+
+
+        # 쿼리 작성: 오늘 작성된 인기 글 가져오기
+        stmt = (
+            select(
+                Article,
+                func.count(Like.id).label("likes"),
+                func.count(Comment.id).label("comments"),
+            )
+            .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
+            .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
+            .filter(
+                Article.created_at >= today_start,           # 오늘 시작 시간 이후
+                Article.created_at < today_end               # 오늘 끝 시간 이전
+            )
+            .group_by(Article.id)
+            .order_by(sort_column)  # 조회수 기준 정렬
+            .offset(offset)         # 페이지 오프셋 적용
+            .limit(per_page)        # 페이지당 제한 (1개)
+        )
+
+        # 쿼리 실행
+        result = await SESSION.execute(stmt)
+        rows = result.all()
+
+        # Pydantic 모델로 변환하여 반환 데이터 생성
+        articles = [
+            ArticleSearchInListResponse.from_article(
+                article=row.Article,
+                article_likes=row.likes,
+                article_comments=row.comments,
+            )
+            for row in rows
+        ]
+
+        # 전체 기사 개수 계산 (페이지네이션을 위해)
+        total_count_stmt = select(func.count(Article.id)).filter(
+            Article.created_at >= today_start,
+            Article.created_at < today_end
+        )
+        total_count = await SESSION.scalar(total_count_stmt)
+
+        return PaginatedArticleListResponse(
+            page=page,
+            per_page=per_page,  # 1페이지에 1개
+            total_count=total_count or 0,
+            articles=articles
+        )
+
+    @transactional
+    async def get_weekly_most_viewed(
+        self,
+    ) -> PaginatedArticleListResponse:
+        # 정렬 기준: 조회수 내림차순
+        sort_column = Article.views.desc()
+        per_page = 5  # 페이지당 기사 수
+
+
+        # 일주일 전과 오늘 날짜 계산
+        week_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=7)
+        today_end = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999999)
+
+        # 쿼리 작성: 홈토픽 ID 목록에 속하고, 지난 일주일 동안 작성된 인기 글 가져오기
+        stmt = (
+            select(
+                Article,
+                func.count(Like.id).label("likes"),
+                func.count(Comment.id).label("comments"),
+            )
+            .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
+            .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
+            .filter(
+                Article.created_at >= week_start,            # 일주일 전 시작 시간 이후
+                Article.created_at <= today_end              # 오늘 끝 시간 이전
+            )
+            .group_by(Article.id)
+            .order_by(sort_column)  # 조회수 기준 정렬
+            .limit(per_page)        # 페이지당 제한
+        )
+
+        # 쿼리 실행
+        result = await SESSION.execute(stmt)
+        rows = result.all()
+
+        # Pydantic 모델로 변환하여 반환 데이터 생성
+        articles = [
+            ArticleSearchInListResponse.from_article(
+                article=row.Article,
+                article_likes=row.likes,
+                article_comments=row.comments,
+            )
+            for row in rows
+        ]
+
+        # 전체 기사 개수 계산 (페이지네이션을 위해)
+        total_count_stmt = select(func.count(Article.id)).filter(
+            Article.created_at >= week_start,
+            Article.created_at <= today_end
+        )
+        total_count = await SESSION.scalar(total_count_stmt)
+
+        return PaginatedArticleListResponse(
+            page=1,
+            per_page=per_page,
+            total_count=total_count or 0,
+            articles=articles
+        )
+    
+    
+    # tistory 에서 hometopic 인기글을 7개씩 4개의 page 를 나열하기에, 동일하게 구현하였습니다.
+    @transactional
+    async def get_most_viewed_in_hometopic(
+        self,
+        hometopic_id_list: list[int],
+        page: int,
+    ) -> PaginatedArticleListResponse:
+        # 정렬 기준: 조회수 내림차순
+        sort_column = Article.views.desc()
+        per_page = 7  # 페이지당 기사 수
+        offset = (page - 1) * per_page  # 페이지 오프셋 계산
+
+        # 쿼리 작성: 홈토픽 ID 목록에 속한 인기 글 가져오기
+        stmt = (
+            select(
+                Article,
+                func.count(Like.id).label("likes"),
+                func.count(Comment.id).label("comments"),
+            )
+            .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
+            .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
+            .filter(Article.hometopic_id.in_(hometopic_id_list))  # 홈토픽 ID 필터링
+            .group_by(Article.id)
+            .order_by(sort_column)  # 조회수 기준 정렬
+            .offset(offset)  # 페이지 오프셋 적용
+            .limit(per_page)  # 페이지당 제한
+        )
+
+        # 쿼리 실행
+        result = await SESSION.execute(stmt)
+        rows = result.all()
+
+        # Pydantic 모델로 변환하여 반환 데이터 생성
+        articles = [
+            ArticleSearchInListResponse.from_article(
+                article=row.Article,
+                article_likes=row.likes,
+                article_comments=row.comments,
+            )
+            for row in rows
+        ]
+
+        # 전체 인기 글 개수 계산 (페이지네이션을 위해)
+        total_count_stmt = select(func.count(Article.id)).filter(
+            Article.hometopic_id.in_(hometopic_id_list)
+        )
+        total_count = await SESSION.scalar(total_count_stmt)
+
+        return PaginatedArticleListResponse(
+            page=page,
+            per_page=per_page,
+            total_count=total_count or 0,
+            articles=articles,
+        )
     
     @transactional
     async def get_articles_in_blog(self, blog_id: int, page: int, per_page: int) -> PaginatedArticleListResponse:
@@ -114,6 +324,7 @@ class ArticleStore :
             total_count=total_count or 0,
             articles=articles,
         )
+    
     @transactional
     async def get_top_articles_in_blog(
         self,
@@ -174,6 +385,13 @@ class ArticleStore :
         page: int,
         per_page: int
     ) -> PaginatedArticleListResponse:
+
+        # category_id가 0일 경우, blog의 default_category_id로 설정
+        if category_id == 0:
+            blog = await SESSION.get(Blog, blog_id)
+            category_id = blog.default_category_id
+        
+        
         offset_val = (page - 1) * per_page
 
         # 쿼리 작성: Article에 likes와 comments를 조인하여 계산

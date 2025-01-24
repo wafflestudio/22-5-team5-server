@@ -17,4 +17,27 @@ class HometopicDetailResponse(BaseModel):
         )
 
         return response
+    
+
+class HometopicListResponse(BaseModel):
+    id: int
+    name: str
+    high_category : int
+
+    # 설정 추가
+    model_config = {
+        "from_attributes": True
+    }
+
+    @staticmethod
+    def from_hometopic(hometopic: Hometopic) -> "HometopicListResponse":
+        return HometopicListResponse(
+            id = hometopic.id,
+            name = hometopic.name,
+            high_category = hometopic.high_category
+        )
+
+class PaginatedHometopicListResponse(BaseModel):
+    hometopics: list[HometopicListResponse]
+
 

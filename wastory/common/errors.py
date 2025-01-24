@@ -1,5 +1,4 @@
 from fastapi import HTTPException
-from starlette.status import HTTP_400_BAD_REQUEST
 
 
 class WastoryHttpException(HTTPException):
