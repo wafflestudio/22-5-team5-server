@@ -21,6 +21,9 @@ class UserStore:
         SESSION.add(user)
         return user
 
+    async def get_user_by_id(self, id: int) -> User | None:
+        return await SESSION.scalar(select(User).where(User.id == id))
+
     async def get_user_by_username(self, username: str) -> User | None:
         return await SESSION.scalar(select(User).where(User.username == username))
 
@@ -36,8 +39,6 @@ class UserStore:
         username: str | None,
         nickname: str | None,
         email: str,
-        address: str | None,
-        phone_number: str | None,
     ) -> User:
         user = await self.get_user_by_email(email)
         if user is None:
@@ -48,12 +49,6 @@ class UserStore:
 
         if nickname is not None:
             user.nickname = nickname
-
-        if address is not None:
-            user.address = address
-
-        if phone_number is not None:
-            user.phone_number = phone_number
 
         return user
 
@@ -69,18 +64,6 @@ class UserStore:
 
         if new_password is not None:
             user.password = new_password
-
-        return user
-
-
-    @transactional
-    async def update_username(self, username:str, email:str) -> User:
-        user = await self.get_user_by_email(email)
-        if user is None:
-            raise UserUnsignedError()
-
-        if username is not None:
-            user.username = username
 
         return user
 

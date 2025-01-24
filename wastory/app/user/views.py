@@ -70,7 +70,7 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
             nickname, None
         )
         await user_service.update_user(
-            nickname, nickname, nickname, None, None
+            username=nickname, nickname=nickname, email=nickname
         )
         access_token, refresh_token = user_service.issue_tokens(nickname)
     else:
@@ -146,10 +146,9 @@ async def update_me(
     user_service: Annotated[UserService, Depends()],
 ):
     await user_service.update_user(
-        user.username,
-        email=update_request.email,
-        address=update_request.address,
-        phone_number=update_request.phone_number,
+        username=update_request.username,
+        email=user.email,
+        nickname=user.nickname
     )
     return "Success"
 
