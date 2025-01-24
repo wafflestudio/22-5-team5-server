@@ -21,6 +21,16 @@ class DatabaseSettings(BaseSettings):
         env_file=SETTINGS.env_file,
     )
 
+class AWSSettings(BaseSettings):
+    access_key_id: str
+    secret_access_key: str 
+    default_region: str
+    s3_bucket: str 
+    model_config = SettingsConfigDict(
+        case_sensitive=False,
+        env_prefix="AWS_",
+        env_file=".env.aws",
+    )
 
 class PasswordSettings(BaseSettings):
     secret_for_jwt: str  # JWT 비밀키
@@ -31,6 +41,6 @@ class PasswordSettings(BaseSettings):
         env_file = ".env.password"
         env_file_encoding = "utf-8"
 
-
 DB_SETTINGS = DatabaseSettings()
 PW_SETTINGS = PasswordSettings()
+AWS_SETTINGS = AWSSettings()

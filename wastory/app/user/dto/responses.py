@@ -6,16 +6,14 @@ from wastory.app.user.models import User
 class MyProfileResponse(BaseModel):
     username: str | None
     email: str
-    address: str | None
-    phone_number: str | None
+    is_kakao_user: bool
 
     @staticmethod
     def from_user(user: User) -> "MyProfileResponse":
         return MyProfileResponse(
             username=user.username,
             email=user.email,
-            address=user.address,
-            phone_number=user.phone_number,
+            is_kakao_user=user.nickname is not None
         )
 
 

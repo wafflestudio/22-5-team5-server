@@ -83,11 +83,7 @@ class UserEmailVerifyRequest(BaseModel):
 
 
 class UserUpdateRequest(BaseModel):
-    email: EmailStr | None = None
-    address: Annotated[str | None, AfterValidator(skip_none(validate_address))] = None
-    phone_number: Annotated[
-        str | None, AfterValidator(skip_none(validate_phone_number))
-    ] = None
+    username: str
 
 
 class PasswordUpdateRequest(BaseModel):
