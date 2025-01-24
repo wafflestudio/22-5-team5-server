@@ -13,7 +13,7 @@ class CommentDetailResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     secret: int
-
+    user_blog_id:int
     @staticmethod
     def from_comment(comment: Comment, current_user: Optional["User"]) -> "CommentDetailResponse":
         content_to_show = comment.content
@@ -28,11 +28,12 @@ class CommentDetailResponse(BaseModel):
 
                 # 블로그 주인 or 게시글(Article) 주인 판별
                 is_resource_owner = False
-                if comment.blog and comment.blog.user_id == current_user.id:
-                    is_resource_owner = True
-                elif comment.article and comment.article.blog_id == current_user.blogs.id:
-                    is_resource_owner = True
-
+                if hasattr(comment, "article") and comment.article:
+                    if comment.article.blog_id == current_user.blogs.id:
+                        is_resource_owner = True
+                if hasattr(comment, "blog") and comment.blog:
+                    if comment.blog.user_id == current_user.id:
+                        is_resource_owner = True
                 # 최종 체크
                 if not (is_author or is_resource_owner):
                     content_to_show = "비밀 댓글입니다"
@@ -44,6 +45,7 @@ class CommentDetailResponse(BaseModel):
             created_at=comment.created_at,
             updated_at=comment.updated_at,
             secret=comment.secret,
+            user_blog_id=comment.user_blog_id
         )
 
 
@@ -54,8 +56,8 @@ class CommentListResponse(BaseModel):
     created_at: datetime
     updated_at: datetime
     secret: int
+    user_blog_id:int
     children: List["CommentDetailResponse"] = []
-
     class Config:
         orm_mode = True
 
@@ -90,7 +92,8 @@ class CommentListResponse(BaseModel):
             created_at=comment.created_at,
             updated_at=comment.updated_at,
             secret=comment.secret,
-            children=children_responses,
+            user_blog_id=comment.user_blog_id,
+            children=children_responses
         )
 
 class PaginatedCommentListResponse(BaseModel):

@@ -18,7 +18,7 @@ from wastory.app.notification.models import Notification
 from wastory.app.subscription.models import Subscription
 from wastory.app.like.models import Like
 from wastory.app.message.models import Message
-
+from wastory.app.hometopic.models import Hometopic
 
 print(DB_SETTINGS.url)
 

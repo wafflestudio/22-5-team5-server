@@ -112,3 +112,11 @@ class SubscriptionService:
         if not subscribed_blog:
             raise BlogNotFoundError
         return await self.subscription_store.get_subscriber_blog_addresses(subscribed_blog.id)
+
+    async def is_blog_subscribed(self, subscriber_id: int, subscribed_id: int) -> bool:
+        """
+        특정 블로그가 현재 사용자의 블로그를 구독하고 있는지 여부 확인
+        """
+        # SubscriptionStore에서 구독 관계 확인
+        subscription = await self.subscription_store.get_subscription(subscriber_id, subscribed_id)
+        return subscription is not None

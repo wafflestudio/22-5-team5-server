@@ -9,6 +9,8 @@ from wastory.app.notification.views import notification_router
 from wastory.app.subscription.views import subscription_router
 from wastory.app.like.views import like_router
 from wastory.app.message.views import message_router
+from wastory.app.image.views import image_router
+from wastory.app.hometopic.views import hometopic_router
 
 api_router = APIRouter()
 
@@ -21,3 +23,5 @@ api_router.include_router(notification_router, prefix="/notifications", tags=["n
 api_router.include_router(subscription_router, prefix="/subscription", tags=["subscriptions"])
 api_router.include_router(like_router, prefix="/likes", tags=["likes"])
 api_router.include_router(message_router, prefix="/messages", tags=["messages"])
+api_router.include_router(image_router, prefix="/images",tags=["images"])
+api_router.include_router(hometopic_router, prefix="/hometopics",tags=["hometopics"])

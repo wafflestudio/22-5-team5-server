@@ -63,6 +63,8 @@ class ArticleService:
         if user_blog is None:
             raise BlogNotFoundError()
 
+       
+        
         # Article 존재 확인
         article = await self.article_store.get_article_by_id(article_id)
         if article is None: 
@@ -127,7 +129,6 @@ class ArticleService:
         self,
         blog_id: int,
         sort_by: str,
-
     ) -> PaginatedArticleListResponse:
         return await self.article_store.get_top_articles_in_blog(
             blog_id=blog_id, sort_by=sort_by)

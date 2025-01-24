@@ -9,6 +9,7 @@ if TYPE_CHECKING:
     from wastory.app.comment.models import Comment
     from wastory.app.notification.models import Notification
     from wastory.app.message.models import Message
+    from wastory.app.comment.models import Comment
 
 class User(Base):
     __tablename__ = "user"
@@ -21,7 +22,7 @@ class User(Base):
     password: Mapped[str | None] = mapped_column(String(20))
 
 
-    blogs = relationship(
+    blogs: Mapped["Blog"] = relationship(
         "Blog",
         lazy="selectin", 
         back_populates="user", 
@@ -34,8 +35,7 @@ class User(Base):
         back_populates="user",  # Comment 모델의 article 관계명
         cascade="all, delete-orphan"  # Article 삭제 시 관련된 Comment도 삭제
     )
-
-    notification = relationship(
+    notification: Mapped["Notification"] = relationship(
         "Notification", 
         lazy="selectin", 
         back_populates="user", 

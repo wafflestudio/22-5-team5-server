@@ -44,10 +44,10 @@ class LikeService:
         new_like = await self.like_store.create_like(blog_id, article_id)
         return LikeDetailResponse.from_like(new_like)
     
-    async def delete_like(
+    async def delete_like_in_article(
         self,
         user: User,
-        like_id: int,
+        article_id: int
     ) -> None:
 
         # 사용자의 Blog 확인
@@ -57,14 +57,12 @@ class LikeService:
 
 
         # like 존재 확인
-        like = await self.like_store.get_like_by_id(like_id) 
+        like = await self.like_store.get_like_by_blog_in_article(
+            blog_id = user_blog.id,
+            article_id = article_id
+        ) 
         if like is None:
-            raise LikeNotFoundError()
-
-        # blog 본인이 누른 like 인지 검증
-        if like.blog_id != user_blog.id:
-            raise PermissionDeniedError()
-    
+            raise LikeNotFoundError()    
 
         # Article 삭제
         await self.like_store.delete_like(like) 

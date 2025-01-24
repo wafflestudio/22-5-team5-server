@@ -9,9 +9,9 @@ class CommentNotFoundError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=404,detail= "comment not found")
 
-class CategoryNameDuplicateError(WastoryHttpException):
+class ParentOtherSectionError(WastoryHttpException):
     def __init__(self) -> None:
-        super().__init__(status_code=409,detail= "category already exists")
+        super().__init__(status_code=409,detail= "parent와 children 위치가 다릅니다")
 
 
 class InvalidFieldFormatError(WastoryHttpException):
@@ -30,3 +30,7 @@ class MissingRequiredFieldError(WastoryHttpException):
 class NotOwnerError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=401,detail= "User Not Allowed")
+
+class UserHasNoBlogError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=404, detail="User doesn't have blog")

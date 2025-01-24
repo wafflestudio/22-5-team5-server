@@ -96,6 +96,6 @@ async def get_guestbook_comment_list(
         blog_id=blog_id,
         page=page,
         per_page=per_page,
-        user=user
+        current_user=user
     )
 

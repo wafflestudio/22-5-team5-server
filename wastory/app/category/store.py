@@ -16,6 +16,8 @@ class CategoryStore:
     async def create_category(
         self, blog_id:int,categoryname:str, categorylevel:int, parentId:int|None=None
         )->Category:
+            if await self.get_category_by_blog_and_name(blog_id=blog_id,name=categoryname):
+                raise CategoryNameDuplicateError()
             category= Category(
                 blog_id=blog_id,
                 name=categoryname,
@@ -28,6 +30,15 @@ class CategoryStore:
             await SESSION.refresh(category)
             return category
         
+    async def get_category_by_blog_and_name(self, blog_id: int, name: str) -> Category | None:
+        stmt = (
+            select(Category)
+            .filter(Category.blog_id == blog_id)
+            .filter(Category.name == name)
+        )
+        category = await SESSION.scalar(stmt)
+        return category
+
     async def get_category_by_categoryname(self, name:str) ->Category|None:
         get_category_query=select(Category).filter(Category.name==name)
         category=await SESSION.scalar(get_category_query)
@@ -42,6 +53,8 @@ class CategoryStore:
         get_category_query=select(Category).filter(Category.id==id)
         category=await SESSION.scalar(get_category_query)
         return category
+
+    
     
 
     #여기가 많은 개선이 필요함!!
