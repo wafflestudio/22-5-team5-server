@@ -47,7 +47,9 @@ class CommentService:
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
                         type=3,
-                        description="댓글",
+                        username=user.username,
+                        notification_blogname=user_blog.blog_name,
+                        description=content,
                     )
             elif level==2:
                 new_comment=await self.comment_store.create_article_comment_2(
@@ -61,7 +63,9 @@ class CommentService:
                 await self.notification_service.add_notification(
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
                     type=3,
-                    description="댓글",
+                    username=user.username,
+                    notification_blogname=user_blog.blog_name,
+                    description=content,
                 )
             return CommentDetailResponse.from_comment(new_comment, user)
 
@@ -85,7 +89,9 @@ class CommentService:
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
                         type=4,
-                        description="방명록",
+                        username=user.username,
+                        notification_blogname=user_blog.blog_name,
+                        description=content,
                     )
             elif level==2:
                 new_comment=await self.comment_store.create_guestbook_comment_2(
@@ -99,7 +105,9 @@ class CommentService:
                 await self.notification_service.add_notification(
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
                     type=4,
-                    description="방명록",
+                    username=user.username,
+                    notification_blogname=user_blog.blog_name,
+                    description=content,
                 )
             return CommentDetailResponse.from_comment(new_comment, user)
 
@@ -120,27 +128,6 @@ class CommentService:
             user=user,
             comment_id=comment_id
         )
-    '''
-    async def get_article_list_level1_with_children(
-        self,
-        article_id: int,
-        page: int,
-        per_page: int
-    ) -> list[CommentListResponse]:
-        """
-        page, per_page에 맞춰 level=1 댓글은 페이지네이션, 
-        각 댓글의 children은 전부 포함.
-        """
-        # store에서 level=1 댓글들만 가져옴 (limit/offset)
-        level1_comments = await self.comment_store.get_article_comments(
-            article_id=article_id, 
-            page=page, 
-            per_page=per_page
-        )
-
-        # DTO 변환
-        return [CommentListResponse.from_comment(c) for c in level1_comments]
-    '''
     # 페이지네이션 정보를 추가로 내려주고 싶으면
     async def get_article_list_pagination(
         self,
@@ -170,27 +157,6 @@ class CommentService:
         )
     
 
-    '''
-    async def get_guestbook_list_level1_with_children(
-        self,
-        blog_id: int,
-        page: int,
-        per_page: int
-    ) -> list[CommentListResponse]:
-        """
-        page, per_page에 맞춰 level=1 댓글은 페이지네이션, 
-        각 댓글의 children은 전부 포함.
-        """
-        # store에서 level=1 댓글들만 가져옴 (limit/offset)
-        level1_comments = await self.comment_store.get_guestbook_comments(
-            blog_id=blog_id, 
-            page=page, 
-            per_page=per_page
-        )
-
-        # DTO 변환
-        return [CommentListResponse.from_comment(c) for c in level1_comments]
-    '''
     # 페이지네이션 정보를 추가로 내려주고 싶으면
     async def get_guestbook_list_pagination(
         self,

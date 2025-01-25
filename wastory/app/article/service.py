@@ -52,7 +52,9 @@ class ArticleService:
         await self.notification_service.add_notification(
             blog_address_names = await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
             type = 1,
-            description = "새글",
+            username = user.username,
+            notification_blogname= user_blog.blog_name,
+            description = article_title,
         )
 
         return ArticleDetailResponse.from_article(new_article)

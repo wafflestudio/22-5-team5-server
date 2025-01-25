@@ -68,7 +68,8 @@ class BlogStore:
         address_name: str,
         new_blog_name: str | None,
         description: str | None,
-        new_default_category_id: int | None
+        new_default_category_id: int | None,
+        new_main_image_URL: str | None
     ) -> Blog:
         # 기존 블로그 검색
         blog = await self.get_blog_by_address_name(address_name)
@@ -87,6 +88,10 @@ class BlogStore:
 
         if new_default_category_id is not None:
             blog.default_category_id = new_default_category_id
+
+        if new_main_image_URL is not None:
+            blog.main_image_url=new_main_image_URL
+
         SESSION.merge(blog)
         await SESSION.flush()
         await SESSION.refresh(blog)

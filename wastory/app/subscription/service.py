@@ -2,6 +2,7 @@ from typing import Annotated, List
 from fastapi import Depends
 from wastory.app.subscription.store import SubscriptionStore
 from wastory.app.subscription.dto.responses import SubscriptionDetailResponse, PaginatedSubscriptionResponse
+from wastory.app.user.service import UserService
 from wastory.app.blog.service import BlogService
 from wastory.app.notification.service import NotificationService
 from wastory.app.subscription.errors import BlogNotFoundError, SelfSubscriptionError
@@ -13,10 +14,12 @@ class SubscriptionService:
     def __init__(
             self,
             subscription_store: Annotated[SubscriptionStore, Depends()],
+            user_service: Annotated[UserService, Depends()],
             blog_service: Annotated[BlogService, Depends()],
             notification_service: Annotated[NotificationService, Depends()],
             ) -> None:
         self.subscription_store = subscription_store
+        self.user_service=user_service
         self.blog_service=blog_service
         self.notification_service = notification_service
 
@@ -25,6 +28,8 @@ class SubscriptionService:
         구독 추가 서비스
         """
         subscribed_blog = await self.blog_service.get_blog_by_id(subscribed_id)
+        subscriber_blog = await self.blog_service.get_blog_by_id(subscriber_id)
+        subscriber = await self.user_service.get_user_by_id(subscriber_blog.user_id)
 
         # SubscriptionStore에서 구독 추가 호출
         subscription = await self.subscription_store.add_subscription(subscriber_id, subscribed_id)
@@ -33,6 +38,8 @@ class SubscriptionService:
         await self.notification_service.add_notification(
             blog_address_names = [subscribed_blog.address_name],
             type=2,
+            username=subscriber.username,
+            notification_blogname=subscriber_blog.blog_name,
             description="구독",
         )
 

@@ -16,15 +16,17 @@ class Notification(Base):
     )
 
     id: Mapped[intpk]
+    notification_blogname: Mapped[str | None] = mapped_column(String(20)) # 알림을 생성한 블로그 이름
     notification_type: Mapped[int] = mapped_column(Integer, nullable=False) # 새 글 알림(1), 구독 알림(2), 댓글 알림(3), 방명록 알림(4), 쪽지 알림(5)
-    description: Mapped[str | None] = mapped_column(String(255))  # 구독 설명 (선택적)
+    notification_title: Mapped[str] = mapped_column(String(255))  # 알림 제목
+    description: Mapped[str | None] = mapped_column(String(255))  # 알림 설명 (선택적)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # 생성 시간
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())  # 갱신 시간
     checked: Mapped[bool] = mapped_column(Boolean, nullable=False, server_default="0")  # 확인 여부 (기본값 False)
 
 
     user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  # 알림 소유자
-    blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=False)  # 알림 소유자
+    blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id"), nullable=False)  # 알림 소유자
 
     # 관계 설정
     user: Mapped["User"] = relationship("User", back_populates="notification")
