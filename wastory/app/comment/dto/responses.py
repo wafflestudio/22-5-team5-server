@@ -14,6 +14,8 @@ class CommentDetailResponse(BaseModel):
     updated_at: datetime
     secret: int
     user_blog_id:int
+    user_name:str
+    blog_main_img:str
     @staticmethod
     def from_comment(comment: Comment, current_user: Optional["User"]) -> "CommentDetailResponse":
         content_to_show = comment.content
@@ -45,7 +47,9 @@ class CommentDetailResponse(BaseModel):
             created_at=comment.created_at,
             updated_at=comment.updated_at,
             secret=comment.secret,
-            user_blog_id=comment.user_blog_id
+            user_blog_id=comment.user_blog_id,
+            user_name=comment.user_name,
+            blog_main_img=comment.blog.main_image_url
         )
 
 
@@ -57,6 +61,8 @@ class CommentListResponse(BaseModel):
     updated_at: datetime
     secret: int
     user_blog_id:int
+    user_name: str
+    blog_main_img:str
     children: List["CommentDetailResponse"] = []
     class Config:
         orm_mode = True
@@ -93,6 +99,8 @@ class CommentListResponse(BaseModel):
             updated_at=comment.updated_at,
             secret=comment.secret,
             user_blog_id=comment.user_blog_id,
+            user_name=comment.user_name,
+            blog_main_img=comment.blog.main_image_url,
             children=children_responses
         )
 
