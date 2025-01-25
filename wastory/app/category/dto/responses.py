@@ -38,10 +38,6 @@ class CategoryListResponse(BaseModel):
 
     @staticmethod
     def from_category(category, article_count: int) -> "CategoryListResponse":
-        """
-        단일 Category 엔티티를 받아서 상응하는 CategoryListResponse 객체를 생성한다.
-        (자식 카테고리는 일단 비워둔다. Service에서 children을 채우면 됨)
-        """
         return CategoryListResponse(
             id=category.id,
             category_name=category.name,
