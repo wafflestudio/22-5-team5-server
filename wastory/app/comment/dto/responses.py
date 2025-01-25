@@ -14,8 +14,7 @@ class CommentDetailResponse(BaseModel):
     updated_at: datetime
     secret: int
     user_blog_id:int
-    user_name:str
-    blog_main_img:str
+    blog_main_img:Optional[str]
     @staticmethod
     def from_comment(comment: Comment, current_user: Optional["User"]) -> "CommentDetailResponse":
         content_to_show = comment.content
@@ -39,7 +38,10 @@ class CommentDetailResponse(BaseModel):
                 # 최종 체크
                 if not (is_author or is_resource_owner):
                     content_to_show = "비밀 댓글입니다"
-
+        blog_main_img = (
+            comment.user.blogs.main_image_url  # 단일 Blog 객체로 접근
+            if comment.user and comment.user.blogs else None
+        )
         return CommentDetailResponse(
             id=comment.id,
             user_name=comment.user_name,
@@ -48,8 +50,7 @@ class CommentDetailResponse(BaseModel):
             updated_at=comment.updated_at,
             secret=comment.secret,
             user_blog_id=comment.user_blog_id,
-            user_name=comment.user_name,
-            blog_main_img=comment.blog.main_image_url
+            blog_main_img=blog_main_img
         )
 
 
@@ -61,8 +62,7 @@ class CommentListResponse(BaseModel):
     updated_at: datetime
     secret: int
     user_blog_id:int
-    user_name: str
-    blog_main_img:str
+    blog_main_img:Optional[str]
     children: List["CommentDetailResponse"] = []
     class Config:
         orm_mode = True
@@ -85,7 +85,10 @@ class CommentListResponse(BaseModel):
 
                 if not (is_author or is_resource_owner):
                     content_to_show = "비밀 댓글입니다"
-
+        blog_main_img = (
+            comment.user.blogs.main_image_url  # 단일 Blog 객체로 접근
+            if comment.user and comment.user.blogs else None
+        )
         children_responses = [
             CommentDetailResponse.from_comment(child, current_user)
             for child in comment.children
@@ -99,8 +102,7 @@ class CommentListResponse(BaseModel):
             updated_at=comment.updated_at,
             secret=comment.secret,
             user_blog_id=comment.user_blog_id,
-            user_name=comment.user_name,
-            blog_main_img=comment.blog.main_image_url,
+            blog_main_img=blog_main_img,
             children=children_responses
         )
 
