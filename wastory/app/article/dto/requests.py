@@ -41,6 +41,7 @@ class ArticleCreateRequest(BaseModel):
     ]
     description : str
     category_id : int
+    hometopic_id : int
 
 
 class ArticleUpdateRequest(BaseModel):
