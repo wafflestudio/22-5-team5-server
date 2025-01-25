@@ -35,12 +35,14 @@ class LikeStore :
     # article 이 받은 like 조회
     @transactional
     async def get_like_by_blog_in_article(self, blog_id: int, article_id: int) -> Sequence[Like]:
-        query = select(Like).where(
-            Like.article_id == article_id, 
-            Like.blog_id == blog_id
+        result = await SESSION.execute(
+            select(Like).where(
+                Like.blog_id == blog_id, 
+                Like.article_id == article_id
+            )
         )
-        result = await SESSION.scalars(query)  # await 추가
-        return result.all()   
+        like = result.scalars().one_or_none()  # 단일 스칼라 값 반환
+        return like
     
     # 특정 blog 가 누른 like 를 얻는 method
     @transactional
