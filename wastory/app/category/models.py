@@ -12,7 +12,6 @@ if TYPE_CHECKING:
 class Category(Base):
     __tablename__ = "category"
     __table_args__ = (
-        UniqueConstraint("name", "blog_id", name="unique_category_per_blog"),  # 동일 블로그 내에서 이름 중복 방지
         CheckConstraint("level IN (1, 2)", name="valid_category_level"),       # level은 1(상위) 또는 2(하위)만 허용
     )
 
