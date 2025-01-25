@@ -3,6 +3,7 @@ from fastapi import APIRouter, Request, Depends
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from authlib.integrations.starlette_client import OAuth
 from starlette.status import HTTP_200_OK, HTTP_201_CREATED
+from fastapi.responses import RedirectResponse
 
 from wastory.database.settings import PW_SETTINGS
 from wastory.app.user.dto.requests import UserSignupRequest, UserUpdateRequest, UserSigninRequest, PasswordUpdateRequest, UserEmailRequest, UserEmailVerifyRequest
@@ -53,7 +54,7 @@ async def login_with_header(
 
 @user_router.get("/auth/kakao")
 async def login_via_kakao(request: Request):
-    redirect_uri = request.url_for("api_users_auth_kakao_callback")
+    redirect_uri = "wastory://authSuccess"
     return await oauth.kakao.authorize_redirect(request, redirect_uri)
 
 
@@ -76,7 +77,9 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
     else:
         access_token, refresh_token = user_service.issue_tokens(user.email)
 
-    return UserSigninResponse(access_token=access_token, refresh_token=refresh_token)
+    return RedirectResponse(
+        url=f"wastory://authSuccess?access_token={access_token}&refresh_token={refresh_token}"
+    )
 
 
 @user_router.post("/request-verification")

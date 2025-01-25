@@ -144,7 +144,7 @@ class UserService:
 
 
     def generate_verification_code(self) -> str:
-        return str(random.randint(100000, 999999))
+        return str(random.randint(10000000, 99999999))
 
 
     async def send_verification_code(self, email: str) -> str:
