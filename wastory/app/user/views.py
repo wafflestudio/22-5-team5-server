@@ -54,8 +54,14 @@ async def login_with_header(
 
 @user_router.get("/auth/kakao")
 async def login_via_kakao(request: Request):
-    redirect_uri = "wastory://authSuccess"
-    return await oauth.kakao.authorize_redirect(request, redirect_uri)
+    # redirect_uri = "wastory://authSuccess"
+    # return await oauth.kakao.authorize_redirect(request, redirect_uri)
+    redirect_uri = request.url_for("api_users_auth_kakao_callback")
+    state = "random-generated-state"  # 고유한 state 값 생성
+    request.session['state'] = state  # 세션에 저장
+    return await oauth.kakao.authorize_redirect(request, redirect_uri, state=state)
+
+
 
 
 @user_router.get("/auth/kakao/callback", name="api_users_auth_kakao_callback")
