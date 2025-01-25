@@ -6,11 +6,97 @@ nohup: ignoring input
 * 'allow_population_by_field_name' has been renamed to 'populate_by_name'
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [64354]
+INFO:     Started server process [13850]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     218.149.163.247:0 - "PATCH /api/blogs/test HTTP/1.0" 500 Internal Server Error
+INFO:     218.149.163.247:0 - "GET /docs HTTP/1.0" 200 OK
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/openapi/utils.py:225: UserWarning: Duplicate Operation ID get_top_articles_in_blog_api_articles_blogs__blog_id__sort_by__sort_by__get for function get_top_articles_in_blog at /home/ubuntu/22-5-team5-server/wastory/app/article/views.py
+  warnings.warn(message, stacklevel=1)
+INFO:     218.149.163.247:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 401 Unauthorized
+INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     218.149.163.247:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+Debug: Blog=<Blog id=3, blog_name=test1, user_id=4>
+main_image_url: string
+/home/ubuntu/22-5-team5-server/wastory/app/blog/store.py:95: RuntimeWarning: coroutine 'async_scoped_session.merge' was never awaited
+  SESSION.merge(blog)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+INFO:     218.149.163.247:0 - "PATCH /api/blogs/test1 HTTP/1.0" 200 OK
+INFO:     95.9.149.188:35998 - "GET / HTTP/1.0" 200 OK
+INFO:     5.181.190.248:0 - "GET / HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2/sort_by/views HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/likes/blog/press_like/17 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/categories/create HTTP/1.0" 201 Created
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     123.163.114.152:0 - "GET / HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     171.36.6.165:0 - "GET / HTTP/1.0" 200 OK
+INFO:     111.113.88.135:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     3.84.46.175:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     18.233.162.115:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     221.139.176.57:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2/sort_by/views HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/likes/blog/press_like/22 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "DELETE /api/likes/22 HTTP/1.0" 500 Internal Server Error
 ERROR:    Exception in ASGI application
   + Exception Group Traceback (most recent call last):
   |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
@@ -56,9 +142,7 @@ ERROR:    Exception in ASGI application
     |     await self.app(scope, receive_or_disconnect, send_no_error)
     |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
     |     await self.app(scope, receive, send_wrapper)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
-    |     await self.simple_response(scope, receive, send, request_headers=headers)
-    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
     |     await self.app(scope, receive, send)
     |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
     |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
@@ -87,10 +171,12 @@ ERROR:    Exception in ASGI application
     |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
     |     return await dependant.call(**values)
     |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |   File "/home/ubuntu/22-5-team5-server/wastory/app/blog/views.py", line 51, in update_blog
-    |     return await blog_service.update_blog(address_name=address_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)
-    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    | TypeError: BlogService.update_blog() missing 1 required positional argument: 'new_default_category_id'
+    |   File "/home/ubuntu/22-5-team5-server/wastory/app/like/views.py", line 33, in delete_like
+    |     await like_service.delete_like_in_article(user, article_id)
+    |   File "/home/ubuntu/22-5-team5-server/wastory/app/like/service.py", line 68, in delete_like_in_article
+    |     await self.like_store.delete_like(like)
+    |          ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | AttributeError: 'LikeStore' object has no attribute 'delete_like'. Did you mean: 'create_like'?
     +------------------------------------
 
 During handling of the above exception, another exception occurred:
@@ -130,9 +216,7 @@ Traceback (most recent call last):
     await self.app(scope, receive_or_disconnect, send_no_error)
   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
     await self.app(scope, receive, send_wrapper)
-  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
-    await self.simple_response(scope, receive, send, request_headers=headers)
-  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
     await self.app(scope, receive, send)
   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
@@ -161,7 +245,21 @@ Traceback (most recent call last):
   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
     return await dependant.call(**values)
            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/home/ubuntu/22-5-team5-server/wastory/app/blog/views.py", line 51, in update_blog
-    return await blog_service.update_blog(address_name=address_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-TypeError: BlogService.update_blog() missing 1 required positional argument: 'new_default_category_id'
+  File "/home/ubuntu/22-5-team5-server/wastory/app/like/views.py", line 33, in delete_like
+    await like_service.delete_like_in_article(user, article_id)
+  File "/home/ubuntu/22-5-team5-server/wastory/app/like/service.py", line 68, in delete_like_in_article
+    await self.like_store.delete_like(like)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'LikeStore' object has no attribute 'delete_like'. Did you mean: 'create_like'?
+INFO:     54.227.73.201:0 - "GET /api/likes/22 HTTP/1.0" 405 Method Not Allowed
+INFO:     44.198.181.178:0 - "GET /api/likes/22 HTTP/1.0" 405 Method Not Allowed
+INFO:     221.139.176.57:0 - "GET /api/categories/list/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     4.43.184.114:0 - "GET / HTTP/1.0" 200 OK
+INFO:     64.62.197.87:9567 - "GET / HTTP/1.1" 200 OK
+INFO:     64.62.197.84:6027 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     64.62.197.86:32273 - "GET http%3A//api.ipify.org/?format=json HTTP/1.1" 404 Not Found
+INFO:     64.62.197.85:47119 - "CONNECT www.shadowserver.org%3A443 HTTP/1.1" 404 Not Found
