@@ -55,13 +55,15 @@ class BlogService:
         address_name : str,
         new_blog_name : str | None,
         new_description : str |None,
-        new_default_category_id : int|None
+        new_default_category_id : int|None,
+        new_main_image_URL : str | None
     ) -> BlogDetailResponse:
         updated_blog = await self.blog_store.update_blog(
             address_name=address_name,
             new_blog_name=new_blog_name,
             description=new_description,
-            new_default_category_id=new_default_category_id
+            new_default_category_id=new_default_category_id,
+            new_main_image_URL=new_main_image_URL
         )
         return BlogDetailResponse.model_validate(updated_blog, from_attributes=True)
     

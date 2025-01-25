@@ -20,3 +20,4 @@ class BlogCreateRequest(BaseModel):
 class BlogUpdateRequest(BaseModel):
     blog_name: str|None = None
     description: str|None = None
+    main_image_URL: str|None = None
