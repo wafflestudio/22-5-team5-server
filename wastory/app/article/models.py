@@ -10,6 +10,8 @@ if TYPE_CHECKING:
     from wastory.app.comment.models import Comment
     from wastory.app.like.models import Like
     from wastory.app.hometopic.models import Hometopic
+
+
 class Article(Base):
     __tablename__ = "Article"
 

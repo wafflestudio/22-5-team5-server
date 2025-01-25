@@ -1,17 +1,17 @@
 from typing import Annotated
 
 from fastapi import Depends
-from wastory.app.article.dto.responses import ArticleDetailResponse, ArticleSearchInListResponse, PaginatedArticleListResponse
+from wastory.app.article.dto.responses import ArticleDetailResponse, PaginatedArticleListResponse, ArticleInformationResponse
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
 from wastory.app.blog.store import BlogStore
-from wastory.app.category.errors import CategoryNotFoundError
+from wastory.app.hometopic.store import HometopicStore
 from wastory.app.category.store import CategoryStore
 from wastory.app.subscription.store import SubscriptionStore
 from wastory.app.notification.service import NotificationService
 from wastory.app.user.errors import PermissionDeniedError
-from wastory.app.user.models import User
+from wastory.app.user.models import User 
 
 class ArticleService:
     def __init__(
@@ -20,6 +20,7 @@ class ArticleService:
         blog_store: Annotated[BlogStore, Depends()],
         category_store: Annotated[CategoryStore, Depends()],
         subscription_store: Annotated[SubscriptionStore, Depends()],
+        hometopic_store : Annotated[HometopicStore, Depends()],
         notification_service: Annotated[NotificationService, Depends()],
     ):
         self.article_store = article_store
@@ -27,9 +28,10 @@ class ArticleService:
         self.category_store = category_store
         self.subscription_store = subscription_store
         self.notification_service = notification_service
+        self.hometopic_store = hometopic_store
     
     async def create_article(
-        self, user: User, category_id :int, article_title: str, article_content: str, article_description: str,
+        self, user: User, category_id :int, hometopic_id : int, article_title: str, article_content: str, article_description: str,
     ) -> ArticleDetailResponse :
                 
         # 사용자의 Blog 확인
@@ -37,7 +39,14 @@ class ArticleService:
         if user_blog is None:
             raise BlogNotFoundError()
             
-        new_article = await self.article_store.create_article(blog_id=user_blog.id, category_id=category_id, atricle_title=article_title, article_content=article_content, article_description = article_description)
+        new_article = await self.article_store.create_article(
+            blog_id=user_blog.id, 
+            category_id=category_id, 
+            atricle_title=article_title, 
+            article_content=article_content, 
+            article_description = article_description,
+            hometopic_id = hometopic_id
+            )
 
         # 새 글 알림
         await self.notification_service.add_notification(
@@ -78,7 +87,36 @@ class ArticleService:
         updated_article = await self.article_store.update_article(article, article_title, article_content)
 
         return ArticleDetailResponse.from_article(updated_article)
-       
+
+    
+    
+    async def get_article_information_by_id(self, article_id : int) -> ArticleInformationResponse:
+        # 조회수 증가
+        article = self.article_store.get_article_information_by_id(article_id)
+        await self.article_store.increment_article_views(article_id)
+        return await article
+    
+    async def get_today_most_viewed(
+        self,
+        page : int
+    ) -> PaginatedArticleListResponse:
+        return await self.article_store.get_today_most_viewed(page)
+
+    async def get_weekly_most_viewed(
+        self,
+    ) -> PaginatedArticleListResponse:
+        return await self.article_store.get_weekly_most_viewed()
+        
+    async def get_most_viewed_in_hometopic(
+        self,
+        high_hometopic_id: int,
+        page: int,
+    ) -> PaginatedArticleListResponse:
+        hometopic_id_list = await self.hometopic_store.get_hometopic_id_list_by_high_hometopic_id(high_hometopic_id)
+        return await self.article_store.get_most_viewed_in_hometopic(
+            hometopic_id_list=hometopic_id_list, 
+            page=page
+        )   
         
     async def get_articles_in_blog(
         self,
@@ -133,15 +171,6 @@ class ArticleService:
         return await self.article_store.get_top_articles_in_blog(
             blog_id=blog_id, sort_by=sort_by)
 
-
-
-    async def get_article_by_id(self, article_id : int) -> ArticleDetailResponse:
-        # 조회수 증가
-        await self.article_store.increment_article_views(article_id)
-
-        article = await self.article_store.get_article_by_id(article_id)
-        return ArticleDetailResponse.from_article(article)
-    
     async def delete_article(
         self,
         user: User,

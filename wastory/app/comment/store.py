@@ -25,10 +25,17 @@ class CommentStore:
             select(Comment)
             .filter(Comment.article_id == article_id, Comment.level == 1)
             .options(
-                selectinload(Comment.children),
                 selectinload(Comment.blog),
-                selectinload(Comment.article)
-            )  # 자식 로드
+                selectinload(Comment.article),
+                selectinload(Comment.user).selectinload(User.blogs),
+
+                selectinload(Comment.children)
+                    .options(
+                        selectinload(Comment.user).selectinload(User.blogs),
+                        selectinload(Comment.blog),
+                        selectinload(Comment.article),
+                    )
+            )
             .offset(offset_val)
             .limit(per_page)
         )
@@ -51,13 +58,19 @@ class CommentStore:
 
         stmt = (
             select(Comment)
-            .filter(Comment.blog_id == blog_id, Comment.level == 1)
+            .filter(Comment.article_id == article_id, Comment.level == 1)
             .options(
-                selectinload(Comment.children),
-                selectinload(Comment.article),     # Article 미리 로드
-                selectinload(Comment.blog)
-            )  # 자식 로드
-            
+                selectinload(Comment.blog),
+                selectinload(Comment.article),
+                selectinload(Comment.user).selectinload(User.blogs),
+
+                selectinload(Comment.children)
+                    .options(
+                        selectinload(Comment.user).selectinload(User.blogs),
+                        selectinload(Comment.blog),
+                        selectinload(Comment.article),
+                    )
+            )
             .offset(offset_val)
             .limit(per_page)
         )
@@ -93,7 +106,7 @@ class CommentStore:
             print(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
-            await SESSION.refresh(comment, ["blog", "article"])
+            await SESSION.refresh(comment, ["user",  "blog", "article"])
             return comment
         
     @transactional
@@ -129,7 +142,7 @@ class CommentStore:
             SESSION.add(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
-            await SESSION.refresh(comment, ["blog", "article"])
+            await SESSION.refresh(comment, ["user",  "blog", "article"])
             return comment
 
     @transactional
@@ -155,7 +168,7 @@ class CommentStore:
             print(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
-            await SESSION.refresh(comment, ["blog", "article"])
+            await SESSION.refresh(comment, ["user", "blog", "article"])
             return comment
         
     @transactional
@@ -188,7 +201,7 @@ class CommentStore:
             SESSION.add(comment)
             await SESSION.flush()
             await SESSION.refresh(comment)
-            await SESSION.refresh(comment, ["blog", "article"])
+            await SESSION.refresh(comment, ["user",  "blog", "article"])
             return comment
 
 
