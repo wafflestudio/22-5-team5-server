@@ -170,12 +170,12 @@ class UserService:
 
         return verification_code
 
-    def verify_code(self, email: str, code: str) -> bool:
+    def verify_code(self, email: str, code: str) -> str:
         """
         Redis에서 인증 코드 검증
         """
         stored_code: Optional[bytes] = redis_client.get(f"verification:{email}")
         if stored_code and stored_code.decode() == code:
             redis_client.delete(f"verification:{email}")  # 사용 후 삭제
-            return True
-        return False
+            return "True"
+        return "False"
