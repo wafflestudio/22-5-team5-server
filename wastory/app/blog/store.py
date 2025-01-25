@@ -77,7 +77,7 @@ class BlogStore:
             raise BlogNotFoundError
 
         # 블로그 이름 업데이트
-        if new_blog_name is not None:
+        if new_blog_name is not None and new_blog_name!=blog.blog_name:
             if await self.get_blog_by_name(new_blog_name):
                 raise BlognameAlreadyExistsError
             blog.blog_name = new_blog_name
