@@ -55,6 +55,7 @@ class LikeService:
         if user_blog is None:
             raise BlogNotFoundError()
 
+        print("user_blog id is ", user_blog.id)
 
         # like 존재 확인
         like = await self.like_store.get_like_by_blog_in_article(
@@ -63,9 +64,12 @@ class LikeService:
         ) 
         if like is None:
             raise LikeNotFoundError()    
+        
+        print("like id is ", like.id)
+
 
         # Article 삭제
-        await self.like_store.delete_like(like) 
+        await self.like_store.delete_like_in_article(like)
        
         
     async def get_likes_by_blog(
