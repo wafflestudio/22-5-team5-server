@@ -1,10 +1,8 @@
-from fastapi import Depends
-from typing import Self, Annotated
+from typing import Self
 from pydantic import BaseModel
 from datetime import datetime
 from wastory.app.article.models import Article
 from wastory.app.article.errors import ArticleNotFoundError
-from wastory.app.blog.store import BlogStore
 
 class ArticleInformationResponse(BaseModel):
     id: int
@@ -14,8 +12,6 @@ class ArticleInformationResponse(BaseModel):
     updated_at: datetime
 
     blog_id: int
-    blog_name : str
-    blog_main_image_url : str | None
     category_id : int 
 
     views: int
@@ -29,7 +25,7 @@ class ArticleInformationResponse(BaseModel):
     }
 
     @staticmethod
-    def from_article(article: Article | None, blog_name : str, blog_main_image_url :str | None, article_likes: int, article_comments: int) -> "ArticleInformationResponse":
+    def from_article(article: Article | None, article_likes: int, article_comments: int) -> "ArticleInformationResponse":
         if article is None : 
             raise ArticleNotFoundError
 
@@ -42,8 +38,6 @@ class ArticleInformationResponse(BaseModel):
             views = article.views,
             blog_id = article.blog_id,
             category_id = article.category_id,
-            blog_name = blog_name,
-            blog_main_image_url = blog_main_image_url,
             article_likes = article_likes,
             article_comments = article_comments
         )
@@ -66,7 +60,6 @@ class ArticleDetailResponse(BaseModel):
 
     
 class ArticleSearchInListResponse(BaseModel):
-
     id: int
     title: str
     description: str
@@ -74,8 +67,6 @@ class ArticleSearchInListResponse(BaseModel):
     updated_at: datetime
 
     blog_id: int
-    blog_name : str
-    blog_main_image_url : str | None
 
     views: int
 
@@ -88,9 +79,7 @@ class ArticleSearchInListResponse(BaseModel):
     }
 
     @staticmethod
-    def from_article(article: Article | None, blog_name : str, blog_main_image_url :str | None, article_likes: int, article_comments: int) -> "ArticleSearchInListResponse":
-        
-        
+    def from_article(article: Article, article_likes: int, article_comments: int) -> "ArticleSearchInListResponse":
         return ArticleSearchInListResponse(
             id=article.id, 
             title=article.title, 
@@ -99,8 +88,6 @@ class ArticleSearchInListResponse(BaseModel):
             updated_at = article.updated_at,
             views = article.views,
             blog_id = article.blog_id,
-            blog_name = blog_name,
-            blog_main_image_url = blog_main_image_url,
             article_likes = article_likes,
             article_comments = article_comments
         )

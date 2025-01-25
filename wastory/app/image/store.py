@@ -1,5 +1,5 @@
 import aioboto3
-import uuid
+
 from functools import cache
 from typing import Annotated, Sequence
 from fastapi import File, UploadFile
@@ -7,7 +7,6 @@ from fastapi import File, UploadFile
 from sqlalchemy import select, or_, and_, func, update
 from wastory.database.annotation import transactional
 from wastory.database.settings import AWSSettings
-from wastory.app.image.dto.requests import PresignedUrlRequest
 
 from wastory.app.image.errors import FileNotFoundError, UnexpectedError
 from botocore.exceptions import ClientError
@@ -64,32 +63,4 @@ class ImageStore :
             await s3_client.delete_object(Bucket=AWS_SETTINGS.s3_bucket, Key=s3_key)
 
         return {"message": f"Deleted image: {file_url}"}
-
-    async def generate_presigned_url(
-        self,
-        request : PresignedUrlRequest
-    ) :
-        session = aioboto3.Session()
-        async with session.client(
-            "s3",
-            aws_access_key_id=AWS_SETTINGS.access_key_id,
-            aws_secret_access_key=AWS_SETTINGS.secret_access_key,
-            region_name=AWS_SETTINGS.default_region
-        ) as s3_client:
-            unique_filename = f"{uuid.uuid4()}-{request.file_name}"
-            
-            # 비동기적으로 presigned URL 생성
-            presigned_url = await s3_client.generate_presigned_url(
-                ClientMethod="put_object",
-                Params={
-                    "Bucket": AWS_SETTINGS.s3_bucket,
-                    "Key": f"uploads/{unique_filename}",
-                    "ContentType": request.file_type,
-                },
-                ExpiresIn=3600  # URL 유효기간 (초 단위)
-            )
-            return {
-                "presigned_url": presigned_url,
-                "file_url": f"https://{AWS_SETTINGS.s3_bucket}.s3.{AWS_SETTINGS.default_region}.amazonaws.com/uploads/{unique_filename}"
-            }
         
