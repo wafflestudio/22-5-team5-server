@@ -74,29 +74,22 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .filter(Article.id == article_id)
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
-
         )
         result = await SESSION.execute(stmt)
 
         row = result.one_or_none()
         article = ArticleInformationResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
         
+        # category_id가 blog 에 저장된 default_category_id일 경우, response 는 0으로 임의로 조정정
         blog = await SESSION.get(Blog, article.blog_id)
-
         if article.category_id == blog.default_category_id:
             article.category_id = 0
 
@@ -132,17 +125,14 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
             .filter(
                 Article.created_at >= today_start,           # 오늘 시작 시간 이후
                 Article.created_at < today_end               # 오늘 끝 시간 이전
             )
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(sort_column)  # 조회수 기준 정렬
             .offset(offset)         # 페이지 오프셋 적용
             .limit(per_page)        # 페이지당 제한 (1개)
@@ -152,13 +142,10 @@ class ArticleStore :
         result = await SESSION.execute(stmt)
         rows = result.all()
 
-        
         # Pydantic 모델로 변환하여 반환 데이터 생성
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -198,17 +185,14 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
             .filter(
                 Article.created_at >= week_start,            # 일주일 전 시작 시간 이후
                 Article.created_at <= today_end              # 오늘 끝 시간 이전
             )
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(sort_column)  # 조회수 기준 정렬
             .limit(per_page)        # 페이지당 제한
         )
@@ -221,8 +205,6 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -262,14 +244,11 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
             .filter(Article.hometopic_id.in_(hometopic_id_list))  # 홈토픽 ID 필터링
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(sort_column)  # 조회수 기준 정렬
             .offset(offset)  # 페이지 오프셋 적용
             .limit(per_page)  # 페이지당 제한
@@ -283,8 +262,6 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -314,14 +291,11 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .filter(Article.blog_id == blog_id)
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(Article.created_at.desc())
             .offset(offset_val)
             .limit(per_page)
@@ -334,8 +308,6 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -376,14 +348,11 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .filter(Article.blog_id == blog_id)  # 특정 블로그에서 필터링
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(sort_column)  # 좋아요 순 또는 댓글 순으로 정렬
             .limit(top_n)           # 상위 N개 제한
         )
@@ -395,8 +364,6 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -433,17 +400,14 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .filter(
                 Article.category_id == category_id,  # category_id 필터
                 Article.blog_id == blog_id           # blog_id 필터
             )
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(Article.created_at.desc())
             .offset(offset_val)
             .limit(per_page)
@@ -457,8 +421,6 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -521,14 +483,11 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .where(and_(*search_conditions))  # 검색 조건 적용
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(Article.created_at.desc())
             .offset(offset_val)
             .limit(per_page)
@@ -542,8 +501,6 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -590,14 +547,11 @@ class ArticleStore :
                 Article,
                 func.count(Like.id).label("likes"),
                 func.count(Comment.id).label("comments"),
-                Blog.blog_name.label("blog_name"),
-                Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .filter(Article.blog_id.in_(subscribed_ids))  # 구독한 블로그의 Article만 필터
-            .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
+            .group_by(Article.id)
             .order_by(Article.created_at.desc())  # 최신순 정렬
             .offset(offset_val)
             .limit(per_page)
@@ -610,8 +564,6 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
