@@ -10,7 +10,8 @@ from wastory.app.user.models import User
 from wastory.app.user.views import login_with_header
 from wastory.app.image.dto.responses import ImageDetailResponse
 from wastory.app.image.service import ImageService
-
+from wastory.app.image.dto.requests import PresignedUrlRequest
+from botocore.exceptions import BotoCoreError, ClientError
 # AWS 설정 불러오기
 AWS_SETTINGS = AWSSettings()
 
@@ -40,3 +41,14 @@ async def delete_image(
 ) -> dict :
     
     return await image_service.delete_image(file_url)
+
+
+@image_router.post("/generate-presigned-urls", status_code=201)
+async def generate_presigned_urls(
+    user: Annotated[User, Depends(login_with_header)],
+    image_service: Annotated[ImageService, Depends()],
+    request: PresignedUrlRequest
+) :
+    return await image_service.generate_presigned_url(
+        request = request
+    )
