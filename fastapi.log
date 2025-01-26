@@ -6,11 +6,609 @@ nohup: ignoring input
 * 'allow_population_by_field_name' has been renamed to 'populate_by_name'
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [2453]
+INFO:     Started server process [3134]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     Shutting down
-INFO:     Waiting for application shutdown.
-INFO:     Application shutdown complete.
-INFO:     Finished server process [2453]
+INFO:     218.149.163.247:0 - "GET /docs HTTP/1.0" 200 OK
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/openapi/utils.py:225: UserWarning: Duplicate Operation ID get_top_articles_in_blog_api_articles_blogs__blog_id__sort_by__sort_by__get for function get_top_articles_in_blog at /home/ubuntu/22-5-team5-server/wastory/app/article/views.py
+  warnings.warn(message, stacklevel=1)
+INFO:     218.149.163.247:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "POST /api/users/signup HTTP/1.0" 201 Created
+INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+Debug: Blog=<Blog id=14, blog_name=psi3님의 블로그, user_id=24>
+main_image_url: None
+/home/ubuntu/22-5-team5-server/wastory/app/blog/store.py:95: RuntimeWarning: coroutine 'async_scoped_session.merge' was never awaited
+  SESSION.merge(blog)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+INFO:     218.149.163.247:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     221.139.176.57:0 - "GET /api/comments/article/1/1 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "POST /api/users/email-exists HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signup HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/gggg HTTP/1.0" 404 Not Found
+Debug: Blog=<Blog id=15, blog_name=gggg님의 블로그, user_id=25>
+main_image_url: None
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=qxm02sTD8p9GnQGxIfPRqbnb-HZ9oDxBZDPz7Ify3Yr3ztRns_ITtgAAAAQKPXKYAAABlKG_qhRb9Pmr5eg_ZA&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "DELETE /api/users/me HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=FOLfQoTQy84KueJtjzuRmqgGQ-Q3aDghVbpxRL06HtqggMJ4BfEKlQAAAAQKKiVTAAABlKHAWLrmTYKY7N6ACw&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/kakaotest1 HTTP/1.0" 404 Not Found
+Debug: Blog=<Blog id=16, blog_name=kakaotest1님의 블로그, user_id=26>
+main_image_url: None
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 400 Bad Request
+INFO:     221.139.176.57:0 - "GET /api/comments/article/2/1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/comments/article/3/1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/comments/article/4/1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/comments/article/11/1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/comments/article/12/1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/comments/article/1 HTTP/1.0" 400 Bad Request
+<wastory.app.comment.models.Comment object at 0x7bb20e3e7ad0>
+Debug: Blog=<Blog id=3, blog_name=test1, user_id=4>
+main_image_url: string
+INFO:     221.139.176.57:0 - "POST /api/comments/article/1 HTTP/1.0" 201 Created
+INFO:     221.139.176.57:0 - "GET /api/comments/article/1/1 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "DELETE /api/users/me HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/email-exists HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signup HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/gggg HTTP/1.0" 404 Not Found
+Debug: Blog=<Blog id=17, blog_name=gggg님의 블로그, user_id=27>
+main_image_url: None
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=N1c3lrWc50fmcFXVDcqR381kOJtbXAioGFvPIh23gIM1hM_oJiij9QAAAAQKPXPsAAABlKHDAA2kJA3lYdtGWQ&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "DELETE /api/users/me HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=eeVxLt4GkQCJrylP3s7d_9TKaTs4Imd0voZdhm-fulfQ7PqqcjOdcQAAAAQKPXPsAAABlKHDPnCvm_uHqQwxKA&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=lcPeCcoHgG7FmudszoLimVqdA1ZxlveQGvxtX4OE9eXNG_yF3gltGAAAAAQKPXPsAAABlKHDYTIp9hBbJybEWQ&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=x2AU6_rLVX_yM62f447Mn3Syq7vjsN_yOy37Y1k155z6iEYd84FcTAAAAAQKKwzTAAABlKHDsnnRDLJpR7eCqA&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/kakaotest1 HTTP/1.0" 404 Not Found
+Debug: Blog=<Blog id=18, blog_name=kakaotest1님의 블로그, user_id=28>
+main_image_url: None
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2/sort_by/views HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/likes/blog/press_like/22 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/comments/article/22/1 HTTP/1.0" 200 OK
+[('asdf',)]
+INFO:     221.139.176.57:0 - "POST /api/comments/article/1 HTTP/1.0" 201 Created
+INFO:     221.139.176.57:0 - "GET /api/comments/article/12/1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/comments/article/1/1 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=CuGfEyIb4iqWMgP6tfPbi56_3S7WFtagOesUkZr9zlVQAgWjZxysEgAAAAQKPXRoAAABlKHFP97DukuslKNZWg&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=Ao-6vf1om2tS0PUveVPRZiqa81oXM5ALBkA4iZClsnvC5-_0KhTMZwAAAAQKPCQhAAABlKHFsgqnsOtctwzlGQ&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "DELETE /api/users/me HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=D4iAtibmEcYM4_aJhGQ-gnchgLHuIVNxIr_QzfKFPUQK7hXpOf39BQAAAAQKPCQhAAABlKHF2gHkNSpXBP-m7Q&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=pD4TRSjz1HicXLLhCLxUWUIHF9uk4MrQhlNHYmpPNarVIkF-veUttgAAAAQKPCQhAAABlKHGDtxONYg--5I0Sw&state=random-generated-state HTTP/1.0" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
+  |     yield
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 186, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 767, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    |     result = await app(  # type: ignore[func-returns-value]
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    |     return await self.app(scope, receive, send)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |   File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    |     self.gen.throw(value)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    |     raise e
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    |     raise app_exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    |     await self.app(scope, receive, send_wrapper)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 69, in auth_kakao_callback
+    |     token = await oauth.kakao.authorize_access_token(request)
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/starlette_client/apps.py", line 80, in authorize_access_token
+    |     params = self._format_state_params(state_data, params)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/base_client/sync_app.py", line 234, in _format_state_params
+    |     raise MismatchingStateError()
+    | authlib.integrations.base_client.errors.MismatchingStateError: mismatching_state: CSRF Warning! State not equal in request and response.
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    with collapse_excgroups():
+  File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    raise e
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    raise app_exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 69, in auth_kakao_callback
+    token = await oauth.kakao.authorize_access_token(request)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/starlette_client/apps.py", line 80, in authorize_access_token
+    params = self._format_state_params(state_data, params)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/base_client/sync_app.py", line 234, in _format_state_params
+    raise MismatchingStateError()
+authlib.integrations.base_client.errors.MismatchingStateError: mismatching_state: CSRF Warning! State not equal in request and response.
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=6QFqhgyI2_pTeYVnGXfemtXRfJjh31EXh05CN2heMI2ZQLzIk6-ZlgAAAAQKKiVTAAABlKHGX0oe0jm_MNo9Pw&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/kakaotest1 HTTP/1.0" 404 Not Found
+Debug: Blog=<Blog id=19, blog_name=kakaotest1님의 블로그, user_id=29>
+main_image_url: None
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=-lilExRfRQyqkVM0-vO4qgSUy7GHhjzDmX8WrfNAp5IyfKSXFKKdJAAAAAQKPCQgAAABlKHG6alAPV-WDrAHcw&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2/sort_by/views HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/likes/blog/press_like/22 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     221.139.176.57:0 - "GET /api/comments/article/22/1 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=kegL8Gpjgys4-VAxhafHsLI7SU7BeZ_QAcvRTzcu3JJL7oy4APMI_AAAAAQKPXKYAAABlKHHHzohI_W2iNNaeg&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=sHm6e3iFrtZTlPEhr_zldWqx_pyExzfLiMy_LhavVhpyt0HGqrOkDwAAAAQKKiVRAAABlKHIKsvo6jj-qNQmaA&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "DELETE /api/users/me HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=FZY4uFyzotwhee5Q_4mPjY_Gq95Icw-HH9zDAUISbob1_lcvmQKiCwAAAAQKPXMXAAABlKHIhi0p9hBbJybEWQ&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=j5hmCpRSEVldX0Wt8xakPXRoFrBoSadFx9N-s4bBA9uiwAa0xrgeZQAAAAQKKcjZAAABlKHJH0QBl6J2VXah6g&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/kakao HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/kakaotest1 HTTP/1.0" 404 Not Found
+Debug: Blog=<Blog id=20, blog_name=kakaotest1님의 블로그, user_id=30>
+main_image_url: None
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "DELETE /api/users/me HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=igYmzhJmNhhysCedDqsREfjOfkiPZE_-17RlYuYcShxSxUB_qaUcBgAAAAQKPCPnAAABlKHJ1A7GDcCf5rkkeA&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=NrNmP1qmGPifpXHh2ZfL9lmQsyGYZiz4L9uLKeH2VhYPzo16LFIq-gAAAAQKKw0eAAABlKHKMXrokopMIboAuA&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 404 Not Found
+called get_blog
+INFO:     49.165.120.175:0 - "GET /api/blogs/kakaotest1 HTTP/1.0" 404 Not Found
+Debug: Blog=<Blog id=21, blog_name=kakaotest1님의 블로그, user_id=31>
+main_image_url: None
+INFO:     49.165.120.175:0 - "POST /api/blogs HTTP/1.0" 201 Created
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=D3uGnYmrhmhR3MLnzLqTugX3lfDGx7XHlSbz0vp6tra8Lq1DqZPNLgAAAAQKKwzSAAABlKHKcVa37mS5Kc-sjw&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=bMhEMiSmdtvH6zNz7B_hj0EzhHQcvW1lLfOERCZj_sw-cwhRGDsTWAAAAAQKKwzSAAABlKHKuUaoblpFv_zasg&state=random-generated-state HTTP/1.0" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
+  |     yield
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 186, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 767, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    |     result = await app(  # type: ignore[func-returns-value]
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    |     return await self.app(scope, receive, send)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |   File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    |     self.gen.throw(value)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    |     raise e
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    |     raise app_exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    |     await self.app(scope, receive, send_wrapper)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 69, in auth_kakao_callback
+    |     token = await oauth.kakao.authorize_access_token(request)
+    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/starlette_client/apps.py", line 80, in authorize_access_token
+    |     params = self._format_state_params(state_data, params)
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/base_client/sync_app.py", line 234, in _format_state_params
+    |     raise MismatchingStateError()
+    | authlib.integrations.base_client.errors.MismatchingStateError: mismatching_state: CSRF Warning! State not equal in request and response.
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    with collapse_excgroups():
+  File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    raise e
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    raise app_exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/app/user/views.py", line 69, in auth_kakao_callback
+    token = await oauth.kakao.authorize_access_token(request)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/starlette_client/apps.py", line 80, in authorize_access_token
+    params = self._format_state_params(state_data, params)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/authlib/integrations/base_client/sync_app.py", line 234, in _format_state_params
+    raise MismatchingStateError()
+authlib.integrations.base_client.errors.MismatchingStateError: mismatching_state: CSRF Warning! State not equal in request and response.
+INFO:     221.139.176.57:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     221.139.176.57:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2/sort_by/views HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/likes/blog/press_like/22 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/comments/article/22/1 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 422 Unprocessable Entity
+INFO:     221.139.176.57:0 - "GET /api/categories/list/5 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/5/sort_by/views HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/5?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/5 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/5 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/5 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/5 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/5 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/blogs/by_id/5 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
+INFO:     221.139.176.57:0 - "GET /api/comments/article/22/2 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2/sort_by/views HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/articles/blogs/2?page=1 HTTP/1.0" 200 OK
+INFO:     221.139.176.57:0 - "GET /api/likes/blog/press_like/22 HTTP/1.0" 200 OK
+INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao/callback?code=oIEgKDfd5H0m-FXxiIPnau8hjS9eoXrao23oPPDpb6yEDh2UazCfgAAAAAQKKwzUAAABlKHK_uYh5oEAb4_jFQ&state=random-generated-state HTTP/1.0" 307 Temporary Redirect
+INFO:     49.165.120.175:0 - "GET /api/users/me HTTP/1.0" 200 OK
+user found
+INFO:     49.165.120.175:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+WARNING:  Invalid HTTP request received.
+INFO:     218.149.163.247:0 - "GET /docs HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /openapi.json HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 401 Unauthorized
+INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+INFO:     139.59.62.148:38654 - "GET / HTTP/1.1" 200 OK
+INFO:     139.59.62.148:38668 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     218.149.163.247:0 - "POST /api/articles/create HTTP/1.0" 201 Created
