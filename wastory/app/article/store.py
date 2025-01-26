@@ -15,10 +15,21 @@ from wastory.app.article.dto.responses import ArticleSearchInListResponse, Pagin
 class ArticleStore :
     @transactional
     async def create_article(
-        self, atricle_title : str, article_content: str, article_description: str, blog_id : int, category_id : int, hometopic_id : int 
+        self, 
+        atricle_title : str, 
+        article_content: str, 
+        article_description: str, 
+        main_image_url : str | None,
+        blog_id : int, 
+        category_id : int, 
+        hometopic_id : int 
     ) -> Article :
         article = Article(
-            title = atricle_title, content = article_content, description = article_description, blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id
+            title = atricle_title, 
+            content = article_content, 
+            description = article_description, 
+            main_image_url = main_image_url,
+            blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id
         )
         SESSION.add(article)
         # 왜 필요하지?       
@@ -30,9 +41,12 @@ class ArticleStore :
     async def update_article(
         self, 
         article: Article, 
-        article_title: str | None = None,
-        article_content: str | None = None,
-        article_description: str | None = None,
+        article_title: str | None,
+        article_content: str | None,
+        article_description: str | None,
+        main_image_url : str | None,
+        category_id : int,
+        hometopic_id : int
 
     ) -> Article:
         if article_title is not None:
@@ -41,6 +55,10 @@ class ArticleStore :
             article.content = article_content
         if article_content is not None:
             article.description = article_description
+        article.main_image_url = main_image_url
+        article.category_id = category_id
+        article.hometopic_id = hometopic_id
+
         await SESSION.merge(article)
         await SESSION.flush()
         return article
