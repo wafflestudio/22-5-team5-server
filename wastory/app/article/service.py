@@ -47,8 +47,6 @@ class ArticleService:
         if user_blog is None:
             raise BlogNotFoundError()
     
-
-            
         new_article = await self.article_store.create_article(
             atricle_title=article_title, 
             article_content=article_content, 
@@ -129,60 +127,67 @@ class ArticleService:
     
     async def get_today_most_viewed(
         self,
+        user : User,
         page : int
     ) -> PaginatedArticleListResponse:
-        return await self.article_store.get_today_most_viewed(page)
+        return await self.article_store.get_today_most_viewed(page=page, user=user)
 
     async def get_weekly_most_viewed(
         self,
+        user : User
     ) -> PaginatedArticleListResponse:
-        return await self.article_store.get_weekly_most_viewed()
+        return await self.article_store.get_weekly_most_viewed(user=user)
         
     async def get_most_viewed_in_hometopic(
         self,
+        user : User,
         high_hometopic_id: int,
         page: int,
     ) -> PaginatedArticleListResponse:
         hometopic_id_list = await self.hometopic_store.get_hometopic_id_list_by_high_hometopic_id(high_hometopic_id)
         return await self.article_store.get_most_viewed_in_hometopic(
             hometopic_id_list=hometopic_id_list, 
+            user=user,
             page=page
         )   
         
     async def get_articles_in_blog(
         self,
+        user: User,
         blog_id: int,
         page: int,
         per_page: int
     ) -> PaginatedArticleListResponse:
-        return await self.article_store.get_articles_in_blog(blog_id=blog_id, page=page, per_page=per_page)
+        return await self.article_store.get_articles_in_blog(blog_id=blog_id, page=page, per_page=per_page, user=user)
     
     async def get_articles_in_blog_in_category(
         self,
         blog_id: int,
         category_id: int,
         page: int,
-        per_page: int
+        per_page: int,
+        user : User
     ) -> PaginatedArticleListResponse:
         return await self.article_store.get_articles_in_blog_in_category(
-            category_id=category_id, blog_id=blog_id, page=page, per_page=per_page
+            category_id=category_id, blog_id=blog_id, page=page, per_page=per_page, user=user
         )
     async def get_articles_by_words_and_blog_id(
         self,
         searching_words: str | None,
         blog_id: int | None,
         page: int,
-        per_page: int
+        per_page: int,
+        user : User
     ) -> PaginatedArticleListResponse:
         return await self.article_store.get_articles_by_words_and_blog_id(
-            searching_words=searching_words, blog_id=blog_id, page=page, per_page=per_page
+            searching_words=searching_words, blog_id=blog_id, page=page, per_page=per_page, user=user
         )
     
     async def get_articles_of_subscriptions(
         self,
         user : User,
         page: int,
-        per_page: int
+        per_page: int,
     ) -> PaginatedArticleListResponse : 
         
         # 사용자의 Blog 확인
@@ -191,16 +196,17 @@ class ArticleService:
             raise BlogNotFoundError()
         
         return await self.article_store.get_articles_of_subscriptions(
-            blog_id = user_blog.id, page = page, per_page = per_page
+            blog_id = user_blog.id, page = page, per_page = per_page, user=user
         )
     
     async def get_top_articles_in_blog(
         self,
         blog_id: int,
         sort_by: str,
+        user : User
     ) -> PaginatedArticleListResponse:
         return await self.article_store.get_top_articles_in_blog(
-            blog_id=blog_id, sort_by=sort_by)
+            blog_id=blog_id, sort_by=sort_by, user=user)
 
     async def delete_article(
         self,

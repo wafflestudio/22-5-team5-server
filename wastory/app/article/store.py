@@ -3,6 +3,7 @@ from typing import Annotated, Sequence
 from datetime import datetime, timedelta
 from sqlalchemy import select, or_, and_, func, update
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.elements import ClauseElement
 
 from wastory.app.article.models import Article
 from wastory.app.blog.models import Blog
@@ -12,6 +13,7 @@ from wastory.app.subscription.models import Subscription
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse, ArticleInformationResponse
+from wastory.app.user.models import User
 
 class ArticleStore :
     @transactional
@@ -126,9 +128,28 @@ class ArticleStore :
 
         return article
     
+    def get_access_condition(self, user: User) -> ClauseElement:
+        """
+        공개 글 또는 작성자인 경우 접근 권한을 확인하는 조건 생성
+        """
+        return or_(
+            Article.secret == 0,  # 공개 글
+            Blog.user_id == user.id  # 작성자인 경우
+        )
+    
     @transactional
-    async def get_articles_by_ids(self, article_ids: list[int]) -> Sequence[Article]:
-        article_list_query = select(Article).where(Article.id.in_(article_ids))
+    async def get_articles_by_ids(self, article_ids: list[int], user: User) -> Sequence[Article]:
+        access_condition = self.get_access_condition(user)
+        article_list_query = (
+            select(Article)
+            .options(joinedload(Article.blog))  # Blog 관계 미리 로드
+            .where(
+                and_(
+                    Article.id.in_(article_ids),  # 특정 article_ids에 속한 글
+                    access_condition             # 접근 권한 확인
+                )
+            )
+        )
         result = await SESSION.scalars(article_list_query)  # await 추가
         return result.all()
     
@@ -136,7 +157,9 @@ class ArticleStore :
     async def get_today_most_viewed(
         self,
         page: int,
+        user: User
     ) -> PaginatedArticleListResponse:
+        access_condition = self.get_access_condition(user)
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
         per_page = 1  # 페이지당 기사 수 (1개로 설정)
@@ -159,12 +182,13 @@ class ArticleStore :
                 Blog.blog_name.label("blog_name"),
                 Blog.main_image_url.label("blog_main_image_url")
             )
-            .join(Blog, Blog.id == Article.blog_id)
+            .join(Blog, Blog.id == Article.blog_id)  # 명시적 조인
             .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
             .filter(
-                Article.created_at >= today_start,           # 오늘 시작 시간 이후
-                Article.created_at < today_end               # 오늘 끝 시간 이전
+                Article.created_at >= today_start,  # 오늘 시작 시간 이후
+                Article.created_at < today_end,    # 오늘 끝 시간 이전
+                access_condition                   # 접근 권한 확인
             )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
             .order_by(sort_column)  # 조회수 기준 정렬
@@ -190,9 +214,14 @@ class ArticleStore :
         ]
 
         # 전체 기사 개수 계산 (페이지네이션을 위해)
-        total_count_stmt = select(func.count(Article.id)).filter(
-            Article.created_at >= today_start,
-            Article.created_at < today_end
+        total_count_stmt = (
+            select(func.count(Article.id))
+            .join(Blog, Blog.id == Article.blog_id)  # 명시적 조인
+            .filter(
+                Article.created_at >= today_start,
+                Article.created_at < today_end,
+                access_condition  # 접근 조건 추가
+            )
         )
         total_count = await SESSION.scalar(total_count_stmt)
 
@@ -206,17 +235,18 @@ class ArticleStore :
     @transactional
     async def get_weekly_most_viewed(
         self,
+        user: User  # 사용자 정보 추가
     ) -> PaginatedArticleListResponse:
+        access_condition = self.get_access_condition(user)  # 접근 권한 조건 추가
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
         per_page = 5  # 페이지당 기사 수
-
 
         # 일주일 전과 오늘 날짜 계산
         week_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=7)
         today_end = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999999)
 
-        # 쿼리 작성: 홈토픽 ID 목록에 속하고, 지난 일주일 동안 작성된 인기 글 가져오기
+        # 쿼리 작성: 지난 일주일 동안 작성된 인기 글 가져오기
         stmt = (
             select(
                 Article,
@@ -229,8 +259,9 @@ class ArticleStore :
             .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
             .filter(
-                Article.created_at >= week_start,            # 일주일 전 시작 시간 이후
-                Article.created_at <= today_end              # 오늘 끝 시간 이전
+                Article.created_at >= week_start,  # 일주일 전 시작 시간 이후
+                Article.created_at <= today_end,   # 오늘 끝 시간 이전
+                access_condition                   # 접근 권한 조건 추가
             )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
             .order_by(sort_column)  # 조회수 기준 정렬
@@ -245,8 +276,8 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
+                blog_name=row.blog_name,
+                blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -254,9 +285,14 @@ class ArticleStore :
         ]
 
         # 전체 기사 개수 계산 (페이지네이션을 위해)
-        total_count_stmt = select(func.count(Article.id)).filter(
-            Article.created_at >= week_start,
-            Article.created_at <= today_end
+        total_count_stmt = (
+            select(func.count(Article.id))
+            .join(Blog, Blog.id == Article.blog_id)
+            .filter(
+                Article.created_at >= week_start,
+                Article.created_at <= today_end,
+                access_condition  # 접근 권한 조건 추가
+            )
         )
         total_count = await SESSION.scalar(total_count_stmt)
 
@@ -268,13 +304,14 @@ class ArticleStore :
         )
     
     
-    # tistory 에서 hometopic 인기글을 7개씩 4개의 page 를 나열하기에, 동일하게 구현하였습니다.
     @transactional
     async def get_most_viewed_in_hometopic(
         self,
         hometopic_id_list: list[int],
         page: int,
+        user: User  # 사용자 정보 추가
     ) -> PaginatedArticleListResponse:
+        access_condition = self.get_access_condition(user)  # 접근 권한 조건 추가
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
         per_page = 7  # 페이지당 기사 수
@@ -292,11 +329,14 @@ class ArticleStore :
             .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # 좋아요 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # 댓글 조인
-            .filter(Article.hometopic_id.in_(hometopic_id_list))  # 홈토픽 ID 필터링
+            .filter(
+                Article.hometopic_id.in_(hometopic_id_list),  # 홈토픽 ID 필터링
+                access_condition                             # 접근 권한 조건 추가
+            )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
             .order_by(sort_column)  # 조회수 기준 정렬
-            .offset(offset)  # 페이지 오프셋 적용
-            .limit(per_page)  # 페이지당 제한
+            .offset(offset)         # 페이지 오프셋 적용
+            .limit(per_page)        # 페이지당 제한
         )
 
         # 쿼리 실행
@@ -307,8 +347,8 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
+                blog_name=row.blog_name,
+                blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -316,8 +356,13 @@ class ArticleStore :
         ]
 
         # 전체 인기 글 개수 계산 (페이지네이션을 위해)
-        total_count_stmt = select(func.count(Article.id)).filter(
-            Article.hometopic_id.in_(hometopic_id_list)
+        total_count_stmt = (
+            select(func.count(Article.id))
+            .join(Blog, Blog.id == Article.blog_id)
+            .filter(
+                Article.hometopic_id.in_(hometopic_id_list),
+                access_condition  # 접근 권한 조건 추가
+            )
         )
         total_count = await SESSION.scalar(total_count_stmt)
 
@@ -327,10 +372,16 @@ class ArticleStore :
             total_count=total_count or 0,
             articles=articles,
         )
+
     
     @transactional
-    async def get_articles_in_blog(self, blog_id: int, page: int, per_page: int) -> PaginatedArticleListResponse:
+    async def get_articles_in_blog(
+        self, blog_id: int, page: int, per_page: int, user: User
+    ) -> PaginatedArticleListResponse:
         offset_val = (page - 1) * per_page
+
+        # 접근 조건 생성
+        access_condition = self.get_access_condition(user)
 
         # 쿼리 작성: Article에 likes와 comments를 조인하여 계산
         stmt = (
@@ -344,7 +395,10 @@ class ArticleStore :
             .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
-            .filter(Article.blog_id == blog_id)
+            .filter(
+                Article.blog_id == blog_id,  # 특정 블로그 필터
+                access_condition             # 접근 조건 필터
+            )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
             .order_by(Article.created_at.desc())
             .offset(offset_val)
@@ -358,8 +412,8 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
+                blog_name=row.blog_name,
+                blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -367,7 +421,14 @@ class ArticleStore :
         ]
 
         # 전체 개수 계산
-        total_count_stmt = select(func.count(Article.id)).filter(Article.blog_id == blog_id)
+        total_count_stmt = (
+            select(func.count(Article.id))
+            .join(Blog, Blog.id == Article.blog_id)
+            .filter(
+                Article.blog_id == blog_id,
+                access_condition  # 접근 조건 필터
+            )
+        )
         total_count = await SESSION.scalar(total_count_stmt)
 
         return PaginatedArticleListResponse(
@@ -376,12 +437,14 @@ class ArticleStore :
             total_count=total_count or 0,
             articles=articles,
         )
+
     
     @transactional
     async def get_top_articles_in_blog(
         self,
         blog_id: int,
-        sort_by: str = "views",  # 기본 정렬 기준은 "likes" 
+        user: User,
+        sort_by: str = "views",  # 기본 정렬 기준은 "views"
         top_n: int = 20          # 기본 상위 20개 가져오기
     ) -> PaginatedArticleListResponse:
         # 정렬 기준 설정
@@ -392,7 +455,10 @@ class ArticleStore :
         elif sort_by == "views":
             sort_column = Article.views.desc()  # 조회수를 기준으로 정렬
         else:
-            raise ValueError("Invalid sort_by value. Use 'likes' or 'comments' or 'views'.")
+            raise ValueError("Invalid sort_by value. Use 'likes', 'comments', or 'views'.")
+
+        # 접근 조건 생성
+        access_condition = self.get_access_condition(user)
 
         # 쿼리 작성: 특정 블로그에서 좋아요 또는 댓글 기준으로 상위 N개 가져오기
         stmt = (
@@ -406,9 +472,12 @@ class ArticleStore :
             .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
-            .filter(Article.blog_id == blog_id)  # 특정 블로그에서 필터링
+            .filter(
+                Article.blog_id == blog_id,  # 특정 블로그에서 필터링
+                access_condition             # 접근 조건 필터 추가
+            )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
-            .order_by(sort_column)  # 좋아요 순 또는 댓글 순으로 정렬
+            .order_by(sort_column)  # 좋아요, 댓글, 조회수 기준으로 정렬
             .limit(top_n)           # 상위 N개 제한
         )
 
@@ -419,8 +488,8 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
+                blog_name=row.blog_name,
+                blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -433,12 +502,14 @@ class ArticleStore :
             total_count=len(articles),
             articles=articles,
         )
+
         
     @transactional
     async def get_articles_in_blog_in_category(
         self,
         category_id: int,
         blog_id: int,
+        user: User,
         page: int,
         per_page: int
     ) -> PaginatedArticleListResponse:
@@ -447,9 +518,11 @@ class ArticleStore :
         if category_id == 0:
             blog = await SESSION.get(Blog, blog_id)
             category_id = blog.default_category_id
-        
-        
+
         offset_val = (page - 1) * per_page
+
+        # 접근 조건 생성
+        access_condition = self.get_access_condition(user)
 
         # 쿼리 작성: Article에 likes와 comments를 조인하여 계산
         stmt = (
@@ -465,7 +538,8 @@ class ArticleStore :
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
             .filter(
                 Article.category_id == category_id,  # category_id 필터
-                Article.blog_id == blog_id           # blog_id 필터
+                Article.blog_id == blog_id,          # blog_id 필터
+                access_condition                     # 접근 조건 필터 추가
             )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
             .order_by(Article.created_at.desc())
@@ -481,8 +555,8 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
+                blog_name=row.blog_name,
+                blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -492,7 +566,8 @@ class ArticleStore :
         # 전체 개수 계산
         total_count_stmt = select(func.count(Article.id)).filter(
             Article.category_id == category_id,
-            Article.blog_id == blog_id
+            Article.blog_id == blog_id,
+            access_condition  # 접근 조건 필터 추가
         )
         total_count = await SESSION.scalar(total_count_stmt)
 
@@ -501,11 +576,13 @@ class ArticleStore :
             per_page=per_page,
             total_count=total_count or 0,
             articles=articles,
-        )   
+        )
+  
     
     @transactional
     async def get_articles_by_words_and_blog_id(
         self,
+        user: User,
         searching_words: str | None = None,
         blog_id: int | None = None,
         page: int = 1,
@@ -536,6 +613,10 @@ class ArticleStore :
         if blog_id is not None:
             search_conditions.append(Article.blog_id == blog_id)
 
+        # 접근 조건 추가
+        access_condition = self.get_access_condition(user)
+        search_conditions.append(access_condition)
+
         # 오프셋 계산
         offset_val = (page - 1) * per_page
 
@@ -551,7 +632,7 @@ class ArticleStore :
             .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
-            .where(and_(*search_conditions))  # 검색 조건 적용
+            .where(and_(*search_conditions))  # 검색 조건 및 접근 조건 적용
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
             .order_by(Article.created_at.desc())
             .offset(offset_val)
@@ -566,8 +647,8 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
+                blog_name=row.blog_name,
+                blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -587,14 +668,14 @@ class ArticleStore :
     
     @transactional
     async def get_articles_of_subscriptions(
-        self, blog_id: int, page: int, per_page: int
+        self, user: User, page: int, per_page: int
     ) -> PaginatedArticleListResponse:
         offset_val = (page - 1) * per_page
 
         # 구독한 블로그 ID 가져오기
         subscribed_blogs_stmt = (
             select(Subscription.subscribed_id)
-            .filter(Subscription.subscriber_id == blog_id)
+            .filter(Subscription.subscriber_id == user.blog.id)  # 사용자의 블로그 ID를 기준으로 필터링
         )
         subscribed_ids_result = await SESSION.scalars(subscribed_blogs_stmt)
         subscribed_ids = subscribed_ids_result.all()
@@ -608,6 +689,9 @@ class ArticleStore :
                 articles=[]
             )
 
+        # 접근 조건 추가
+        access_condition = self.get_access_condition(user)
+
         # 구독한 블로그들의 Article 가져오기
         stmt = (
             select(
@@ -620,7 +704,10 @@ class ArticleStore :
             .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)  # likes 조인
             .join(Comment, Comment.article_id == Article.id, isouter=True)  # comments 조인
-            .filter(Article.blog_id.in_(subscribed_ids))  # 구독한 블로그의 Article만 필터
+            .filter(
+                Article.blog_id.in_(subscribed_ids),  # 구독한 블로그의 Article만 필터
+                access_condition  # 접근 조건 필터링 추가
+            )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
             .order_by(Article.created_at.desc())  # 최신순 정렬
             .offset(offset_val)
@@ -634,8 +721,8 @@ class ArticleStore :
         articles = [
             ArticleSearchInListResponse.from_article(
                 article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
+                blog_name=row.blog_name,
+                blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
             )
@@ -643,7 +730,13 @@ class ArticleStore :
         ]
 
         # 전체 개수 계산
-        total_count_stmt = select(func.count(Article.id)).filter(Article.blog_id.in_(subscribed_ids))
+        total_count_stmt = (
+            select(func.count(Article.id))
+            .filter(
+                Article.blog_id.in_(subscribed_ids),  # 구독한 블로그의 Article만 필터
+                access_condition  # 접근 조건 필터링 추가
+            )
+        )
         total_count = await SESSION.scalar(total_count_stmt)
 
         return PaginatedArticleListResponse(
@@ -652,3 +745,4 @@ class ArticleStore :
             total_count=total_count or 0,
             articles=articles,
         )
+
