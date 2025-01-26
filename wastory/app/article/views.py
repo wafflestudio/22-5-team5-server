@@ -29,7 +29,8 @@ async def create_article(
             article_description= article.description, 
             main_image_url = article.main_image_url,
             category_id=user_blog.default_category_id,
-            hometopic_id = article.hometopic_id
+            hometopic_id = article.hometopic_id,
+            secret=article.secret
             )
     else:
         return await article_service.create_article(
@@ -39,7 +40,8 @@ async def create_article(
             article_description = article.description,
             main_image_url = article.main_image_url, 
             category_id=article.category_id,
-            hometopic_id = article.hometopic_id
+            hometopic_id = article.hometopic_id,
+            secret=article.secret
             )
 
 # article 수정
@@ -55,14 +57,15 @@ async def update_article(
     user_blog = await blog_service.get_blog_by_user(user)
     if article.category_id == 0:
         return await article_service.update_article(
-            user=user, 
+            user=user,
             article_id = article_id,
             article_title=article.title, 
             article_content=article.content, 
             article_description = article.description, 
             main_image_url = article.main_image_url,
             category_id=user_blog.default_category_id,
-            hometopic_id = article.hometopic_id
+            hometopic_id = article.hometopic_id,
+            secret=article.secret
         )
     else : 
         return await article_service.update_article(
@@ -81,9 +84,10 @@ async def update_article(
 @article_router.get("/get/{article_id}", status_code=200)
 async def get_article_information_by_id(
     article_service: Annotated[ArticleService, Depends()],
+    user: Annotated[User, Depends(login_with_header)],
     article_id : int,
 ) -> ArticleInformationResponse :
-    return await article_service.get_article_information_by_id(article_id)
+    return await article_service.get_article_information_by_id(user, article_id)
 
 # blog 내 인기글 가져오기
 @article_router.get("/today_wastory", status_code=200)

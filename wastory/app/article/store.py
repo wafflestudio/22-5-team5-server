@@ -2,6 +2,7 @@ from functools import cache
 from typing import Annotated, Sequence
 from datetime import datetime, timedelta
 from sqlalchemy import select, or_, and_, func, update
+from sqlalchemy.orm import joinedload
 
 from wastory.app.article.models import Article
 from wastory.app.blog.models import Blog
@@ -22,14 +23,16 @@ class ArticleStore :
         main_image_url : str | None,
         blog_id : int, 
         category_id : int, 
-        hometopic_id : int 
+        hometopic_id : int,
+        secret : int = 0
     ) -> Article :
         article = Article(
             title = atricle_title, 
             content = article_content, 
             description = article_description, 
             main_image_url = main_image_url,
-            blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id
+            blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id,
+            secret=secret
         )
         SESSION.add(article)
         # 왜 필요하지?       
@@ -46,8 +49,8 @@ class ArticleStore :
         article_description: str | None,
         main_image_url : str | None,
         category_id : int,
-        hometopic_id : int
-
+        hometopic_id : int,
+        secret : int | None
     ) -> Article:
         if article_title is not None:
             article.title = article_title
@@ -55,6 +58,8 @@ class ArticleStore :
             article.content = article_content
         if article_content is not None:
             article.description = article_description
+        if secret is not None:
+            article.secret=secret
         article.main_image_url = main_image_url
         article.category_id = category_id
         article.hometopic_id = hometopic_id
@@ -80,9 +85,10 @@ class ArticleStore :
         await SESSION.flush()
 
     @transactional
-    async def get_article_by_id(self, article_id : int) -> Article | None:
-        article = await SESSION.get(Article, article_id)
-        return article
+    async def get_article_by_id(self, article_id: int) -> Article | None:
+        stmt = select(Article).options(joinedload(Article.blog)).where(Article.id == article_id)
+        result = await SESSION.execute(stmt)
+        return result.scalar_one_or_none()
 
     @transactional
     async def get_article_information_by_id(self, article_id : int) -> ArticleInformationResponse:

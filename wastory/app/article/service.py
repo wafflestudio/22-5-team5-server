@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from wastory.app.article.dto.responses import ArticleDetailResponse, PaginatedArticleListResponse, ArticleInformationResponse
-from wastory.app.article.errors import ArticleNotFoundError
+from wastory.app.article.errors import ArticleNotFoundError, NoAuthoriztionError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
 from wastory.app.blog.store import BlogStore
@@ -39,6 +39,7 @@ class ArticleService:
         main_image_url : str | None,
         category_id :int, 
         hometopic_id : int, 
+        secret : int = 0
     ) -> ArticleDetailResponse :
                 
         # 사용자의 Blog 확인
@@ -55,8 +56,9 @@ class ArticleService:
             main_image_url = main_image_url,
             blog_id=user_blog.id, 
             category_id=category_id, 
-            hometopic_id = hometopic_id
-            )
+            hometopic_id = hometopic_id,
+            secret=secret
+        )
 
         # 새 글 알림
         await self.notification_service.add_notification(
@@ -78,7 +80,8 @@ class ArticleService:
         article_description : str,
         main_image_url : str | None,
         category_id : int,
-        hometopic_id : int
+        hometopic_id : int,
+        secret : int | None
     ) -> ArticleDetailResponse:
         
         # 사용자의 Blog 확인
@@ -103,18 +106,26 @@ class ArticleService:
             article_description,
             main_image_url,
             category_id,
-            hometopic_id
+            hometopic_id,
+            secret
             )
 
         return ArticleDetailResponse.from_article(updated_article)
 
-    
-    
-    async def get_article_information_by_id(self, article_id : int) -> ArticleInformationResponse:
+    async def get_article_information_by_id(self, user: User, article_id: int) -> ArticleInformationResponse:
+        article = await self.article_store.get_article_by_id(article_id)
+        
+        # Article 존재 확인
+        if article is None:
+            raise ArticleNotFoundError()
+
+        # 비밀글 접근 권한 확인
+        if article.secret == 1 and article.blog.user_id != user.id:
+            raise NoAuthoriztionError()
+
         # 조회수 증가
-        article = self.article_store.get_article_information_by_id(article_id)
         await self.article_store.increment_article_views(article_id)
-        return await article
+        return await self.article_store.get_article_information_by_id(article_id)
     
     async def get_today_most_viewed(
         self,
