@@ -283,3 +283,12 @@ async def delete_article(
     article_service: Annotated[ArticleService, Depends()],
 ) -> None:
     await article_service.delete_article(user, article_id)
+
+# article 삭제
+@article_router.delete("/delete/draft/{article_id}", status_code=204)
+async def delete_draft(
+    user: Annotated[User, Depends(login_with_header)],
+    article_id: int,
+    article_service: Annotated[ArticleService, Depends()],
+) -> None:
+    await article_service.delete_draft(user, article_id)

@@ -286,4 +286,29 @@ class ArticleService:
         # Article 삭제
         await self.article_store.delete_article(article)  # await 추가
 
+    async def delete_draft(
+        self,
+        user: User,
+        article_id: int,
+    ) -> None:
+
+        # 사용자의 Blog 확인
+        user_blog = await self.blog_store.get_blog_of_user(user.id)  # await 추가
+        if user_blog is None:
+            raise BlogNotFoundError()
+
+
+        # Article 존재 확인
+        article = await self.article_store.get_draft_by_id(article_id)  # await 추가
+        if article is None:
+            raise ArticleNotFoundError()
+
+        # 권한 검증
+        if article.blog_id != user_blog.id:
+            raise PermissionDeniedError()
+    
+
+        # Article 삭제
+        await self.article_store.delete_article(article)  # await 추가
+
     
