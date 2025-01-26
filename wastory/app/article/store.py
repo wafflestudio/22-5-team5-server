@@ -12,11 +12,12 @@ from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse, ArticleInformationResponse,DraftListResponse,DraftResponse
 from wastory.app.article.errors import ArticleNotPublishedError,ArticleNotFoundError
+from wastory.app.user.errors import PermissionDeniedError
 
 class ArticleStore :
     @transactional
     async def create_article(
-        self, atricle_title : str, article_content: str, article_description: str, blog_id : int, category_id : int, hometopic_id : int 
+        self, article_title : str, article_content: str, article_description: str, blog_id : int, category_id : int, hometopic_id : int 
     ) -> Article :
         article = Article(
             title = atricle_title, 
@@ -32,6 +33,31 @@ class ArticleStore :
         await SESSION.flush()
         await SESSION.refresh(article)
         return article
+    
+    @transactional
+    async def publish_draft(
+        self, article_title : str, article_content: str, article_description: str, blog_id : int, category_id : int, hometopic_id : int ,article_id:int
+    ) -> Article :
+        draft=await self. get_draft_by_id(article_id)
+        if blog_id != draft.blog_id:
+            raise PermissionDeniedError
+
+        if article_title is not None:
+            draft.title=article_title
+        if article_content is not None:
+            draft.content=article_content
+        if article_description is not None:
+            draft.description=article_description
+        draft.blog_id=blog_id
+        draft.category_id=category_id
+        draft.hometopic_id=hometopic_id
+        draft.draft=False
+        
+        SESSION.add(draft)
+        # 왜 필요하지?       
+        await SESSION.flush()
+        await SESSION.refresh(draft)
+        return draft
     
     @transactional
     async def create_draft(
@@ -70,7 +96,23 @@ class ArticleStore :
         await SESSION.merge(article)
         await SESSION.flush()
         return article
-    
+
+    @transactional
+    async def update_draft(
+        self, 
+        article: Article, 
+        article_title: str | None = None,
+        article_content: str | None = None,
+        article_description: str | None = None,
+
+    ) -> Article:
+        if article_title is not None:
+            article.title = article_title
+        if article_content is not None:
+            article.content = article_content
+        await SESSION.merge(article)
+        await SESSION.flush()
+        return article
 
     @transactional
     async def delete_article(self, article: Article) -> None:
@@ -120,8 +162,10 @@ class ArticleStore :
 
         )
         result = await SESSION.execute(stmt)
-
         row = result.one_or_none()
+
+        if row==None:
+            raise ArticleNotFoundError
         article = ArticleInformationResponse.from_article(
                 article=row.Article,
                 blog_name = row.blog_name,

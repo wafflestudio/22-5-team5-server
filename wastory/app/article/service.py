@@ -2,7 +2,7 @@ from typing import Annotated
 
 from fastapi import Depends
 from wastory.app.article.dto.responses import ArticleDetailResponse, PaginatedArticleListResponse, ArticleInformationResponse,DraftListResponse,DraftResponse
-from wastory.app.article.errors import ArticleNotFoundError,ArticleNotDraftError
+from wastory.app.article.errors import ArticleNotFoundError,ArticleNotDraftError,ArticleNotPublishedError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
 from wastory.app.blog.store import BlogStore
@@ -42,7 +42,7 @@ class ArticleService:
         new_article = await self.article_store.create_article(
             blog_id=user_blog.id, 
             category_id=category_id, 
-            atricle_title=article_title, 
+            article_title=article_title, 
             article_content=article_content, 
             article_description = article_description,
             hometopic_id = hometopic_id
@@ -58,7 +58,38 @@ class ArticleService:
         )
 
         return ArticleDetailResponse.from_article(new_article)
+
+    async def publish_draft(
+        self, user: User, category_id :int, hometopic_id : int, article_title: str, article_content: str, article_description: str,article_id:int
+    ) -> ArticleDetailResponse :
+                
+        # 사용자의 Blog 확인
+        user_blog = await self.blog_store.get_blog_of_user(user.id)
+        if user_blog is None:
+            raise BlogNotFoundError()
         
+        
+        new_article = await self.article_store.publish_draft(
+            blog_id=user_blog.id, 
+            category_id=category_id, 
+            article_title=article_title, 
+            article_content=article_content, 
+            article_description = article_description,
+            hometopic_id = hometopic_id,
+            article_id=article_id
+            )
+
+        # 새 글 알림
+        await self.notification_service.add_notification(
+            blog_address_names = await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
+            type = 1,
+            username = user.username,
+            notification_blogname= user_blog.blog_name,
+            description = article_title,
+        )
+
+        return ArticleDetailResponse.from_article(new_article)
+
     async def create_draft(
         self, user: User, category_id :int, hometopic_id : int, article_title: str, article_content: str, article_description: str,
     )->ArticleDetailResponse:
@@ -105,7 +136,33 @@ class ArticleService:
 
         return ArticleDetailResponse.from_article(updated_article)
 
+    async def update_draft(
+        self, 
+        user: User,
+        article_id: int,
+        article_title: str,
+        article_content: str,
+    ) -> DraftResponse:
+        
+        # 사용자의 Blog 확인
+        user_blog = await self.blog_store.get_blog_of_user(user.id)
+        if user_blog is None:
+            raise BlogNotFoundError()
+
+
+        # Article 존재 확인
+        draft = await self.article_store.get_draft_by_id(article_id)
+        if draft is None: 
+            raise ArticleNotFoundError()
+        
+        # 권한 검증
+        if draft.blog_id != user_blog.id:
+            raise PermissionDeniedError()
     
+        
+        updated_draft = await self.article_store.update_draft(draft, article_title, article_content)
+
+        return DraftResponse.from_draft(updated_draft)
     
     async def get_article_information_by_id(self, article_id : int) -> ArticleInformationResponse:
         # 조회수 증가

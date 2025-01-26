@@ -65,3 +65,14 @@ class ArticleUpdateRequest(BaseModel):
         AfterValidator(content_min_valid_character)
     ] = None
     description :str
+
+class DraftUpdateRequest(BaseModel):
+    title: Annotated[
+        str | None,
+        AfterValidator(title_length_1_and_80),
+        AfterValidator(title_not_empty)
+    ] = None
+    content: Annotated[
+        str | None,
+        AfterValidator(content_min_valid_character)
+    ] = None

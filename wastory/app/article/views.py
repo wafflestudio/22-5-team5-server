@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest,ArticleDraftRequest
+from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest,ArticleDraftRequest,DraftUpdateRequest
 from wastory.app.article.dto.responses import PaginatedArticleListResponse, ArticleDetailResponse, ArticleInformationResponse,DraftListResponse,DraftResponse
 from wastory.app.article.service import ArticleService
 from wastory.app.blog.service import BlogService
@@ -40,6 +40,7 @@ async def create_article(
             hometopic_id = article.hometopic_id
             )
 
+#draft 생성
 @article_router.post("/draft", status_code=201)
 async def create_draft(
     user: Annotated[User, Depends(login_with_header)],
@@ -70,6 +71,50 @@ async def update_article(
     return await article_service.update_article(
         user, article_id, article.title, article.content
     )
+
+#draft 수정해서 다시 저장
+@article_router.patch("/draft/update/{article_id}", status_code=200)
+async def update_draft(
+    user: Annotated[User, Depends(login_with_header)],
+    article_id: int,
+    article: DraftUpdateRequest,
+    article_service: Annotated[ArticleService, Depends()],
+) -> DraftResponse:
+    return await article_service.update_draft(
+        user, article_id, article.title, article.content
+    )
+
+#draft 수정해서 article로 발행
+@article_router.patch("/draft/publish/{article_id}", status_code=200)
+async def publish_draft(
+    user: Annotated[User, Depends(login_with_header)],
+    article_id: int,
+    article: ArticleCreateRequest,
+    article_service: Annotated[ArticleService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
+) -> ArticleDetailResponse:
+    user_blog = await blog_service.get_blog_by_user(user)
+
+    if article.category_id == 0:
+        return await article_service.publish_draft(
+            user=user, 
+            article_title=article.title, 
+            article_content=article.content, 
+            article_description= article.description, 
+            category_id=user_blog.default_category_id,
+            hometopic_id = article.hometopic_id,
+            article_id=article_id
+            )
+    else:
+        return await article_service.publish_draft(
+            user=user, 
+            article_title=article.title, 
+            article_content=article.content, 
+            article_description = article.description, 
+            category_id=article.category_id,
+            hometopic_id = article.hometopic_id,
+            article_id=article_id
+            )
 
 # article 정보 가져오기
 @article_router.get("/get/{article_id}", status_code=200)
