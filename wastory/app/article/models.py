@@ -1,5 +1,5 @@
 from typing import TYPE_CHECKING
-from sqlalchemy import String, Text, DateTime, func, ForeignKey, Integer
+from sqlalchemy import String, Text, DateTime, func, ForeignKey, Integer,Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wastory.database.common import Base, intpk
@@ -19,7 +19,7 @@ class Article(Base):
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
     description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description
-
+    
     views: Mapped[int] = mapped_column(Integer, default=0, nullable=False) # 조회수
 
     main_image_url: Mapped[str | None] = mapped_column(String(255), default=None, nullable=True)
@@ -48,3 +48,4 @@ class Article(Base):
     )
     likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
     hometopic : Mapped["Hometopic"] = relationship("Hometopic", back_populates = "articles")
+    draft: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)

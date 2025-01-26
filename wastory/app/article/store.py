@@ -18,7 +18,13 @@ class ArticleStore :
         self, atricle_title : str, article_content: str, article_description: str, blog_id : int, category_id : int, hometopic_id : int 
     ) -> Article :
         article = Article(
-            title = atricle_title, content = article_content, description = article_description, blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id
+            title = atricle_title, 
+            content = article_content, 
+            description = article_description, 
+            blog_id = blog_id, 
+            category_id = category_id, 
+            hometopic_id = hometopic_id,
+            draft=False
         )
         SESSION.add(article)
         # 왜 필요하지?       
@@ -26,6 +32,22 @@ class ArticleStore :
         await SESSION.refresh(article)
         return article
     
+    @transactional
+    async def create_draft(
+        self, atricle_title : str, article_content: str, article_description: str, blog_id : int, category_id : int, hometopic_id : int 
+    ) -> Article :
+        article = Article(
+            title = atricle_title, 
+            content = article_content, 
+            blog_id = blog_id,
+            draft=True
+        )
+        SESSION.add(article)
+        # 왜 필요하지?       
+        await SESSION.flush()
+        await SESSION.refresh(article)
+        return article
+
     @transactional
     async def update_article(
         self, 

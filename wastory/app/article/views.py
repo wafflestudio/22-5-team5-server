@@ -40,6 +40,19 @@ async def create_article(
             hometopic_id = article.hometopic_id
             )
 
+@article_router.post("/draft", status_code=201)
+async def create_draft(
+    user: Annotated[User, Depends(login_with_header)],
+    article: ArticleCreateRequest,
+    article_service: Annotated[ArticleService, Depends()],
+) -> ArticleDetailResponse:
+        return await article_service.create_draft(
+            user=user, 
+            article_title=article.title, 
+            article_content=article.content, 
+        )
+   
+
 # article 수정
 @article_router.patch("/update/{article_id}", status_code=200)
 async def update_article(

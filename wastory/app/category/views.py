@@ -23,7 +23,7 @@ async def create(
         categorylevel=category_create_request.categoryLevel,
         parentId=category_create_request.parent_id
     )
-@category_router.get("/{category_id}", status_code=HTTP_201_CREATED)
+@category_router.get("/{category_id}", status_code=HTTP_200_OK)
 async def create(
     category_id:int,
     category_service: Annotated[CategoryService, Depends()],

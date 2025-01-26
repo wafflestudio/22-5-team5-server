@@ -58,7 +58,21 @@ class ArticleService:
         )
 
         return ArticleDetailResponse.from_article(new_article)
-    
+        
+    async def create_draft(
+        self, user: User, article_title: str, article_content: str,
+    )->ArticleDetailResponse:
+        user_blog = await self.blog_store.get_blog_of_user(user.id)
+        if user_blog is None:
+            raise BlogNotFoundError()
+            
+        new_article = await self.article_store.create_draft(
+            blog_id=user_blog.id, 
+            atricle_title=article_title, 
+            article_content=article_content, 
+            )
+        return ArticleDetailResponse.from_article(new_article)
+
     async def update_article(
         self, 
         user: User,
