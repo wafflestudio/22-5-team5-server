@@ -11,7 +11,7 @@ from wastory.app.subscription.models import Subscription
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse, ArticleInformationResponse,DraftListResponse,DraftResponse
-from wastory.app.article.errors import ArticleNotPublishedError
+from wastory.app.article.errors import ArticleNotPublishedError,ArticleNotFoundError
 
 class ArticleStore :
     @transactional
@@ -92,6 +92,13 @@ class ArticleStore :
         article = await SESSION.get(Article, article_id)
         if article.draft:
             raise ArticleNotPublishedError
+        return article
+
+    @transactional
+    async def get_draft_by_id(self, article_id : int) -> Article | None:
+        article = await SESSION.get(Article, article_id)
+        if article==None:
+            raise ArticleNotFoundError
         return article
 
     @transactional

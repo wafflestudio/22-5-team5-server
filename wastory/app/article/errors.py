@@ -8,3 +8,7 @@ class ArticleNotFoundError(WastoryHttpException):
 class ArticleNotPublishedError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=404, detail="Article is not published")
+
+class ArticleNotDraftError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=404, detail="Article is not draft, already Published")

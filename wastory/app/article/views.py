@@ -79,6 +79,14 @@ async def get_article_information_by_id(
 ) -> ArticleInformationResponse :
     return await article_service.get_article_information_by_id(article_id)
 
+@article_router.get("/get/draft/{article_id}", status_code=200)
+async def get_article_information_by_id(
+    user: Annotated[User, Depends(login_with_header)],
+    article_service: Annotated[ArticleService, Depends()],
+    article_id : int,
+) -> DraftResponse :
+    return await article_service.get_draft_information_by_id(user,article_id)
+
 # blog 내 인기글 가져오기
 @article_router.get("/today_wastory", status_code=200)
 async def get_today_most_viewed(
