@@ -15,7 +15,7 @@ draft_router = APIRouter()
 @draft_router.post("/create", status_code=201)
 async def create_draft(
     user: Annotated[User, Depends(login_with_header)],
-    draft: ArticleCreateRequest,
+    draft: DraftCreateRequest,
     draft_service: Annotated[DraftService, Depends()],
     blog_service: Annotated[BlogService, Depends()],
 ) -> DraftResponse:
@@ -23,8 +23,8 @@ async def create_draft(
 
     return await draft_service.create_draft(
         user=user, 
-        draft_title=article.title, 
-        draft_content=article.content
+        draft_title=draft.title, 
+        draft_content=draft.content
         )
     
 
@@ -33,11 +33,12 @@ async def create_draft(
 async def update_draft(
     user: Annotated[User, Depends(login_with_header)],
     draft_id: int,
+    draft: DraftUpdateRequest,
     blog_service: Annotated[BlogService, Depends()],
     draft_service: Annotated[DraftService, Depends()],
 ) -> DraftResponse:
     user_blog = await blog_service.get_blog_by_user(user)
-    return await draft_service.update_article(
+    return await draft_service.update_draft(
         user=user,
         draft_id = draft_id,
         draft_title=draft.title, 
@@ -49,7 +50,7 @@ async def update_draft(
 async def get_draft_by_id(
     draft_service: Annotated[DraftService, Depends()],
     user: Annotated[User, Depends(login_with_header)],
-    draft_id : int,
+    draft_id : int
 ) -> DraftResponse :
     return await draft_service.get_draft_by_id(user, draft_id)
 
@@ -58,14 +59,13 @@ async def get_draft_by_id(
 # blog 내 draft 목록 가져오기
 @draft_router.get("/blogs/{blog_id}", status_code=200)
 async def get_drafts_in_blog(
-    article_service: Annotated[ArticleService, Depends()],
+    draft_service: Annotated[DraftService, Depends()],
     user : Annotated[User, Depends(login_with_header)],
     blog_id : int,
     page: int
-) -> PaginatedArticleListResponse:
+) -> DraftListResponse:
     per_page = 10
-    return await article_service.get_articles_in_blog(
-        blog_id = blog_id,
+    return await draft_service.get_drafts_in_blog(
         page = page,
         per_page = per_page,
         user=user
@@ -76,6 +76,6 @@ async def get_drafts_in_blog(
 async def delete_article(
     user: Annotated[User, Depends(login_with_header)],
     draft_id: int,
-    article_service: Annotated[ArticleService, Depends()],
+    draft_service: Annotated[DraftService, Depends()],
 ) -> None:
-    await article_service.delete_article(user, article_id)
+    await draft_service.delete_draft(user, draft_id)

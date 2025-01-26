@@ -2,22 +2,27 @@ from fastapi import Depends
 from typing import Self, Annotated
 from pydantic import BaseModel
 from datetime import datetime
+from wastory.app.draft.models import Draft
 
 class DraftResponse(BaseModel):
     id:int
     title:str
+    content:str
     created_at:datetime
 
     @staticmethod
-    def from_draft(article: Article | None) -> "DraftResponse":
+    def from_draft(draft:Draft | None) -> "DraftResponse":
         
         return DraftResponse(
-            id=article.id, 
-            title=article.title, 
-            created_at=article.created_at
+            id=draft.id, 
+            title=draft.title, 
+            content=draft.content,
+            created_at=draft.created_at
         )
 
 
 class DraftListResponse(BaseModel):
+    page:int
+    per_page:int
     total_count:int
     drafts:list[DraftResponse]

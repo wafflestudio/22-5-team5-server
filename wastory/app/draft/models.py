@@ -23,4 +23,4 @@ class Draft(Base):
     updated_at: Mapped[DateTime] = mapped_column(DateTime(timezone=True), default=func.now(), onupdate=func.now())
 
     blog_id : Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete = "CASCADE"))
-    blog : Mapped["Blog"] = relationship("Blog", back_populates = "articles")
+    blog : Mapped["Blog"] = relationship("Blog", back_populates = "drafts")
