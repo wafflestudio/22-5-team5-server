@@ -29,7 +29,8 @@ async def create_article(
             article_description= article.description, 
             main_image_url = article.main_image_url,
             category_id=user_blog.default_category_id,
-            hometopic_id = article.hometopic_id
+            hometopic_id = article.hometopic_id,
+            secret=article.secret
             )
     else:
         return await article_service.create_article(
@@ -39,7 +40,8 @@ async def create_article(
             article_description = article.description,
             main_image_url = article.main_image_url, 
             category_id=article.category_id,
-            hometopic_id = article.hometopic_id
+            hometopic_id = article.hometopic_id,
+            secret=article.secret
             )
 
 # article 수정
@@ -55,14 +57,15 @@ async def update_article(
     user_blog = await blog_service.get_blog_by_user(user)
     if article.category_id == 0:
         return await article_service.update_article(
-            user=user, 
+            user=user,
             article_id = article_id,
             article_title=article.title, 
             article_content=article.content, 
             article_description = article.description, 
             main_image_url = article.main_image_url,
             category_id=user_blog.default_category_id,
-            hometopic_id = article.hometopic_id
+            hometopic_id = article.hometopic_id,
+            secret=article.secret
         )
     else : 
         return await article_service.update_article(
@@ -81,23 +84,27 @@ async def update_article(
 @article_router.get("/get/{article_id}", status_code=200)
 async def get_article_information_by_id(
     article_service: Annotated[ArticleService, Depends()],
+    user: Annotated[User, Depends(login_with_header)],
     article_id : int,
 ) -> ArticleInformationResponse :
-    return await article_service.get_article_information_by_id(article_id)
+    return await article_service.get_article_information_by_id(user, article_id)
 
 # blog 내 인기글 가져오기
 @article_router.get("/today_wastory", status_code=200)
 async def get_today_most_viewed(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     page : int
 ) ->PaginatedArticleListResponse:
     return await article_service.get_today_most_viewed(
-        page = page
+        page = page,
+        user=user
     )
 # blog 내 인기글 가져오기
 @article_router.get("/weekly_wastory", status_code=200)
 async def get_weekly_most_viewed(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
 ) ->PaginatedArticleListResponse:
     return await article_service.get_weekly_most_viewed()
 
@@ -105,24 +112,28 @@ async def get_weekly_most_viewed(
 @article_router.get("/blogs/{blog_id}/sort_by/{sort_by}", status_code=200)
 async def get_top_articles_in_blog(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     blog_id : int,
     sort_by: str
 ) ->PaginatedArticleListResponse:
     return await article_service.get_top_articles_in_blog(
         blog_id = blog_id,
-        sort_by = sort_by
+        sort_by = sort_by,
+        user=user
     )
 
 # hometopic 인기글 가져오기기
 @article_router.get("/hometopic/{hometopic_id}", status_code=200)
 async def get_most_viewed_in_hometopic(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     high_hometopic_id : int,
     page: int
 ) ->PaginatedArticleListResponse:
     return await article_service.get_most_viewed_in_hometopic(
         high_hometopic_id = high_hometopic_id,
-        page = page
+        page = page,
+        user=user
     )
 
 
@@ -130,6 +141,7 @@ async def get_most_viewed_in_hometopic(
 @article_router.get("/blogs/{blog_id}", status_code=200)
 async def get_articles_in_blog(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     blog_id : int,
     page: int
 ) -> PaginatedArticleListResponse:
@@ -137,13 +149,15 @@ async def get_articles_in_blog(
     return await article_service.get_articles_in_blog(
         blog_id = blog_id,
         page = page,
-        per_page = per_page
+        per_page = per_page,
+        user=user
     )
 
 # blog 내 특정 category 내 article 목록 가져오기
 @article_router.get("/blogs/{blog_id}/categories/{category_id}", status_code=200)
 async def get_articles_in_blog_in_category(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     category_id : int,
     blog_id: int,
     page: int
@@ -154,7 +168,8 @@ async def get_articles_in_blog_in_category(
         category_id = category_id, 
         blog_id = blog_id,
         page = page,
-        per_page = per_page
+        per_page = per_page,
+        user=user
     )
 # blog 내 subscription 목록에서 article 가져오기
 @article_router.get("/blogs/{blog_id}/subscription", status_code=200)
@@ -174,12 +189,14 @@ async def get_articles_of_subscription(
 @article_router.get("/blogs/{blog_id}/sort_by/{sort_by}", status_code=200)
 async def get_top_articles_in_blog(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     blog_id : int,
     sort_by: str
 ) ->PaginatedArticleListResponse:
     return await article_service.get_top_articles_in_blog(
         blog_id = blog_id,
-        sort_by = sort_by
+        sort_by = sort_by,
+        user=user
     )
 
 
@@ -187,6 +204,7 @@ async def get_top_articles_in_blog(
 @article_router.get("/search/{blog_id}/{searching_words}", status_code=200)
 async def get_articles_by_words_in_blog(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     page: int,
     searching_words: str | None = None,
     blog_id : int | None = None
@@ -196,13 +214,15 @@ async def get_articles_by_words_in_blog(
         searching_words = searching_words, 
         blog_id = blog_id,
         page = page,
-        per_page = per_page
+        per_page = per_page,
+        user=user
     )
 
 # 전체 검색 기능 지원
 @article_router.get("/search/{searching_words}", status_code=200)
 async def get_articles_by_word(
     article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
     page: int,
     searching_words: str,
 ) -> PaginatedArticleListResponse:
@@ -211,7 +231,8 @@ async def get_articles_by_word(
         searching_words = searching_words, 
         blog_id = None,
         page = page,
-        per_page = per_page
+        per_page = per_page,
+        user=user
     )
 
 # article 삭제
