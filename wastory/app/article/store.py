@@ -10,7 +10,7 @@ from wastory.app.comment.models import Comment
 from wastory.app.subscription.models import Subscription
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
-from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse, ArticleInformationResponse
+from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse, ArticleInformationResponse,DraftListResponse,DraftResponse
 from wastory.app.article.errors import ArticleNotPublishedError
 
 class ArticleStore :
@@ -695,12 +695,8 @@ class ArticleStore :
 
         # Pydantic 모델로 변환하여 필요한 데이터만 반환
         articles = [
-            ArticleSearchInListResponse.from_article(
-                article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
-                article_likes=row.likes,
-                article_comments=row.comments,
+            DraftResponse.from_draft(
+                article=row.Article
             )
             for row in rows
         ]
@@ -709,9 +705,7 @@ class ArticleStore :
         total_count_stmt = select(func.count(Article.id)).filter(Article.blog_id == blog_id,Article.draft==True)
         total_count = await SESSION.scalar(total_count_stmt)
 
-        return PaginatedArticleListResponse(
-            page=page,
-            per_page=per_page,
+        return DraftListResponse(
             total_count=total_count or 0,
-            articles=articles,
+            drafts=articles,
         )

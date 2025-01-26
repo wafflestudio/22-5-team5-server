@@ -53,8 +53,6 @@ class ArticleDraftRequest(BaseModel):
         str | None,
         AfterValidator(content_min_valid_character)
     ]
-    description : str
-    category_id : int
 
 class ArticleUpdateRequest(BaseModel):
     title: Annotated[

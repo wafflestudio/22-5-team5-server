@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from fastapi import Depends
-from wastory.app.article.dto.responses import ArticleDetailResponse, PaginatedArticleListResponse, ArticleInformationResponse
+from wastory.app.article.dto.responses import ArticleDetailResponse, PaginatedArticleListResponse, ArticleInformationResponse,DraftListResponse,DraftResponse
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
@@ -74,7 +74,9 @@ class ArticleService:
             article_description = article_description,
             hometopic_id = hometopic_id
             )
-        return ArticleDetailResponse.from_article(new_article)
+        if new_article is None:
+            raise ValueError("Failed to create draft")
+        return DraftResponse.from_draft(new_article)
 
     async def update_article(
         self, 
@@ -145,11 +147,11 @@ class ArticleService:
 
     async def get_drafts_in_blog(
         self,
-        blog_id: int,
+        user: User,
         page: int,
         per_page: int
-    ) -> PaginatedArticleListResponse:
-        return await self.article_store.get_drafts_in_blog(blog_id=blog_id, page=page, per_page=per_page)
+    ) -> DraftListResponse:
+        return await self.article_store.get_drafts_in_blog(blog_id=user.blogs.id, page=page, per_page=per_page)
     
     async def get_articles_in_blog_in_category(
         self,
