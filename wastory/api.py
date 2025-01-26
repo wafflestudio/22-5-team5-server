@@ -11,6 +11,7 @@ from wastory.app.like.views import like_router
 from wastory.app.message.views import message_router
 from wastory.app.image.views import image_router
 from wastory.app.hometopic.views import hometopic_router
+from wastory.app.draft.views import draft_router
 
 api_router = APIRouter()
 
@@ -25,3 +26,5 @@ api_router.include_router(like_router, prefix="/likes", tags=["likes"])
 api_router.include_router(message_router, prefix="/messages", tags=["messages"])
 api_router.include_router(image_router, prefix="/images",tags=["images"])
 api_router.include_router(hometopic_router, prefix="/hometopics",tags=["hometopics"])
+api_router.include_router(draft_router, prefix="/drafts",tags=["drafts"])
+

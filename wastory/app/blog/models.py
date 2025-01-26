@@ -42,6 +42,10 @@ class Blog(Base):
         "Article",  back_populates="blog", cascade="all, delete-orphan"
         )
 
+    drafts: Mapped[list["Draft"]]=relationship(
+        "Draft", back_populates="blog", cascade="all, delete-orphan"
+    )
+
     subscriptions: Mapped[list["Subscription"]] = relationship(
         "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
     )  # 이 블로그가 구독한 다른 블로그들
