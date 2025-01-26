@@ -1,6 +1,6 @@
 from typing import Annotated
 from fastapi import APIRouter, Depends
-from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest
+from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest,ArticleDraftRequest
 from wastory.app.article.dto.responses import PaginatedArticleListResponse, ArticleDetailResponse, ArticleInformationResponse
 from wastory.app.article.service import ArticleService
 from wastory.app.blog.service import BlogService
@@ -43,14 +43,30 @@ async def create_article(
 @article_router.post("/draft", status_code=201)
 async def create_draft(
     user: Annotated[User, Depends(login_with_header)],
-    article: ArticleCreateRequest,
+    article: ArticleDraftRequest,
     article_service: Annotated[ArticleService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
 ) -> ArticleDetailResponse:
+    user_blog = await blog_service.get_blog_by_user(user)
+
+    if article.category_id == 0:
         return await article_service.create_draft(
             user=user, 
             article_title=article.title, 
             article_content=article.content, 
-        )
+            article_description= article.description, 
+            category_id=user_blog.default_category_id,
+            hometopic_id = 1
+            )
+    else:
+        return await article_service.create_draft(
+            user=user, 
+            article_title=article.title, 
+            article_content=article.content, 
+            article_description = article.description, 
+            category_id=article.category_id,
+            hometopic_id = 1
+            )
    
 
 # article 수정
@@ -123,6 +139,20 @@ async def get_articles_in_blog(
 ) -> PaginatedArticleListResponse:
     per_page = 10
     return await article_service.get_articles_in_blog(
+        blog_id = blog_id,
+        page = page,
+        per_page = per_page
+    )
+
+# blog 내 draft 목록 가져오기
+@article_router.get("/blogs/draft/{blog_id}", status_code=200)
+async def get_drafts_in_blog(
+    article_service: Annotated[ArticleService, Depends()],
+    blog_id : int,
+    page: int
+) -> PaginatedArticleListResponse:
+    per_page = 10
+    return await article_service.get_drafts_in_blog(
         blog_id = blog_id,
         page = page,
         per_page = per_page

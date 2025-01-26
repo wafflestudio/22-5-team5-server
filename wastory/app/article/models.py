@@ -18,7 +18,7 @@ class Article(Base):
     id : Mapped[intpk]
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
-    description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description
+    description: Mapped[str] = mapped_column(String(100), nullable = False, default="") # 미리보기용 description
     
     views: Mapped[int] = mapped_column(Integer, default=0, nullable=False) # 조회수
 
@@ -31,7 +31,7 @@ class Article(Base):
     ## posts: Mapped[list["Article"]] = relationship("Article", back_populates="blog", cascade="all, delete-orphan")
     ## 식으로 정의해주면, blog 또는 category 삭제시 하위 항목도 같이 삭제됨.
     blog_id : Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete = "CASCADE"))
-    category_id : Mapped[int] = mapped_column(ForeignKey("category.id", ondelete = "CASCADE"))
+    category_id : Mapped[int|None] = mapped_column(ForeignKey("category.id", ondelete = "CASCADE"),nullable=True)
     hometopic_id : Mapped[int] = mapped_column(ForeignKey("hometopic.id", ondelete = "CASCADE"),nullable =True)  # 외래 키 정의
 
     """

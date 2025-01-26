@@ -60,7 +60,7 @@ class ArticleService:
         return ArticleDetailResponse.from_article(new_article)
         
     async def create_draft(
-        self, user: User, article_title: str, article_content: str,
+        self, user: User, category_id :int, hometopic_id : int, article_title: str, article_content: str, article_description: str,
     )->ArticleDetailResponse:
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
@@ -68,8 +68,11 @@ class ArticleService:
             
         new_article = await self.article_store.create_draft(
             blog_id=user_blog.id, 
+            category_id=category_id, 
             atricle_title=article_title, 
             article_content=article_content, 
+            article_description = article_description,
+            hometopic_id = hometopic_id
             )
         return ArticleDetailResponse.from_article(new_article)
 
@@ -139,6 +142,14 @@ class ArticleService:
         per_page: int
     ) -> PaginatedArticleListResponse:
         return await self.article_store.get_articles_in_blog(blog_id=blog_id, page=page, per_page=per_page)
+
+    async def get_drafts_in_blog(
+        self,
+        blog_id: int,
+        page: int,
+        per_page: int
+    ) -> PaginatedArticleListResponse:
+        return await self.article_store.get_drafts_in_blog(blog_id=blog_id, page=page, per_page=per_page)
     
     async def get_articles_in_blog_in_category(
         self,

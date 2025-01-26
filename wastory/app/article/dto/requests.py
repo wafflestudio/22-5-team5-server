@@ -43,6 +43,18 @@ class ArticleCreateRequest(BaseModel):
     category_id : int
     hometopic_id : int
 
+class ArticleDraftRequest(BaseModel):
+    title: Annotated[
+        str | None,
+        AfterValidator(title_length_1_and_80),
+        AfterValidator(title_not_empty)
+    ]
+    content: Annotated[
+        str | None,
+        AfterValidator(content_min_valid_character)
+    ]
+    description : str
+    category_id : int
 
 class ArticleUpdateRequest(BaseModel):
     title: Annotated[
