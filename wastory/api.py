@@ -25,3 +25,5 @@ api_router.include_router(like_router, prefix="/likes", tags=["likes"])
 api_router.include_router(message_router, prefix="/messages", tags=["messages"])
 api_router.include_router(image_router, prefix="/images",tags=["images"])
 api_router.include_router(hometopic_router, prefix="/hometopics",tags=["hometopics"])
+api_router.include_router(draft_router, prefix="/drafts",tags=["drafts"])
+
