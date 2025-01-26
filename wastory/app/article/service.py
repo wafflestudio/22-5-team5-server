@@ -31,20 +31,30 @@ class ArticleService:
         self.hometopic_store = hometopic_store
     
     async def create_article(
-        self, user: User, category_id :int, hometopic_id : int, article_title: str, article_content: str, article_description: str,
+        self, 
+        user: User, 
+        article_title: str, 
+        article_content: str, 
+        article_description: str,
+        main_image_url : str | None,
+        category_id :int, 
+        hometopic_id : int, 
     ) -> ArticleDetailResponse :
                 
         # 사용자의 Blog 확인
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
             raise BlogNotFoundError()
+    
+
             
         new_article = await self.article_store.create_article(
-            blog_id=user_blog.id, 
-            category_id=category_id, 
             atricle_title=article_title, 
             article_content=article_content, 
             article_description = article_description,
+            main_image_url = main_image_url,
+            blog_id=user_blog.id, 
+            category_id=category_id, 
             hometopic_id = hometopic_id
             )
 
@@ -65,14 +75,16 @@ class ArticleService:
         article_id: int,
         article_title: str,
         article_content: str,
+        article_description : str,
+        main_image_url : str | None,
+        category_id : int,
+        hometopic_id : int
     ) -> ArticleDetailResponse:
         
         # 사용자의 Blog 확인
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
             raise BlogNotFoundError()
-
-       
         
         # Article 존재 확인
         article = await self.article_store.get_article_by_id(article_id)
@@ -84,7 +96,15 @@ class ArticleService:
             raise PermissionDeniedError()
     
         
-        updated_article = await self.article_store.update_article(article, article_title, article_content)
+        updated_article = await self.article_store.update_article(
+            article, 
+            article_title, 
+            article_content,
+            article_description,
+            main_image_url,
+            category_id,
+            hometopic_id
+            )
 
         return ArticleDetailResponse.from_article(updated_article)
 

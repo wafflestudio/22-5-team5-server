@@ -27,6 +27,7 @@ async def create_article(
             article_title=article.title, 
             article_content=article.content, 
             article_description= article.description, 
+            main_image_url = article.main_image_url,
             category_id=user_blog.default_category_id,
             hometopic_id = article.hometopic_id
             )
@@ -35,7 +36,8 @@ async def create_article(
             user=user, 
             article_title=article.title, 
             article_content=article.content, 
-            article_description = article.description, 
+            article_description = article.description,
+            main_image_url = article.main_image_url, 
             category_id=article.category_id,
             hometopic_id = article.hometopic_id
             )
@@ -47,10 +49,33 @@ async def update_article(
     article_id: int,
     article: ArticleUpdateRequest,
     article_service: Annotated[ArticleService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
+
 ) -> ArticleDetailResponse:
-    return await article_service.update_article(
-        user, article_id, article.title, article.content
-    )
+    user_blog = await blog_service.get_blog_by_user(user)
+    if article.category_id == 0:
+        return await article_service.update_article(
+            user=user, 
+            article_id = article_id,
+            article_title=article.title, 
+            article_content=article.content, 
+            article_description = article.description, 
+            main_image_url = article.main_image_url,
+            category_id=user_blog.default_category_id,
+            hometopic_id = article.hometopic_id
+        )
+    else : 
+        return await article_service.update_article(
+            user=user, 
+            article_id = article_id,
+            article_title=article.title, 
+            article_content=article.content, 
+            article_description = article.description, 
+            main_image_url = article.main_image_url,
+            category_id=article.category_id,
+            hometopic_id = article.hometopic_id
+        )
+
 
 # article 정보 가져오기
 @article_router.get("/get/{article_id}", status_code=200)
