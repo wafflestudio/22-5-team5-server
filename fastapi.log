@@ -6,24 +6,11 @@ nohup: ignoring input
 * 'allow_population_by_field_name' has been renamed to 'populate_by_name'
 * 'orm_mode' has been renamed to 'from_attributes'
   warnings.warn(message, UserWarning)
-INFO:     Started server process [1499]
+INFO:     Started server process [2453]
 INFO:     Waiting for application startup.
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     218.149.163.247:0 - "GET /docs HTTP/1.0" 200 OK
-/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
-* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
-* 'orm_mode' has been renamed to 'from_attributes'
-  warnings.warn(message, UserWarning)
-/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/openapi/utils.py:225: UserWarning: Duplicate Operation ID get_top_articles_in_blog_api_articles_blogs__blog_id__sort_by__sort_by__get for function get_top_articles_in_blog at /home/ubuntu/22-5-team5-server/wastory/app/article/views.py
-  warnings.warn(message, stacklevel=1)
-INFO:     218.149.163.247:0 - "GET /openapi.json HTTP/1.0" 200 OK
-INFO:     49.165.120.175:0 - "POST /api/users/signin HTTP/1.0" 401 Unauthorized
-INFO:     49.165.120.175:0 - "GET /api/users/auth/kakao HTTP/1.0" 302 Found
-INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 200 OK
-Debug: Blog=<Blog id=6, blog_name=test2님의 블로그, user_id=7>
-main_image_url: None
-INFO:     218.149.163.247:0 - "POST /api/articles/create HTTP/1.0" 201 Created
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [2453]
