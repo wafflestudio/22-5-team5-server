@@ -27,7 +27,6 @@ class BlogService:
         blog = await self.blog_store.add_blog(user_id=user.id, name=name, default_id=0)
 
         default_category=await self.categroy_store.create_category(blog_id=blog.id, categoryname="카테고리 없음", categorylevel=1)
-        print(default_category.id)
         await self.blog_store.update_blog(address_name=blog.address_name, new_default_category_id=default_category.id, new_blog_name=None, description=None, new_main_image_URL=None)
 
         return BlogDetailResponse.model_validate(blog, from_attributes=True)

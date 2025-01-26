@@ -33,9 +33,9 @@ async def create(
     )
 
 #현재 유저가 지니고 있는 카테고리들을 불러오는 API
-@category_router.get("/list", status_code=HTTP_200_OK)
+@category_router.get("/list/user", status_code=HTTP_200_OK)
 async def get_list(
-    user:Annotated[User,Depends(optional_login_with_header)],
+    user:Annotated[User,Depends(login_with_header)],
     category_service:Annotated[CategoryService,Depends()],
 )-> CategoryFinalResponse:
     return await category_service.list_categories(user)
