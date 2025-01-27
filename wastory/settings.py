@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings
 # TODO 환경 변수로 설정된 환경을 가져옵니다.
 # 가능한 값은 "local", "test", "prod" 이며, 기본값은 "local" 입니다.
 # 환경 변수는 어떻게 바꿀 수 있을까요?
-ENV = os.getenv("ENV", "prod")
+ENV = os.getenv("ENV", "local")
 assert ENV in ("prod", "test", "local")
 
 
