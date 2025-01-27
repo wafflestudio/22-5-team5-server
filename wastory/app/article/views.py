@@ -94,10 +94,8 @@ async def get_article_information_by_id(
 async def get_today_most_viewed(
     article_service: Annotated[ArticleService, Depends()],
     user : Annotated[User, Depends(login_with_header)],
-    page : int
 ) ->PaginatedArticleListResponse:
     return await article_service.get_today_most_viewed(
-        page = page,
         user=user
     )
 # blog 내 인기글 가져오기
@@ -106,7 +104,9 @@ async def get_weekly_most_viewed(
     article_service: Annotated[ArticleService, Depends()],
     user : Annotated[User, Depends(login_with_header)],
 ) ->PaginatedArticleListResponse:
-    return await article_service.get_weekly_most_viewed()
+    return await article_service.get_weekly_most_viewed(
+        user = user
+    )
 
 # blog 내 인기글 가져오기
 @article_router.get("/blogs/{blog_id}/sort_by/{sort_by}", status_code=200)
