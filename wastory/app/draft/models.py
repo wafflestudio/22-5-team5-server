@@ -5,11 +5,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from wastory.database.common import Base, intpk
 
 if TYPE_CHECKING:
-    from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
-    from wastory.app.comment.models import Comment
-    from wastory.app.like.models import Like
-    from wastory.app.hometopic.models import Hometopic
 
 
 class Draft(Base):
