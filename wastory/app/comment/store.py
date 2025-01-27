@@ -44,8 +44,7 @@ class CommentStore:
 
     async def get_article_comments_count(self, article_id: int) -> int:
         stmt = select(func.count(Comment.id)).filter(
-            Comment.article_id == article_id,
-            Comment.level == 1
+            Comment.article_id == article_id
         )
         count = await SESSION.scalar(stmt)
         return count or 0
@@ -79,8 +78,7 @@ class CommentStore:
 
     async def get_guestbook_comments_count(self, blog_id: int) -> int:
         stmt = select(func.count(Comment.id)).filter(
-            Comment.blog_id == blog_id,
-            Comment.level == 1
+            Comment.blog_id == blog_id
         )
         count = await SESSION.scalar(stmt)
         return count or 0
