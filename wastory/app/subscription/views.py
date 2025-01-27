@@ -8,6 +8,9 @@ from wastory.app.user.models import User
 from wastory.app.blog.service import BlogService
 from wastory.app.user.views import login_with_header
 from wastory.app.subscription.errors import BlogNotFoundError
+from wastory.app.blog.store import BlogStore
+from wastory.app.blog.errors import BlogNotFoundError
+from wastory.app.user.service import UserService
 
 subscription_router = APIRouter()
 
@@ -66,6 +69,57 @@ async def get_my_subscribers(
         page=page,
         per_page=per_page
     )
+
+@subscription_router.get("/subcriptions/{page}", response_model=PaginatedSubscriptionResponse)
+async def get_subscriptions(
+    blog_id: int,
+    page: int,
+    subscribe_service: Annotated[SubscriptionService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
+    user_service: Annotated[UserService, Depends()]
+) -> PaginatedSubscriptionResponse:
+    """
+    해당 블로그가 구독 중인 블로그들의 정보를 반환하는 API
+    """
+    per_page=10
+    blog = await blog_service.get_blog_by_id(blog_id=blog_id)
+    
+    if blog is None:
+        raise BlogNotFoundError
+    
+    user= await user_service.get_user_by_id(blog.user_id)
+    
+    return await subscribe_service.get_paginated_subscribed_blog_address(
+        subscriber=user,
+        page=page,
+        per_page=per_page
+    )
+
+@subscription_router.get("/subscribers/{page}", response_model=PaginatedSubscriptionResponse)
+async def get_subscribers(
+    blog_id: int,
+    page: int,
+    subscribe_service: Annotated[SubscriptionService, Depends()],
+    blog_service: Annotated[BlogService, Depends()],
+    user_service: Annotated[UserService, Depends()]
+) -> PaginatedSubscriptionResponse:
+    """
+    해당 블로그를 구독하는 블로그들의 정보를 반환하는 API
+    """
+    per_page=10
+    blog = await blog_service.get_blog_by_id(blog_id=blog_id)
+    
+    if blog is None:
+        raise BlogNotFoundError
+    
+    user= await user_service.get_user_by_id(blog.user_id)
+    
+    return await subscribe_service.get_paginated_subscriber_blog_address(
+        subscribed=user,
+        page=page,
+        per_page=per_page
+    )
+
 
 @subscription_router.delete("", status_code=HTTP_200_OK)
 async def cancel_subscription(
