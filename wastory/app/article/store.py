@@ -156,14 +156,12 @@ class ArticleStore :
     @transactional
     async def get_today_most_viewed(
         self,
-        page: int,
         user: User
     ) -> PaginatedArticleListResponse:
         access_condition = self.get_access_condition(user)
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
-        per_page = 1  # 페이지당 기사 수 (1개로 설정)
-        offset = (page - 1) * per_page  # 페이지 오프셋 계산
+        per_page = 5  # 페이지당 기사 수 (1개로 설정)
 
         # 오늘 날짜의 시작과 끝 계산
         today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
@@ -191,8 +189,7 @@ class ArticleStore :
                 access_condition                   # 접근 권한 확인
             )
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
-            .order_by(sort_column)  # 조회수 기준 정렬
-            .offset(offset)         # 페이지 오프셋 적용
+            .order_by(sort_column)  # 조회수 기준 정렬       
             .limit(per_page)        # 페이지당 제한 (1개)
         )
 
@@ -213,22 +210,12 @@ class ArticleStore :
             for row in rows
         ]
 
-        # 전체 기사 개수 계산 (페이지네이션을 위해)
-        total_count_stmt = (
-            select(func.count(Article.id))
-            .join(Blog, Blog.id == Article.blog_id)  # 명시적 조인
-            .filter(
-                Article.created_at >= today_start,
-                Article.created_at < today_end,
-                access_condition  # 접근 조건 추가
-            )
-        )
-        total_count = await SESSION.scalar(total_count_stmt)
+        
 
         return PaginatedArticleListResponse(
-            page=page,
+            page=1,
             per_page=per_page,  # 1페이지에 1개
-            total_count=total_count or 0,
+            total_count=len(articles),
             articles=articles
         )
 
@@ -284,22 +271,10 @@ class ArticleStore :
             for row in rows
         ]
 
-        # 전체 기사 개수 계산 (페이지네이션을 위해)
-        total_count_stmt = (
-            select(func.count(Article.id))
-            .join(Blog, Blog.id == Article.blog_id)
-            .filter(
-                Article.created_at >= week_start,
-                Article.created_at <= today_end,
-                access_condition  # 접근 권한 조건 추가
-            )
-        )
-        total_count = await SESSION.scalar(total_count_stmt)
-
         return PaginatedArticleListResponse(
             page=1,
             per_page=per_page,
-            total_count=total_count or 0,
+            total_count=len(articles),
             articles=articles
         )
     
@@ -668,14 +643,14 @@ class ArticleStore :
     
     @transactional
     async def get_articles_of_subscriptions(
-        self, user: User, page: int, per_page: int
+        self, user: User, user_blog: Blog, page: int, per_page: int
     ) -> PaginatedArticleListResponse:
         offset_val = (page - 1) * per_page
 
         # 구독한 블로그 ID 가져오기
         subscribed_blogs_stmt = (
             select(Subscription.subscribed_id)
-            .filter(Subscription.subscriber_id == user.blog.id)  # 사용자의 블로그 ID를 기준으로 필터링
+            .filter(Subscription.subscriber_id == user_blog.id)  # 사용자의 블로그 ID를 기준으로 필터링
         )
         subscribed_ids_result = await SESSION.scalars(subscribed_blogs_stmt)
         subscribed_ids = subscribed_ids_result.all()

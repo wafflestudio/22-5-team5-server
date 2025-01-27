@@ -127,10 +127,9 @@ class ArticleService:
     
     async def get_today_most_viewed(
         self,
-        user : User,
-        page : int
+        user : User
     ) -> PaginatedArticleListResponse:
-        return await self.article_store.get_today_most_viewed(page=page, user=user)
+        return await self.article_store.get_today_most_viewed(user=user)
 
     async def get_weekly_most_viewed(
         self,
@@ -196,7 +195,7 @@ class ArticleService:
             raise BlogNotFoundError()
         
         return await self.article_store.get_articles_of_subscriptions(
-            blog_id = user_blog.id, page = page, per_page = per_page, user=user
+            user = user, user_blog=user_blog, page = page, per_page = per_page
         )
     
     async def get_top_articles_in_blog(

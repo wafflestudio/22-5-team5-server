@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from wastory.app.subscription.models import Subscription
     from wastory.app.like.models import Like
     from wastory.app.notification.models import Notification
+    from wastory.app.draft.models import Draft
 
 class Blog(Base):
     __tablename__ = "blog"
