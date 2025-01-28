@@ -16,6 +16,9 @@ class CategoryStore:
     async def create_category(
         self, blog_id:int,categoryname:str, categorylevel:int, parentId:int|None=None
         )->Category:
+            if await self.get_category_by_blog_and_name(blog_id, categoryname):
+                raise CategoryNameDuplicateError
+
             category= Category(
                 blog_id=blog_id,
                 name=categoryname,
