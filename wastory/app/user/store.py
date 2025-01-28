@@ -10,13 +10,11 @@ from wastory.app.user.models import User, BlockedToken
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 
-
 class UserStore:
     @transactional
     async def add_user(self, email: str, password: str) -> User:
         if await self.get_user_by_email(email):
             raise EmailAlreadyExistsError()
-
         user = User(password=password, email=email)
         SESSION.add(user)
         return user
@@ -36,14 +34,10 @@ class UserStore:
     @transactional
     async def update_user(
         self,
+        user : User,
         username: str | None,
         nickname: str | None,
-        email: str,
     ) -> User:
-        user = await self.get_user_by_email(email)
-        if user is None:
-            raise UserUnsignedError()
-
         if username is not None:
             user.username = username
 
@@ -54,14 +48,8 @@ class UserStore:
 
 
     @transactional
-    async def update_password(self, email:str, old_password: str, new_password: str) -> User:
-        user = await self.get_user_by_email(email)
-        if user is None:
-            raise UserUnsignedError()
-
-        if user.password != old_password:
-            raise InvalidUsernameOrPasswordError()
-
+    async def update_password(self, user: User, new_password: str) -> User:
+        
         if new_password is not None:
             user.password = new_password
 

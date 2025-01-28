@@ -26,6 +26,7 @@ itsdangerous = "^2.2.0"
 redis = "^5.2.1"
 aioboto3 = "^13.4.0"
 python-multipart = "^0.0.20"
+passlib = "^1.7.4"
 
 
 [tool.poetry.group.dev.dependencies]
