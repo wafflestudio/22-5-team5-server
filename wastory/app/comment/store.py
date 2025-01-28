@@ -12,7 +12,11 @@ from wastory.app.comment.models import Comment
 
 class CommentStore:
     async def get_comment_by_id(self,id:int)->Comment|None:
-        get_comment_query=select(Comment).filter(Comment.id==id)
+        get_comment_query = (
+            select(Comment)
+            .filter(Comment.id == id)
+            .options(selectinload(Comment.user))  # user를 미리 로드하여 DetachedInstanceError 방지
+        )
         comment=await SESSION.scalar(get_comment_query)
         return comment
 
@@ -109,39 +113,44 @@ class CommentStore:
         
     @transactional
     async def create_article_comment_2(
-        self, content:str,secret:int,user:User,article_id:int,parent_id:int
-        )->Comment:
-            if user.blogs is None:
-                    raise UserHasNoBlogError
-            parent_comment=await self.get_comment_by_id(parent_id)
-            if not parent_comment:
-                raise CommentNotFoundError()
-            if parent_comment.level==2:
-                raise InvalidLevelError()
-            if parent_comment.article_id==None or parent_comment.article_id!=article_id:
-                raise ParentOtherSectionError()
-            secret_here=secret
-            if parent_comment.secret==1:
-                secret_here=1
-            comment= Comment(
-                content=content,
-                level=2,
-                secret=secret_here,
-                user_id=user.id,
-                user_name=user.username,
-                article_id=article_id,
-                parent_id=parent_id,
-                user_blog_id=user.blogs.id
-            )
-            parent_comment=await self.get_comment_by_id(parent_id)
-            if not parent_comment:
-                raise CommentNotFoundError()
-            comment.parent = parent_comment
-            SESSION.add(comment)
-            await SESSION.flush()
-            await SESSION.refresh(comment)
-            await SESSION.refresh(comment, ["user",  "blog", "article"])
-            return comment
+        self, content: str, secret: int, user: User, article_id: int, parent_id: int
+    ) -> Comment:
+        if user.blogs is None:
+            raise UserHasNoBlogError
+
+        parent_comment = await self.get_comment_by_id(parent_id)  # 여기서 selectinload 사용됨
+
+        if not parent_comment:
+            raise CommentNotFoundError()
+
+        if parent_comment.level == 2:
+            raise InvalidLevelError()
+
+        if parent_comment.article_id is None or parent_comment.article_id != article_id:
+            raise ParentOtherSectionError()
+
+        secret_here = secret
+        if parent_comment.secret == 1:
+            secret_here = 1
+
+        comment = Comment(
+            content=content,
+            level=2,
+            secret=secret_here,
+            user_id=user.id,
+            user_name=user.username,
+            article_id=article_id,
+            parent_id=parent_id,
+            user_blog_id=user.blogs.id,
+        )
+
+        comment.parent = parent_comment  # 부모 댓글을 명확히 설정
+
+        SESSION.add(comment)
+        await SESSION.flush()
+        await SESSION.refresh(comment)
+        await SESSION.refresh(comment, ["user", "blog", "article"])  # 명확한 관계 로딩
+        return comment
 
     @transactional
     async def create_guestbook_comment_1(
@@ -204,28 +213,20 @@ class CommentStore:
 
 
     @transactional
-    async def update_comment(
-        self,
-        user:User,
-        comment_id: int,
-        content:str
-    ) -> Comment:
+    async def update_comment(self, user: User, comment_id: int, content: str) -> Comment:
         comment = await self.get_comment_by_id(comment_id)
-        
-        
+
         if comment is None:
             raise CommentNotFoundError()
 
-        if comment.user_id!=user.id:
+        if comment.user_id != user.id:
             raise NotOwnerError()
 
         if content is not None:
-            comment.content=content
-        
+            comment.content = content
 
-        SESSION.merge(comment)
         await SESSION.flush()
-        await SESSION.refresh(comment)
+        await SESSION.refresh(comment)  # 최신 상태로 업데이트
 
         return comment
 
