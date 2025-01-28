@@ -1,0 +1,146 @@
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/openapi/utils.py:225: UserWarning: Duplicate Operation ID get_top_articles_in_blog_api_articles_blogs__blog_id__sort_by__sort_by__get for function get_top_articles_in_blog at /home/ubuntu/22-5-team5-server/wastory/app/article/views.py
+  warnings.warn(message, stacklevel=1)
+sys:1: SAWarning: Multiple rows returned with uselist=False for eagerly-loaded attribute 'User.notification' 
+string
+psi1
+0
+<wastory.app.comment.models.Comment object at 0x7d7802f9e810>
+Debug: Blog=<Blog id=1, blog_name=중워니의 iOS Wastory 제작 만약 이름이 엄청나게 길어서 40자?, user_id=1>
+main_image_url: https://wastory.s3.ap-northeast-2.amazonaws.com/uploads/57a97ad5-bfd8-4f73-970b-77507501e165-wastory.jpg
+user found
+user found
+user found
+user found
+user found
+user found
+Debug: Blog=<Blog id=5, blog_name=psi2님의 블로그, user_id=5>
+main_image_url: None
+user found
+user_blog id is  1
+like id is  12
+user found
+user found
+Debug: Blog=<Blog id=1, blog_name=중워니의 iOS Wastory 제작 만약 이름이 엄청나게 길어서 40자?, user_id=1>
+main_image_url: https://wastory.s3.ap-northeast-2.amazonaws.com/uploads/57a97ad5-bfd8-4f73-970b-77507501e165-wastory.jpg
+/home/ubuntu/22-5-team5-server/wastory/app/blog/store.py:95: RuntimeWarning: coroutine 'async_scoped_session.merge' was never awaited
+  SESSION.merge(blog)
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+user found
+user found
+user found
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+called get_blog
+user found
+user found
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+sys:1: SAWarning: Multiple rows returned with uselist=False for eagerly-loaded attribute 'User.notification' 
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/openapi/utils.py:225: UserWarning: Duplicate Operation ID get_top_articles_in_blog_api_articles_blogs__blog_id__sort_by__sort_by__get for function get_top_articles_in_blog at /home/ubuntu/22-5-team5-server/wastory/app/article/views.py
+  warnings.warn(message, stacklevel=1)
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+user found
+user found
+user found
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+Debug: Blog=<Blog id=5, blog_name=psi2님의 블로그, user_id=5>
+main_image_url: None
+Debug: Blog=<Blog id=5, blog_name=psi2님의 블로그, user_id=5>
+main_image_url: None
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+user found
+user found
+user found
+user found
+user found
+user found
+user_blog id is  1
+like id is  13
+user found
+user found
+user found
+user found
+user found
+user found
+[('joongalway2swonit',)]
+user found
+user found
+user found
+user_blog id is  1
+like id is  14
+user found
+방명록 작성
+중워니
+0
+<wastory.app.comment.models.Comment object at 0x7f53f0786330>
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+[('joongalway2swonit',)]
+[('joongalway2swonit',)]
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+Debug: Blog=<Blog id=2, blog_name=psi1님의 블로그, user_id=2>
+main_image_url: None
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/openapi/utils.py:225: UserWarning: Duplicate Operation ID get_top_articles_in_blog_api_articles_blogs__blog_id__sort_by__sort_by__get for function get_top_articles_in_blog at /home/ubuntu/22-5-team5-server/wastory/app/article/views.py
+  warnings.warn(message, stacklevel=1)
+sys:1: SAWarning: Multiple rows returned with uselist=False for eagerly-loaded attribute 'User.notification' 
