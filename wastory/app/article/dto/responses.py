@@ -16,6 +16,7 @@ class ArticleInformationResponse(BaseModel):
     blog_id: int
     blog_name : str
     blog_main_image_url : str | None
+    article_main_image_url : str | None
     category_id : int 
 
     views: int
@@ -44,6 +45,7 @@ class ArticleInformationResponse(BaseModel):
             category_id = article.category_id,
             blog_name = blog_name,
             blog_main_image_url = blog_main_image_url,
+            article_main_image_url = article.main_image_url,
             article_likes = article_likes,
             article_comments = article_comments
         )
@@ -76,6 +78,7 @@ class ArticleSearchInListResponse(BaseModel):
     blog_id: int
     blog_name : str
     blog_main_image_url : str | None
+    article_main_image_url : str | None
 
     views: int
 
@@ -101,6 +104,7 @@ class ArticleSearchInListResponse(BaseModel):
             blog_id = article.blog_id,
             blog_name = blog_name,
             blog_main_image_url = blog_main_image_url,
+            article_main_image_url = article.main_image_url,
             article_likes = article_likes,
             article_comments = article_comments
         )
