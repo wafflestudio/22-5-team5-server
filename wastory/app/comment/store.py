@@ -57,7 +57,7 @@ class CommentStore:
 
         stmt = (
             select(Comment)
-            .filter(Comment.article_id == article_id, Comment.level == 1)
+            .filter(Comment.blog_id == blog_id, Comment.level == 1)
             .options(
                 selectinload(Comment.blog),
                 selectinload(Comment.article),
