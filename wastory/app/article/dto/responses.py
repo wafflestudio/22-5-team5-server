@@ -12,6 +12,7 @@ class ArticleInformationResponse(BaseModel):
     content: str
     created_at: datetime
     updated_at: datetime
+    article_main_image_url : str | None
 
     blog_id: int
     blog_name : str
@@ -36,9 +37,12 @@ class ArticleInformationResponse(BaseModel):
         return ArticleInformationResponse(
             id=article.id, 
             title=article.title, 
-            content=article.content, 
+            content=article.content,
             created_at=article.created_at, 
             updated_at = article.updated_at,
+            
+            article_main_image_url = article.main_image_url,
+
             views = article.views,
             blog_id = article.blog_id,
             category_id = article.category_id,
@@ -72,6 +76,8 @@ class ArticleSearchInListResponse(BaseModel):
     description: str
     created_at: datetime
     updated_at: datetime
+    article_main_image_url : str | None
+
 
     blog_id: int
     blog_name : str
@@ -97,6 +103,8 @@ class ArticleSearchInListResponse(BaseModel):
             description=article.description, 
             created_at=article.created_at, 
             updated_at = article.updated_at,
+            article_main_image_url = article.main_image_url,
+
             views = article.views,
             blog_id = article.blog_id,
             blog_name = blog_name,
