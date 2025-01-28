@@ -27,3 +27,8 @@ class MissingRequiredFieldError(WastoryHttpException):
 class NotOwnerError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=401, detail="User Not Allowed")
+
+
+class InvalidhometopicError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=400, detail="Invalid hometopic")

@@ -7,6 +7,7 @@ from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
 from wastory.app.blog.store import BlogStore
 from wastory.app.hometopic.store import HometopicStore
+from wastory.app.hometopic.errors import InvalidhometopicError
 from wastory.app.category.store import CategoryStore
 from wastory.app.subscription.store import SubscriptionStore
 from wastory.app.notification.service import NotificationService
@@ -46,7 +47,11 @@ class ArticleService:
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
             raise BlogNotFoundError()
-    
+        
+        # 유효한 hometopic_id 범위 검사
+        if hometopic_id <= 0 or (2 <= hometopic_id <= 9) or hometopic_id >= 54:
+            raise InvalidhometopicError    
+        
         new_article = await self.article_store.create_article(
             atricle_title=article_title, 
             article_content=article_content, 
@@ -95,6 +100,10 @@ class ArticleService:
         # 권한 검증
         if article.blog_id != user_blog.id:
             raise PermissionDeniedError()
+        
+        # 유효한 hometopic_id 범위 검사
+        if hometopic_id <= 0 or (2 <= hometopic_id <= 9) or hometopic_id >= 54:
+            raise InvalidhometopicError 
     
         
         updated_article = await self.article_store.update_article(
@@ -106,7 +115,7 @@ class ArticleService:
             category_id,
             hometopic_id,
             secret
-            )
+        )
 
         return ArticleDetailResponse.from_article(updated_article)
 
@@ -143,12 +152,43 @@ class ArticleService:
         high_hometopic_id: int,
         page: int,
     ) -> PaginatedArticleListResponse:
+
+        # 유효한 hometopic_id    검사
+        if high_hometopic_id <= 1 or high_hometopic_id >= 10:
+            raise InvalidhometopicError
+        
         hometopic_id_list = await self.hometopic_store.get_hometopic_id_list_by_high_hometopic_id(high_hometopic_id)
+        return await self.article_store.get_most_viewed_in_hometopic(
+            user=user,
+            hometopic_id_list=hometopic_id_list, 
+            page=page,
+            per_page = 7
+        )
+
+    async def get_focus_view_of_article_Js_weekend_plan(
+        self,
+        user : User
+    ) -> PaginatedArticleListResponse:
+
+        hometopic_id_list = [10,11,12,13]
+        return await self.article_store.get_most_viewed_in_hometopic(
+            hometopic_id_list=hometopic_id_list, 
+            user = user,
+            page = 1,
+            per_page = 5
+        )
+    async def get_focus_view_of_article_coffee(
+        self,
+        user : User
+    ) -> PaginatedArticleListResponse:
+
+        hometopic_id_list = [14]
         return await self.article_store.get_most_viewed_in_hometopic(
             hometopic_id_list=hometopic_id_list, 
             user=user,
-            page=page
-        )   
+            page = 1,
+            per_page = 5
+        )            
         
     async def get_articles_in_blog(
         self,
