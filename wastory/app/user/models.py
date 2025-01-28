@@ -19,7 +19,7 @@ class User(Base):
     username: Mapped[str | None] = mapped_column(String(20), unique=True, index=True)
     nickname: Mapped[str | None] = mapped_column(String(20), unique=True, index=True)
     email: Mapped[str] = mapped_column(String(100), unique=True, index=True)
-    password: Mapped[str | None] = mapped_column(String(20))
+    password: Mapped[str | None] = mapped_column(String(60))
 
 
     blogs: Mapped["Blog"] = relationship(
