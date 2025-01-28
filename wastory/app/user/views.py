@@ -172,13 +172,13 @@ async def delete_me(
 
 
 @user_router.patch("/change_password", status_code=HTTP_200_OK)
-async def update_me(
+async def change_password(
     user: Annotated[User, Depends(login_with_header)],
     update_request: PasswordUpdateRequest,
     user_service: Annotated[UserService, Depends()],
 ):
     await user_service.update_password(
-        user.email,
+        email = user.email,
         old_password=update_request.old_password,
         new_password=update_request.new_password
     )
