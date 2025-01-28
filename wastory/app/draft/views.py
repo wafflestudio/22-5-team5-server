@@ -45,7 +45,7 @@ async def update_draft(
         draft_content=draft.content
     )
 
-# article 정보 가져오기
+# draft 정보 가져오기
 @draft_router.get("/get/{draft_id}", status_code=200)
 async def get_draft_by_id(
     draft_service: Annotated[DraftService, Depends()],
@@ -57,7 +57,7 @@ async def get_draft_by_id(
 
 
 # blog 내 draft 목록 가져오기
-@draft_router.get("/blogs/{blog_id}", status_code=200)
+@draft_router.get("/blogs/{blog_id}/{page}", status_code=200)
 async def get_drafts_in_blog(
     draft_service: Annotated[DraftService, Depends()],
     user : Annotated[User, Depends(login_with_header)],
