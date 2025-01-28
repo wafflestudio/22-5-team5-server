@@ -136,6 +136,26 @@ async def get_most_viewed_in_hometopic(
         user=user
     )
 
+# hometopic 인기글 가져오기기
+@article_router.get("/focusview/Js_weekend_plan", status_code=200)
+async def get_focus_view_of_article_Js_weekend_plan(
+    article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)]
+) ->PaginatedArticleListResponse:
+    return await article_service.get_focus_view_of_article_Js_weekend_plan(
+        user=user
+    )
+# hometopic 인기글 가져오기기
+@article_router.get("/focusview/coffee", status_code=200)
+async def get_focus_view_of_article_coffee(
+    article_service: Annotated[ArticleService, Depends()],
+    user : Annotated[User, Depends(login_with_header)],
+) ->PaginatedArticleListResponse:
+    return await article_service.get_focus_view_of_article_coffee(
+        user=user
+    )
+
+
 
 # blog 내 article 목록 가져오기
 @article_router.get("/blogs/{blog_id}", status_code=200)
