@@ -22,6 +22,18 @@ async def create_blog(
         name=blog_create_request.address_name
     )
 
+@blog_router.get("/search", response_model=PaginatedBlogDetailResponse, status_code=HTTP_200_OK)
+async def search_blogs(
+    keywords: str,
+    page: int,
+    blog_service: Annotated[BlogService, Depends()]
+) -> PaginatedBlogDetailResponse:
+    """
+    키워드로 블로그 검색 API
+    """
+    per_page=10
+    return await blog_service.search_blog_by_keywords(keywords=keywords, page=page, per_page=per_page)
+
 @blog_router.get("/my_blog")
 async def get_blog_by_user(
     user: Annotated[User, Depends(login_with_header)],
@@ -69,15 +81,3 @@ async def get_blog_by_email(
     유저 이메일로 블로그 조회 API
     """
     return await blog_service.get_blog_by_user_email(email)
-
-@blog_router.get("/search", response_model=PaginatedBlogDetailResponse, status_code=HTTP_200_OK)
-async def search_blogs(
-    keywords: str,
-    page: int,
-    blog_service: Annotated[BlogService, Depends()]
-) -> PaginatedBlogDetailResponse:
-    """
-    키워드로 블로그 검색 API
-    """
-    per_page=10
-    return await blog_service.search_blog_by_keywords(keywords=keywords, page=page, per_page=per_page)
