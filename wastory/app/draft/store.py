@@ -10,7 +10,7 @@ from wastory.database.connection import SESSION
 from wastory.app.user.models import User
 from wastory.app.draft.models import Draft
 from wastory.app.blog.models import Blog
-from wastory.app.draft.dto.responses import DraftResponse,DraftListResponse
+from wastory.app.draft.dto.responses import DraftResponse,DraftListResponse,DraftResponseForList
 
 class DraftStore :
     @transactional
@@ -84,7 +84,7 @@ class DraftStore :
 
         # Pydantic 모델로 변환하여 필요한 데이터만 반환
         drafts = [
-            DraftResponse.from_draft(
+            DraftResponseForList.from_draft(
                 draft=row.Draft
             )
             for row in rows

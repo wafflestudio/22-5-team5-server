@@ -265,13 +265,14 @@ class ArticleStore :
     @transactional
     async def get_most_viewed_in_hometopic(
         self,
+        user: User,
         hometopic_id_list: list[int],
         page: int,
-        user: User  # 사용자 정보 추가
+        per_page : int
     ) -> PaginatedArticleListResponse:
 
         sort_column = Article.views.desc() # 정렬 기준: 조회수 내림차순
-        per_page = 7  # 페이지당 기사 수
+        per_page = per_page  # 페이지당 기사 수
         offset_val = (page - 1) * per_page  # 페이지 오프셋 계산
 
         access_condition = self.get_access_condition(user)
@@ -280,8 +281,8 @@ class ArticleStore :
             base_query
             .filter(Article.hometopic_id.in_(hometopic_id_list))
             .order_by(sort_column)  # 조회수 기준 정렬
-            .offset(offset_val)         # 페이지 오프셋 적용       
-            .limit(per_page)        # 페이지당 제한 (1개)
+            .offset(offset_val)     # 페이지 오프셋 적용       
+            .limit(per_page) 
         )
     
         # 쿼리 실행
