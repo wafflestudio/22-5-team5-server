@@ -61,8 +61,7 @@ pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
 
 
 ### 🏡 4. 메인 페이지  
-#### 메인 탭들
-##### 홈 탭
+#### 홈 탭
 - 오늘, 일주일 간 인기글
 <img width="342" src = "https://github.com/user-attachments/assets/3e91f5ab-abcc-48f2-a178-a43f2fc55c05"  />
 
@@ -75,30 +74,38 @@ pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
 <img width="342" src = "https://github.com/user-attachments/assets/093ea069-aab9-4a66-b336-f7a8509cd6d2" />
 <img width="342" src = "https://github.com/user-attachments/assets/04d470c3-d86f-4cda-9950-953bea32bf3d" />
 
-##### 피드 탭
+#### 피드 탭
+- 구독중인 블로그의 글들을 볼 수 있다!
+<img width="342" src = "https://github.com/user-attachments/assets/8326682d-d186-4c5e-beb5-bc0fd1a19af1" />
+<img width="342" src = "https://github.com/user-attachments/assets/966ef95f-118d-42a8-91c6-a9734575fdfb" />
 
-##### 글쓰기 탭
+- 우측 상단의 구독자, 구독중을 누르면 해당 블로그들을 볼 수 있다!
+<img width="342" src = "https://github.com/user-attachments/assets/c084f2ef-d9aa-4852-9e56-5532c0d8d52f" />
+<img width="342" src = "https://github.com/user-attachments/assets/e171c7b9-6676-4b54-aca9-830d215a1372" />
 
-##### 알림 탭
+#### 알림 탭
+(사진 추가 필요)
 
-##### 내 블로그 탭
-
-
-
+#### 내 블로그 탭
 
 
-### ✍️ 5. 글 작성 및 조회 페이지  
+
+
+### 📰 5. 블로그 조회 페이지
+- 블로그의 인기글
+
+### ✍️ 6. 글 작성 및 조회 페이지  
 - 작성한 글 조회 및 수정 가능  
 
-### 💬 6. 댓글 작성 및 조회 페이지  
+### 💬 7. 댓글 작성 및 조회 페이지  
 - 실시간 댓글 작성 및 대댓글 지원  
 - 좋아요 기능
 
-### 📖 7. 방명록 작성 및 조회 페이지  
+### 📖 8. 방명록 작성 및 조회 페이지  
 - 자유롭게 메시지를 남기고 열람 가능  
 - 작성자 정보 및 작성일 표시  
 
-### 🔔 8. 알림 페이지  
+### 🔔 9. 알림 페이지  
 - 댓글, 좋아요, 구독 등의 알림 확인  
 - 알림 읽음 처리 기능 제공  
 
