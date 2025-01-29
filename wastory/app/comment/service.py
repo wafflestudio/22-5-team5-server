@@ -46,9 +46,11 @@ class CommentService:
                 if (blog.user_id != user.id):
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
+                        username=user.username,
                         type = 3,
                         notification_blog_name = blog.blog_name,
                         notification_blog_image_url = user_blog.main_image_url,
+                        article_id=article.id,
                         comment_id = new_comment.id
                     )
             elif level==2:
@@ -64,7 +66,9 @@ class CommentService:
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
                     type = 3,
                     notification_blog_name = blog.blog_name,
+                    username=user.username,
                     notification_blog_image_url = user_blog.main_image_url,
+                    article_id=article.id,
                     comment_id = new_comment.id
                 )
             return CommentDetailResponse.from_comment(new_comment, user)
@@ -88,6 +92,7 @@ class CommentService:
                 if (blog.user_id != user.id):
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
+                        username=user.username,
                         type=4,
                         notification_blog_name=blog.blog_name,
                         notification_blog_image_url=user_blog.main_image_url,
@@ -104,6 +109,7 @@ class CommentService:
                 # 방명록 알림
                 await self.notification_service.add_notification(
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
+                    username=user.username,
                     type=4,
                     notification_blog_name=blog.blog_name,
                     notification_blog_image_url=user_blog.main_image_url,
