@@ -33,6 +33,7 @@ class MessageService:
         # 쪽지 알림
         await self.notification_service.add_notification(
             blog_address_names = [sender_blog.address_name],
+            username=sender.username,
             type = 5,
             notification_blog_name=sender_blog.blog_name,
             notification_blog_image_url=sender_blog.main_image_url

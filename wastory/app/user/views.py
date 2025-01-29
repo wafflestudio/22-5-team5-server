@@ -74,7 +74,7 @@ async def auth_kakao_callback(request: Request, user_service: Annotated[UserServ
     user = await user_service.get_user_by_nickname(nickname)
     if user == None:
         await user_service.add_user(
-            nickname, None
+            email=nickname, password=None
         )
         await user_service.update_user(
             username=nickname, nickname=nickname, email=nickname

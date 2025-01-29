@@ -35,8 +35,10 @@ class UserService:
     def __init__(self, user_store: Annotated[UserStore, Depends()]) -> None:
         self.user_store = user_store
 
-    async def add_user(self, email: str, password: str):
-        hash_password = Hasher.get_password_hash(password)
+    async def add_user(self, email: str, password: str | None):
+        hash_password = password
+        if password is not None:
+            hash_password = Hasher.get_password_hash(password)
         await self.user_store.add_user(email=email, password=hash_password)
 
     async def get_user_by_id(self, id: int) -> User | None:
@@ -57,21 +59,7 @@ class UserService:
         nickname: str | None,
         email: str,
     ) -> User:
-        user = await self.user_store.get_user_by_email(email)
-        if user is None:
-            raise UserUnsignedError
-        return await self.user_store.update_user(
-            user = user,
-            username = username, 
-            nickname = nickname
-        )
-
-    async def update_username(
-        self,
-        username: str,
-        email: str,
-    ) -> User:
-        return await self.user_store.update_username(username, email)
+        return await self.user_store.update_user(username=username, nickname=nickname, email=email)
 
     async def update_password(
         self,
