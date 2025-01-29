@@ -10,6 +10,8 @@ from wastory.app.blog.errors import (
 )
 from wastory.app.user.models import User
 from wastory.app.blog.models import Blog
+from wastory.app.article.models import Article
+from wastory.app.comment.models import Comment
 from wastory.app.notification.models import Notification
 from wastory.app.article.models import Article
 from wastory.app.comment.models import comment
@@ -22,34 +24,18 @@ from wastory.app.user.service import UserService
 class NotificationStore:
     user_service=UserService
     @transactional
-    async def add_notification(self, ids: List[Tuple[int, int]], type : int, username: str, notification_blogname: str, description: str | None, article_) -> Notification:
-        max_description_length = 50
-        if len(description) > max_description_length:
-            description = description[:max_description_length - 3] + "..."
-        description = "\"" + description + "\""
-
-        notification_title = username
-        if type == 1:
-            notification_title = notification_title + "님이 새 글을 발행했습니다."
-        if type == 2:
-            notification_title = notification_title + "님이 내 블로그를 구독합니다."
-        if type == 3:
-            notification_title = notification_title + "님이 댓글을 남겼습니다."
-        if type == 4:
-            notification_title = notification_title + "님이 방명록을 남겼습니다."
-        if type == 5:
-            notification_title = notification_title + "님이 쪽지를 보냈습니다."
-
+    async def add_notification(self, ids: List[Tuple[int, int, int | None, int | None]], type : int, notification_blogname: str, notification_blog_image_url : str) -> Notification:
         notifications = [
             Notification(
                 notification_type=type,
-                notification_title=notification_title,
                 notification_blogname=notification_blogname,
-                description=description,
+                notification_blog_image_url=notification_blog_image_url,
                 user_id=user_id,
-                blog_id=blog_id
+                blog_id=blog_id,
+                article_id=article_id,
+                comment_id=comment_id
             )
-            for user_id, blog_id in ids
+            for user_id, blog_id, article_id, comment_id in ids
         ]
         SESSION.add_all(notifications)
         await SESSION.flush()
@@ -69,10 +55,14 @@ class NotificationStore:
             select(
                 Notification,
                 User.username,
-                Blog.main_image_url
+                Blog.blog_name,
+                Article.title,
+                Comment.content
             )
             .join(User, User.id == Notification.user_id)  # Notification과 User 조인
             .join(Blog, Blog.id == Notification.blog_id) 
+            .join(Article, Article.id == Notification.article_id, isouter=True) 
+            .join(Comment, Comment.id == Notification.comment_id, isouter=True) 
             .where(Notification.user_id == user_id)  # user_id 필터
             .order_by(Notification.created_at.desc())  # 최신순 정렬
             .offset(offset_val)
@@ -95,15 +85,16 @@ class NotificationStore:
         notifications_response = [
             NotificationResponse(
                 id=n[0].id,
-                notification_blogname=n[0].notification_blogname,
                 notification_type=n[0].notification_type,
-                notification_title=n[0].notification_title,
-                description=n[0].description,
-                created_at=n[0].created_at,
-                updated_at=n[0].updated_at,
-                checked=n[0].checked,
                 username=n[1],
-                blog_main_image_url=n[2]
+                blog_id=n[0].blog_id,
+                blog_name=n[2],
+                blog_main_image_url=n[0].notification_blog_image_url,
+                article_id=n[0].article_id,
+                article_title=n[3],
+                comment_content=n[4],
+                created_at=n[0].created_at,
+                checked=n[0].checked
             )
             for n in notifications
         ]

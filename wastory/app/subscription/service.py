@@ -29,7 +29,6 @@ class SubscriptionService:
         """
         subscribed_blog = await self.blog_service.get_blog_by_id(subscribed_id)
         subscriber_blog = await self.blog_service.get_blog_by_id(subscriber_id)
-        subscriber = await self.user_service.get_user_by_id(subscriber_blog.user_id)
 
         # SubscriptionStore에서 구독 추가 호출
         subscription = await self.subscription_store.add_subscription(subscriber_id, subscribed_id)
@@ -38,9 +37,8 @@ class SubscriptionService:
         await self.notification_service.add_notification(
             blog_address_names = [subscribed_blog.address_name],
             type=2,
-            username=subscriber.username,
-            notification_blogname=subscriber_blog.blog_name,
-            description="구독",
+            notification_blog_name=subscriber_blog.blog_name,
+            notification_blog_image_url=subscriber_blog.main_image_url
         )
 
         # SubscriptionDetailResponse로 변환하여 반환

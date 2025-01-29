@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from wastory.app.article.models import Article
     from wastory.app.user.models import User
     from wastory.app.blog.models import Blog  
+    from wastory.app.notification.models import Notification  
 
 class Comment(Base):
     __tablename__ = "comment"
@@ -26,6 +27,8 @@ class Comment(Base):
 
     blog_id: Mapped[Optional[int]] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=True, index=True)
     blog: Mapped[Optional["Blog"]] = relationship("Blog", back_populates="comments")
+    
+    notification: Mapped[Optional["Notification"]] = relationship("Notification", back_populates="comments")
 
     # 자기 자신의 FK(부모 댓글)
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("comment.id"), nullable=True)
