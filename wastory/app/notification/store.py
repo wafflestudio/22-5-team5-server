@@ -13,12 +13,16 @@ from wastory.app.blog.models import Blog
 from wastory.app.article.models import Article
 from wastory.app.comment.models import Comment
 from wastory.app.notification.models import Notification
+from wastory.app.article.models import Article
+from wastory.app.comment.models import comment
 from wastory.app.notification.dto.responses import NotificationResponse, PaginatedNotificationListResponse
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
+from wastory.app.user.service import UserService
 
 
 class NotificationStore:
+    user_service=UserService
     @transactional
     async def add_notification(
         self, ids: List[Tuple[int, int, int | None, int | None]], type : int, notification_blogname: str, notification_blog_image_url : str, username : str
