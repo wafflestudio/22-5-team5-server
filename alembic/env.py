@@ -19,6 +19,7 @@ from wastory.app.subscription.models import Subscription
 from wastory.app.like.models import Like
 from wastory.app.message.models import Message
 from wastory.app.hometopic.models import Hometopic
+from wastory.app.draft.models import Draft
 
 print(DB_SETTINGS.url)
 

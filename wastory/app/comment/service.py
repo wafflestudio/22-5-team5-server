@@ -128,27 +128,6 @@ class CommentService:
             user=user,
             comment_id=comment_id
         )
-    '''
-    async def get_article_list_level1_with_children(
-        self,
-        article_id: int,
-        page: int,
-        per_page: int
-    ) -> list[CommentListResponse]:
-        """
-        page, per_page에 맞춰 level=1 댓글은 페이지네이션, 
-        각 댓글의 children은 전부 포함.
-        """
-        # store에서 level=1 댓글들만 가져옴 (limit/offset)
-        level1_comments = await self.comment_store.get_article_comments(
-            article_id=article_id, 
-            page=page, 
-            per_page=per_page
-        )
-
-        # DTO 변환
-        return [CommentListResponse.from_comment(c) for c in level1_comments]
-    '''
     # 페이지네이션 정보를 추가로 내려주고 싶으면
     async def get_article_list_pagination(
         self,
@@ -178,27 +157,6 @@ class CommentService:
         )
     
 
-    '''
-    async def get_guestbook_list_level1_with_children(
-        self,
-        blog_id: int,
-        page: int,
-        per_page: int
-    ) -> list[CommentListResponse]:
-        """
-        page, per_page에 맞춰 level=1 댓글은 페이지네이션, 
-        각 댓글의 children은 전부 포함.
-        """
-        # store에서 level=1 댓글들만 가져옴 (limit/offset)
-        level1_comments = await self.comment_store.get_guestbook_comments(
-            blog_id=blog_id, 
-            page=page, 
-            per_page=per_page
-        )
-
-        # DTO 변환
-        return [CommentListResponse.from_comment(c) for c in level1_comments]
-    '''
     # 페이지네이션 정보를 추가로 내려주고 싶으면
     async def get_guestbook_list_pagination(
         self,

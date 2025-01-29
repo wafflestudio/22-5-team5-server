@@ -16,8 +16,9 @@ class CategoryStore:
     async def create_category(
         self, blog_id:int,categoryname:str, categorylevel:int, parentId:int|None=None
         )->Category:
-            if await self.get_category_by_blog_and_name(blog_id=blog_id,name=categoryname):
-                raise CategoryNameDuplicateError()
+            if await self.get_category_by_blog_and_name(blog_id, categoryname):
+                raise CategoryNameDuplicateError
+
             category= Category(
                 blog_id=blog_id,
                 name=categoryname,
@@ -57,18 +58,6 @@ class CategoryStore:
     
     
 
-    #여기가 많은 개선이 필요함!!
-
-    async def get_category_by_name_parent_level(self,new_category_name:str,parentId:int, level:int)->Category|None:
-        get_category_query = select(Category).filter(
-            and_(
-                Category.name == new_category_name,
-                Category.level == level,
-                Category.parent_id == parentId  # parent가 User 객체라면 .id로 비교
-            )
-        )
-        category=await SESSION.scalar(get_category_query)
-        return category
 
 
 
@@ -87,29 +76,27 @@ class CategoryStore:
     @transactional
     async def update_category(
         self,
-        user:User,
+        user: User,
         category_id: int,
-        new_category_name:str
+        new_category_name: str
     ) -> Category:
-        category = await self.get_category_by_id(category_id)
-        
-        
-        if category is None:
+        # 명시적으로 blog 데이터를 로드
+        stmt = (
+            select(Category)
+            .filter(Category.id == category_id)
+            .options(selectinload(Category.blog))  # blog를 미리 로드
+        )
+        category = await SESSION.scalar(stmt)
+
+        if not category:
             raise CategoryNotFoundError()
 
-        if category.blog !=user.blog:
+        # blog_id로 비교하도록 변경
+        if category.blog.id != user.blogs.id:
             raise NotOwnerError()
 
-        if new_category_name is not None:
-            if await self.get_category_by_name_parent_level(
-                new_cateogry_name=new_category_name,
-                parentId=category.parent_id,
-                level=category.level
-                ): 
-                raise CategoryNameDuplicateError()
-        
-        category.name=new_category_name
-        
+        if new_category_name:
+            category.name = new_category_name
 
         SESSION.merge(category)
         await SESSION.flush()

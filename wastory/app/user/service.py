@@ -10,8 +10,10 @@ from wastory.app.user.errors import (
     InvalidTokenError,
     ExpiredSignatureError,
     BlockedTokenError,
-    UserNotFoundError
+    UserNotFoundError,
+    UserUnsignedError
 )
+from wastory.app.user.hashing import Hasher
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
 import jwt
@@ -34,7 +36,8 @@ class UserService:
         self.user_store = user_store
 
     async def add_user(self, email: str, password: str):
-        await self.user_store.add_user(email=email, password=password)
+        hash_password = Hasher.get_password_hash(password)
+        await self.user_store.add_user(email=email, password=hash_password)
 
     async def get_user_by_id(self, id: int) -> User | None:
         return await self.user_store.get_user_by_id(id)
@@ -54,7 +57,14 @@ class UserService:
         nickname: str | None,
         email: str,
     ) -> User:
-        return await self.user_store.update_user(username=username, nickname=nickname, email=email)
+        user = await self.user_store.get_user_by_email(email)
+        if user is None:
+            raise UserUnsignedError
+        return await self.user_store.update_user(
+            user = user,
+            username = username, 
+            nickname = nickname
+        )
 
     async def update_username(
         self,
@@ -69,7 +79,23 @@ class UserService:
         old_password: str,
         new_password: str,
     ) -> User:
-        return await self.user_store.update_password(email, old_password, new_password)
+        user = await self.user_store.get_user_by_email(email)
+        if user is None:
+            raise UserUnsignedError
+
+        hash_old_password = Hasher.get_password_hash(old_password)
+        print("password before hashing : ", hash_old_password)
+        print("password after hashing :", user.password)
+
+        if Hasher.verify_password(old_password, user.password) == False:
+            raise InvalidUsernameOrPasswordError()
+        
+        hash_new_password = Hasher.get_password_hash(new_password)
+        
+        return await self.user_store.update_password(
+            user = user,
+            new_password = hash_new_password
+        )
 
     async def is_kakao_user(self, user: User) -> bool:
         return user.nickname is not None
@@ -82,8 +108,14 @@ class UserService:
 
     async def signin(self, email: str, password: str) -> tuple[str, str]:
         user = await self.get_user_by_email(email)
-        if user is None or user.password != password:
-            raise InvalidUsernameOrPasswordError()
+        if user is None :
+            raise UserNotFoundError
+        
+        print("password before hashing : ", password)
+        print("password after hashing :", user.password)
+    
+        if Hasher.verify_password(password, user.password) == False:
+            raise InvalidUsernameOrPasswordError
         return self.issue_tokens(user.email)
     
     def issue_tokens(self, email: str) -> tuple[str, str]:

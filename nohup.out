@@ -1,0 +1,187 @@
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/pydantic/_internal/_config.py:345: UserWarning: Valid config keys have changed in V2:
+* 'allow_population_by_field_name' has been renamed to 'populate_by_name'
+* 'orm_mode' has been renamed to 'from_attributes'
+  warnings.warn(message, UserWarning)
+INFO:     Started server process [64244]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+called get_blog
+Debug: Blog=<Blog id=2, blog_name=asdf님의 블로그, user_id=3>
+main_image_url: None
+INFO:     218.149.163.247:0 - "GET /api/blogs/asdf HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "GET /favicon.ico HTTP/1.0" 404 Not Found
+INFO:     218.149.163.247:0 - "POST /api/users/signin HTTP/1.0" 200 OK
+user found
+INFO:     218.149.163.247:0 - "GET /api/blogs/my_blog HTTP/1.0" 200 OK
+INFO:     218.149.163.247:0 - "PATCH /api/blogs/test HTTP/1.0" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+  + Exception Group Traceback (most recent call last):
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 76, in collapse_excgroups
+  |     yield
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 186, in __call__
+  |     async with anyio.create_task_group() as task_group:
+  |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/anyio/_backends/_asyncio.py", line 767, in __aexit__
+  |     raise BaseExceptionGroup(
+  | ExceptionGroup: unhandled errors in a TaskGroup (1 sub-exception)
+  +-+---------------- 1 ----------------
+    | Traceback (most recent call last):
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    |     result = await app(  # type: ignore[func-returns-value]
+    |              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    |     return await self.app(scope, receive, send)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    |     await super().__call__(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    |     await self.app(scope, receive, _send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    |     with collapse_excgroups():
+    |   File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    |     self.gen.throw(value)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    |     response = await self.dispatch_func(request, call_next)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    |     raise e
+    |   File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    |     response = await call_next(request)
+    |                ^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    |     raise app_exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    |     await self.app(scope, receive_or_disconnect, send_no_error)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    |     await self.app(scope, receive, send_wrapper)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    |     await self.simple_response(scope, receive, send, request_headers=headers)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    |     await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    |     await self.middleware_stack(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    |     await route.handle(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    |     await self.app(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    |     await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    |     raise exc
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    |     await app(scope, receive, sender)
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    |     response = await f(request)
+    |                ^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    |     raw_response = await run_endpoint_function(
+    |                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    |     return await dependant.call(**values)
+    |            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |   File "/home/ubuntu/22-5-team5-server/wastory/app/blog/views.py", line 51, in update_blog
+    |     return await blog_service.update_blog(address_name=address_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)
+    |                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    | TypeError: BlogService.update_blog() missing 1 required positional argument: 'new_default_category_id'
+    +------------------------------------
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/protocols/http/h11_impl.py", line 406, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/uvicorn/middleware/proxy_headers.py", line 70, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 187, in __call__
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/errors.py", line 165, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 185, in __call__
+    with collapse_excgroups():
+  File "/usr/lib/python3.12/contextlib.py", line 158, in __exit__
+    self.gen.throw(value)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_utils.py", line 82, in collapse_excgroups
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 187, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 12, in dispatch
+    raise e
+  File "/home/ubuntu/22-5-team5-server/wastory/database/middleware.py", line 10, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 163, in call_next
+    raise app_exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/base.py", line 149, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/sessions.py", line 85, in __call__
+    await self.app(scope, receive, send_wrapper)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/middleware/exceptions.py", line 62, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 715, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 735, in app
+    await route.handle(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 288, in handle
+    await self.app(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 76, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/starlette/routing.py", line 73, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 301, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/fastapi/routing.py", line 212, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/22-5-team5-server/wastory/app/blog/views.py", line 51, in update_blog
+    return await blog_service.update_blog(address_name=address_name, new_blog_name=blog_update_request.blog_name, new_description=blog_update_request.description)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: BlogService.update_blog() missing 1 required positional argument: 'new_default_category_id'
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64244]
+Exception ignored in: <function Connection.__del__ at 0x7bca82c5c5e0>
+Traceback (most recent call last):
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/aiomysql/connection.py", line 1131, in __del__
+  File "/home/ubuntu/.cache/pypoetry/virtualenvs/22-5-team5-server-RG-_jVMF-py3.12/lib/python3.12/site-packages/aiomysql/connection.py", line 339, in close
+  File "/usr/lib/python3.12/asyncio/selector_events.py", line 1211, in close
+  File "/usr/lib/python3.12/asyncio/selector_events.py", line 875, in close
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 795, in call_soon
+  File "/usr/lib/python3.12/asyncio/base_events.py", line 541, in _check_closed
+RuntimeError: Event loop is closed

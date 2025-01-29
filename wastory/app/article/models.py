@@ -11,10 +11,13 @@ if TYPE_CHECKING:
     from wastory.app.notification.models import Notification
     from wastory.app.like.models import Like
     from wastory.app.hometopic.models import Hometopic
+
+
 class Article(Base):
     __tablename__ = "Article"
 
     id : Mapped[intpk]
+    secret: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     title : Mapped[str] = mapped_column(String(20), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
     description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description

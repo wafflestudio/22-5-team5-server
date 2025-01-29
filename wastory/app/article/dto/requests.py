@@ -40,7 +40,10 @@ class ArticleCreateRequest(BaseModel):
         AfterValidator(content_min_valid_character)
     ]
     description : str
+    main_image_url : str | None
     category_id : int
+    hometopic_id : int
+    secret : int
 
 
 class ArticleUpdateRequest(BaseModel):
@@ -54,3 +57,8 @@ class ArticleUpdateRequest(BaseModel):
         AfterValidator(content_min_valid_character)
     ] = None
     description :str
+
+    main_image_url : str | None
+    category_id : int
+    hometopic_id : int
+    secret : int | None

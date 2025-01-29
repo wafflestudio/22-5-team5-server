@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from wastory.app.subscription.models import Subscription
     from wastory.app.like.models import Like
     from wastory.app.notification.models import Notification
+    from wastory.app.draft.models import Draft
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -41,6 +42,10 @@ class Blog(Base):
     articles: Mapped[list["Article"]] = relationship(
         "Article",  back_populates="blog", cascade="all, delete-orphan"
         )
+
+    drafts: Mapped[list["Draft"]]=relationship(
+        "Draft", back_populates="blog", cascade="all, delete-orphan"
+    )
 
     subscriptions: Mapped[list["Subscription"]] = relationship(
         "Subscription", foreign_keys="Subscription.subscriber_id", back_populates="subscriber"
