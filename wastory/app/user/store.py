@@ -12,7 +12,7 @@ from wastory.database.connection import SESSION
 
 class UserStore:
     @transactional
-    async def add_user(self, email: str, password: str) -> User:
+    async def add_user(self, email: str, password: str | None) -> User:
         if await self.get_user_by_email(email):
             raise EmailAlreadyExistsError()
         user = User(password=password, email=email)
@@ -34,10 +34,14 @@ class UserStore:
     @transactional
     async def update_user(
         self,
-        user : User,
         username: str | None,
         nickname: str | None,
+        email: str,
     ) -> User:
+        user = await self.get_user_by_email(email)
+        if user is None:
+            raise UserUnsignedError()
+
         if username is not None:
             user.username = username
 
@@ -45,15 +49,6 @@ class UserStore:
             user.nickname = nickname
 
         return user
-
-
-    @transactional
-    async def update_username(self, username:str, email:str) -> User:
-        user = await self.get_user_by_email(email)
-        if user is None:
-            raise UserUnsignedError()
-        if username is not None:
-            user.username = username
 
 
     @transactional
