@@ -213,7 +213,7 @@ class CommentStore:
 
 
     @transactional
-    async def update_comment(self, user: User, comment_id: int, content: str) -> Comment:
+    async def update_comment(self, user: User, comment_id: int, content: str,secret:int) -> Comment:
         comment = await self.get_comment_by_id(comment_id)
 
         if comment is None:
@@ -224,10 +224,13 @@ class CommentStore:
 
         if content is not None:
             comment.content = content
+        
+        if secret is not None:
+            comment.secret=secret
 
         await SESSION.flush()
         await SESSION.refresh(comment)  # 최신 상태로 업데이트
-
+        await SESSION.refresh(comment, ["user",  "blog", "article"])
         return comment
 
     @transactional
