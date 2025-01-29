@@ -41,16 +41,51 @@ pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
 > 📌 Wastory 프로젝트의 주요 화면 구성입니다.  
 
 ### 🏠 1. 랜딩 페이지  
+<img width="342" alt="스크린샷 2025-01-29 16 23 12" src="https://github.com/user-attachments/assets/a7b9a4d1-fdae-45a4-b0b0-162a1e0b2bc3" />
 
 
 ### 📝 2. 회원가입 페이지  
-- 이메일 및 소셜 로그인 지원  
+#### 이메일 및 소셜 로그인 지원
+- 이메일 회원가입
+<img width="342" alt="스크린샷 2025-01-29 16 23 20" src="https://github.com/user-attachments/assets/58a26ddd-651c-4ef8-9c27-cbf8e19be343" />
+<img width="342" alt="스크린샷 2025-01-29 16 23 56" src="https://github.com/user-attachments/assets/957e1578-3be6-419c-ac7f-06f8864d8fc0" />
+<img width="342" alt="스크린샷 2025-01-29 16 23 23" src="https://github.com/user-attachments/assets/b6d4ecee-e462-4c8f-8e30-d326864e1e9e" />
+
+- 소셜 회원가입
+  (사진 추가 필요)
 
 ### 🔑 3. 로그인 페이지  
-- ID/PW 로그인 또는 소셜 로그인  
+#### ID/PW 로그인 또는 소셜 로그인
+- 이메일 로그인
+<img width="342" alt="스크린샷 2025-01-29 16 23 20" src="https://github.com/user-attachments/assets/58a26ddd-651c-4ef8-9c27-cbf8e19be343" />
+
 
 ### 🏡 4. 메인 페이지  
-- 토픽 별 게시글 표시
+#### 메인 탭들
+##### 홈 탭
+- 오늘, 일주일 간 인기글
+<img width="342" src = "https://github.com/user-attachments/assets/3e91f5ab-abcc-48f2-a178-a43f2fc55c05"  />
+
+- 카테고리 별 인기글
+<img width="342" src = "https://github.com/user-attachments/assets/aa3c67bd-4d70-495b-b289-58470864c4d1" />
+<img width="342" src = "https://github.com/user-attachments/assets/6b0db9be-8cfe-40fc-8af5-e0f046cb56b9" />
+<img width="342" src = "https://github.com/user-attachments/assets/b37c3d8a-24a7-41f1-8fb0-de0b8d4471c0" />
+
+- 주제 별 추천 글
+<img width="342" src = "https://github.com/user-attachments/assets/093ea069-aab9-4a66-b336-f7a8509cd6d2" />
+<img width="342" src = "https://github.com/user-attachments/assets/04d470c3-d86f-4cda-9950-953bea32bf3d" />
+
+##### 피드 탭
+
+##### 글쓰기 탭
+
+##### 알림 탭
+
+##### 내 블로그 탭
+
+
+
+
 
 ### ✍️ 5. 글 작성 및 조회 페이지  
 - 작성한 글 조회 및 수정 가능  
