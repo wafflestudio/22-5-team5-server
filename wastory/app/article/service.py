@@ -67,9 +67,9 @@ class ArticleService:
         await self.notification_service.add_notification(
             blog_address_names = await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
             type = 1,
-            username = user.username,
-            notification_blogname= user_blog.blog_name,
-            description = article_title,
+            notification_blog_name = user_blog.blog_name,
+            notification_blog_image_url = user_blog.main_image_url,
+            article_id=new_article.id
         )
 
         return ArticleDetailResponse.from_article(new_article)

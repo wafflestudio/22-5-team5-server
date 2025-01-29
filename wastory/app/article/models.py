@@ -1,4 +1,4 @@
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Optional
 from sqlalchemy import String, Text, DateTime, func, ForeignKey, Integer
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
@@ -8,6 +8,7 @@ if TYPE_CHECKING:
     from wastory.app.category.models import Category
     from wastory.app.blog.models import Blog
     from wastory.app.comment.models import Comment
+    from wastory.app.notification.models import Notification
     from wastory.app.like.models import Like
     from wastory.app.hometopic.models import Hometopic
 
@@ -49,3 +50,5 @@ class Article(Base):
     )
     likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
     hometopic : Mapped["Hometopic"] = relationship("Hometopic", back_populates = "articles")
+
+    notification: Mapped[Optional["Notification"]] = relationship("Notification", back_populates="article")
