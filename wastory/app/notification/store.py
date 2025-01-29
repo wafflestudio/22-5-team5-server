@@ -11,14 +11,18 @@ from wastory.app.blog.errors import (
 from wastory.app.user.models import User
 from wastory.app.blog.models import Blog
 from wastory.app.notification.models import Notification
+from wastory.app.article.models import Article
+from wastory.app.comment.models import comment
 from wastory.app.notification.dto.responses import NotificationResponse, PaginatedNotificationListResponse
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
+from wastory.app.user.service import UserService
 
 
 class NotificationStore:
+    user_service=UserService
     @transactional
-    async def add_notification(self, ids: List[Tuple[int, int]], type : int, username: str, notification_blogname: str, description: str | None) -> Notification:
+    async def add_notification(self, ids: List[Tuple[int, int]], type : int, username: str, notification_blogname: str, description: str | None, article_) -> Notification:
         max_description_length = 50
         if len(description) > max_description_length:
             description = description[:max_description_length - 3] + "..."

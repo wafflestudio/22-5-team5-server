@@ -12,7 +12,12 @@ class NotificationResponse(BaseModel):
     updated_at: datetime
     checked: bool = False
     username: str
+    blog_id: int
     blog_main_image_url: str | None
+    article_id: int | None = None
+    article_title: str|None = None
+    comment_content: str|None = None
+    letter_content: str|None = None
 
 class NotificationListResponse(BaseModel):
     total_count: int
