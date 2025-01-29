@@ -56,6 +56,13 @@ class UserService:
     ) -> User:
         return await self.user_store.update_user(username=username, nickname=nickname, email=email)
 
+    async def update_username(
+        self,
+        username: str,
+        email: str,
+    ) -> User:
+        return await self.user_store.update_username(username, email)
+
     async def update_password(
         self,
         email: str,

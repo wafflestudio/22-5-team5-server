@@ -26,17 +26,19 @@ class NotificationService:
         self,
         blog_address_names : List[str],
         type : int,
-        username : str,
-        notification_blogname : str | None,
-        description : str | None,
+        notification_blog_name : str,
+        notification_blog_image_url : str,
+        article_id : int | None = None,
+        comment_id : int | None = None,
     ) -> None:
         blogs = [
             await self.blog_store.get_blog_by_address_name(address_name)
             for address_name in blog_address_names
         ]
-        ids = [(blog.user_id, blog.id) for blog in blogs if blog is not None]
+        notification_blog = await self.blog_store.get_blog_by_name(notification_blog_name)
+        ids = [(blog.user_id, notification_blog.id, article_id, comment_id) for blog in blogs if blog is not None]
         await self.notification_store.add_notification(
-            ids=ids, type=type, username=username, notification_blogname=notification_blogname, description=description
+            ids=ids, type=type, notification_blogname=notification_blog_name, notification_blog_image_url=notification_blog_image_url
             )
     
     async def get_notification_by_id(self, notification_id : int) -> NotificationResponse:
