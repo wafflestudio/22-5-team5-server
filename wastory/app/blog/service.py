@@ -22,7 +22,7 @@ class BlogService:
         name : str,
     ) -> BlogDetailResponse:
 
-        await self.user_store.update_user(user, username=name, nickname=None)
+        await self.user_store.update_user(username=name, nickname=None, email=user.email)
 
         blog = await self.blog_store.add_blog(user_id=user.id, name=name, default_id=0)
 

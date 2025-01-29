@@ -17,7 +17,8 @@ class Notification(Base):
     )
 
     id: Mapped[intpk]
-    notification_blogname: Mapped[str | None] = mapped_column(String(20)) # 알림을 생성한 블로그 이름
+    notification_blogname: Mapped[str | None] = mapped_column(String(20)) # 알림에 사용되는 블로그 이름
+    username: Mapped[str | None] = mapped_column(String(20)) # 알림 생성자 유저 이름
     notification_type: Mapped[int] = mapped_column(Integer, nullable=False) # 새 글 알림(1), 구독 알림(2), 댓글 알림(3), 방명록 알림(4), 쪽지 알림(5)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # 생성 시간
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())  # 갱신 시간
