@@ -3,7 +3,7 @@ from typing import Annotated
 from fastapi import Depends
 from wastory.app.category.store import CategoryStore
 from wastory.app.category.dto.responses import CategoryDetailResponse,CategoryListResponse,CategoryFinalResponse
-from wastory.app.category.errors import BlogNotFoundError
+from wastory.app.category.errors import BlogNotFoundError,CategoryNameDuplicateError
 from wastory.app.user.models import User
 from wastory.app.user.store import UserStore
 from wastory.app.blog.store import BlogStore
@@ -39,6 +39,8 @@ class CategoryService:
     async def update_category(
         self, category_id:int, new_category_name:str,user:User
     )-> CategoryDetailResponse:
+        if await self.category_store.get_category_by_blog_and_name(user.blogs.id, new_category_name):
+                raise CategoryNameDuplicateError
         updated_category= await self.category_store.update_category(
                 user=user,
                 category_id=category_id,
