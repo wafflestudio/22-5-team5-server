@@ -46,10 +46,10 @@ class CommentService:
                 if (blog.user_id != user.id):
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
-                        type=3,
-                        username=user.username,
-                        notification_blogname=user_blog.blog_name,
-                        description=content,
+                        type = 3,
+                        notification_blog_name = blog.blog_name,
+                        notification_blog_image_url = user_blog.main_image_url,
+                        comment_id = new_comment.id
                     )
             elif level==2:
                 new_comment=await self.comment_store.create_article_comment_2(
@@ -62,10 +62,10 @@ class CommentService:
                 # 댓글 알림
                 await self.notification_service.add_notification(
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
-                    type=3,
-                    username=user.username,
-                    notification_blogname=user_blog.blog_name,
-                    description=content,
+                    type = 3,
+                    notification_blog_name = blog.blog_name,
+                    notification_blog_image_url = user_blog.main_image_url,
+                    comment_id = new_comment.id
                 )
             return CommentDetailResponse.from_comment(new_comment, user)
 
@@ -89,9 +89,9 @@ class CommentService:
                     await self.notification_service.add_notification(
                         blog_address_names = [blog.address_name],
                         type=4,
-                        username=user.username,
-                        notification_blogname=user_blog.blog_name,
-                        description=content,
+                        notification_blog_name=blog.blog_name,
+                        notification_blog_image_url=user_blog.main_image_url,
+                        comment_id=new_comment.id
                     )
             elif level==2:
                 new_comment=await self.comment_store.create_guestbook_comment_2(
@@ -105,9 +105,9 @@ class CommentService:
                 await self.notification_service.add_notification(
                     blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
                     type=4,
-                    username=user.username,
-                    notification_blogname=user_blog.blog_name,
-                    description=content,
+                    notification_blog_name=blog.blog_name,
+                    notification_blog_image_url=user_blog.main_image_url,
+                    comment_id=new_comment.id
                 )
             return CommentDetailResponse.from_comment(new_comment, user)
 

@@ -34,9 +34,8 @@ class MessageService:
         await self.notification_service.add_notification(
             blog_address_names = [sender_blog.address_name],
             type = 5,
-            username = sender.username,
-            notification_blogname= sender_blog.blog_name,
-            description = content,
+            notification_blog_name=sender_blog.blog_name,
+            notification_blog_image_url=sender_blog.main_image_url
         )
 
         return MessageDetailResponse.from_message(message)

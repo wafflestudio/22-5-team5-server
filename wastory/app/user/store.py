@@ -48,12 +48,22 @@ class UserStore:
 
 
     @transactional
-    async def update_password(self, user: User, new_password: str) -> User:
-        
-        if new_password is not None:
-            user.password = new_password
+    async def update_username(self, username:str, email:str) -> User:
+        user = await self.get_user_by_email(email)
+        if user is None:
+            raise UserUnsignedError()
+        if username is not None:
+            user.username = username
 
-        return user
+
+    @transactional
+    async def update_password(self, email:str, old_password: str, new_password: str) -> User:
+        user = await self.get_user_by_email(email)
+        if user is None:
+            raise UserUnsignedError()
+
+        if user.password != old_password:
+            raise InvalidUsernameOrPasswordError()
 
 
     @transactional
