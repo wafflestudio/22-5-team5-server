@@ -68,6 +68,7 @@ class ArticleService:
             blog_address_names = await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
             type = 1,
             notification_blog_name = user_blog.blog_name,
+            username=user.username,
             notification_blog_image_url = user_blog.main_image_url,
             article_id=new_article.id
         )

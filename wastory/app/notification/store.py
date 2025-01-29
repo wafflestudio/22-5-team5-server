@@ -24,11 +24,14 @@ from wastory.app.user.service import UserService
 class NotificationStore:
     user_service=UserService
     @transactional
-    async def add_notification(self, ids: List[Tuple[int, int, int | None, int | None]], type : int, notification_blogname: str, notification_blog_image_url : str) -> Notification:
+    async def add_notification(
+        self, ids: List[Tuple[int, int, int | None, int | None]], type : int, notification_blogname: str, notification_blog_image_url : str, username : str
+        ) -> Notification:
         notifications = [
             Notification(
                 notification_type=type,
                 notification_blogname=notification_blogname,
+                username=username,
                 notification_blog_image_url=notification_blog_image_url,
                 user_id=user_id,
                 blog_id=blog_id,
@@ -54,7 +57,6 @@ class NotificationStore:
         stmt = (
             select(
                 Notification,
-                User.username,
                 Blog.blog_name,
                 Article.title,
                 Comment.content
@@ -86,13 +88,13 @@ class NotificationStore:
             NotificationResponse(
                 id=n[0].id,
                 notification_type=n[0].notification_type,
-                username=n[1],
+                username=n[0].username,
                 blog_id=n[0].blog_id,
-                blog_name=n[2],
+                blog_name=n[1],
                 blog_main_image_url=n[0].notification_blog_image_url,
                 article_id=n[0].article_id,
-                article_title=n[3],
-                comment_content=n[4],
+                article_title=n[2],
+                comment_content=n[3],
                 created_at=n[0].created_at,
                 checked=n[0].checked
             )
