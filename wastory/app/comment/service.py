@@ -112,12 +112,13 @@ class CommentService:
             return CommentDetailResponse.from_comment(new_comment, user)
 
     async def update_comment(
-        self,user:User,comment_id:int,content:str
+        self,user:User,comment_id:int,content:str,secret:int
     )-> CommentDetailResponse:
         comment=await self.comment_store.update_comment(
             user=user,
             comment_id=comment_id,
-            content=content
+            content=content,
+            secret=secret
         )
         return CommentDetailResponse.from_comment(comment,user)
 

@@ -52,7 +52,8 @@ async def update(
     return await comment_service.update_comment(
         user=user, 
         comment_id=comment_id,
-        content=comment_request.content
+        content=comment_request.content,
+        secret=comment_request.secret
     )
 
 @comment_router.delete("/{comment_id}", status_code=HTTP_204_NO_CONTENT)

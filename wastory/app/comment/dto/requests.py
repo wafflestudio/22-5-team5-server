@@ -37,3 +37,4 @@ class CommentUpdateRequest(BaseModel):
         str,
         AfterValidator(content_max_length_5000),
     ]
+    secret:Optional[int] = None
