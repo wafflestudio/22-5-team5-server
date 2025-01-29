@@ -4,7 +4,7 @@ Tistory 클론 코딩 프로젝트 Wastory입니다
 ## 프로젝트 참여자
 1. 백엔드
 
-박수인
+박수인(https://github.com/SooinPark1019)
 
 박상현
 
