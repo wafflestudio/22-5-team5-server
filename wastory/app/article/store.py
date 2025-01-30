@@ -1,7 +1,7 @@
 from functools import cache
 from fastapi import Depends
 from typing import Annotated, Sequence, List, Optional
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from sqlalchemy import Select, select, or_, and_, func, update
 from sqlalchemy.orm import joinedload, aliased
 from sqlalchemy.sql.elements import ClauseElement
@@ -284,7 +284,7 @@ class ArticleStore :
         per_page = 5  # 페이지당 기사 수 (1개로 설정)
 
         # 오늘 날짜의 시작과 끝 계산
-        today_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        today_start = datetime.now(timezone(timedelta(hours=9))).replace(hour=0, minute=0, second=0, microsecond=0)
         today_end = today_start + timedelta(days=1)
         
         access_condition = self.get_access_condition(user)
