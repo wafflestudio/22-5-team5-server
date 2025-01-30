@@ -24,7 +24,7 @@ class Article(Base):
     comments_enabled: Mapped[int] = mapped_column(Integer, default=1, nullable=False)  # 1 = 활성화, 0 = 비활성화
     title : Mapped[str] = mapped_column(String(80), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
-    description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description
+    description: Mapped[str] = mapped_column(Text, nullable = False) # 미리보기용 description
 
     views: Mapped[int] = mapped_column(Integer, default=0, nullable=False) # 조회수
 
