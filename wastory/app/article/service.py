@@ -47,7 +47,8 @@ class ArticleService:
         images: List[ImageCreateRequest],
         secret: int = 0,
         protected: int = 0,
-        password: Optional[str] = None
+        password: Optional[str] = None,
+        comments_enabled: int = 1  # 댓글 기본 허용
     ) -> ArticleDetailResponse:
         # 사용자의 Blog 확인
         user_blog = await self.blog_store.get_blog_of_user(user.id)
@@ -69,18 +70,19 @@ class ArticleService:
             images=images,
             secret=secret,
             protected=protected,
-            password=password
+            password=password,
+            comments_enabled=comments_enabled
         )
 
-        # 새 글 알림
-        await self.notification_service.add_notification(
-            blog_address_names=await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
-            type=1,
-            notification_blog_name=user_blog.blog_name,
-            username=user.username,
-            notification_blog_image_url=user_blog.main_image_url,
-            article_id=new_article.id
-        )
+        if secret == 0:
+            await self.notification_service.add_notification(
+                blog_address_names=await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
+                type=1,
+                notification_blog_name=user_blog.blog_name,
+                username=user.username,
+                notification_blog_image_url=user_blog.main_image_url,
+                article_id=new_article.id
+            )
 
         return ArticleDetailResponse.from_article(new_article)
     
@@ -97,7 +99,8 @@ class ArticleService:
         main_image_url: Optional[str] = None,
         secret: Optional[int] = None,
         protected: Optional[int] = None,
-        password: Optional[str] = None
+        password: Optional[str] = None,
+        comments_enabled: Optional[int] = None  # 댓글 허용 여부 수정 가능
     ) -> ArticleDetailResponse:
         # 사용자의 Blog 확인
         user_blog = await self.blog_store.get_blog_of_user(user.id)
@@ -128,7 +131,8 @@ class ArticleService:
             main_image_url=main_image_url,
             secret=secret,
             protected=protected,
-            password=password
+            password=password,
+            comments_enabled=comments_enabled
         )
 
         return ArticleDetailResponse.from_article(updated_article)
