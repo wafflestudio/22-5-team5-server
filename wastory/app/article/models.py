@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from wastory.app.notification.models import Notification
     from wastory.app.like.models import Like
     from wastory.app.hometopic.models import Hometopic
+    from wastory.app.image.models import Image
 
 
 class Article(Base):
@@ -36,9 +37,8 @@ class Article(Base):
     category_id : Mapped[int] = mapped_column(ForeignKey("category.id", ondelete = "CASCADE"))
     hometopic_id : Mapped[int] = mapped_column(ForeignKey("hometopic.id", ondelete = "CASCADE"),nullable =True)  # 외래 키 정의
 
-    """
-    images : Mapped[list["Image"]] = relationship("Image", back_populates = "article", cascade = "all, delete-orphan")    
-    """
+    
+    images : Mapped[list["Image"]] = relationship("Image", back_populates = "article", cascade = "all, delete-orphan")
     blog : Mapped["Blog"] = relationship("Blog", back_populates = "articles")
     category : Mapped["Category"] = relationship("Category", back_populates = "articles")
     

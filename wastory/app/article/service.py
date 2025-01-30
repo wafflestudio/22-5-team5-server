@@ -1,4 +1,4 @@
-from typing import Annotated
+from typing import Annotated, List
 
 from fastapi import Depends
 from wastory.app.article.dto.responses import ArticleDetailResponse, PaginatedArticleListResponse, ArticleInformationResponse
@@ -13,6 +13,7 @@ from wastory.app.subscription.store import SubscriptionStore
 from wastory.app.notification.service import NotificationService
 from wastory.app.user.errors import PermissionDeniedError
 from wastory.app.user.models import User 
+from wastory.app.image.dto.requests import ImageCreateRequest
 
 class ArticleService:
     def __init__(
@@ -40,6 +41,7 @@ class ArticleService:
         main_image_url : str | None,
         category_id :int, 
         hometopic_id : int, 
+        images : List[ImageCreateRequest],
         secret : int = 0
     ) -> ArticleDetailResponse :
                 
@@ -60,6 +62,7 @@ class ArticleService:
             blog_id=user_blog.id, 
             category_id=category_id, 
             hometopic_id = hometopic_id,
+            images = images,
             secret=secret
         )
 
@@ -85,6 +88,7 @@ class ArticleService:
         main_image_url : str | None,
         category_id : int,
         hometopic_id : int,
+        images : List[ImageCreateRequest],
         secret : int | None
     ) -> ArticleDetailResponse:
         
@@ -115,6 +119,7 @@ class ArticleService:
             main_image_url,
             category_id,
             hometopic_id,
+            images,
             secret
         )
 

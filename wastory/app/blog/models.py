@@ -12,6 +12,7 @@ if TYPE_CHECKING:
     from wastory.app.like.models import Like
     from wastory.app.notification.models import Notification
     from wastory.app.draft.models import Draft
+    from wastory.app.image.models import Image
 
 class Blog(Base):
     __tablename__ = "blog"
@@ -25,7 +26,8 @@ class Blog(Base):
     description: Mapped[str | None] = mapped_column(String(255), default=None, nullable=True)
 
     main_image_url: Mapped[str | None] = mapped_column(String(255), default=None, nullable=True)
-    
+    main_image : Mapped["Image"] = relationship("Image", back_populates = "blog")
+
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())  # 생성 시간
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())  # 갱신 시간
     default_category_id: Mapped[int|None] = mapped_column(Integer)
@@ -34,7 +36,6 @@ class Blog(Base):
     
     # 관계 설정
     user: Mapped["User"] = relationship("User", back_populates="blogs")
-
     categories: Mapped[list["Category"]] = relationship(
         "Category", back_populates="blog", cascade="all, delete-orphan"
         )
