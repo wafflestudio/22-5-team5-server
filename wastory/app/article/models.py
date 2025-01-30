@@ -19,6 +19,8 @@ class Article(Base):
 
     id : Mapped[intpk]
     secret: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    protected: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
+    password: Mapped[str | None] = mapped_column(String(60), nullable=True)
     title : Mapped[str] = mapped_column(String(80), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
     description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description

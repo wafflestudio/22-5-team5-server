@@ -1,5 +1,5 @@
-from typing import Annotated, List
-from pydantic import AfterValidator, BaseModel
+from typing import Annotated, List, Optional
+from pydantic import AfterValidator, BaseModel, field_validator, ValidationInfo
 
 from wastory.common.errors import InvalidFieldFormatError
 from wastory.app.image.dto.requests import ImageCreateRequest
@@ -27,8 +27,11 @@ def content_min_valid_character(content: str | None) -> str | None:
         raise InvalidFieldFormatError("내용에는 최소 1개의 문자(공백 제외)가 포함되어야 합니다.")
     return content
 
-
-
+def password_valid(password: Optional[str], values: ValidationInfo) -> Optional[str]:
+    protected = values.data.get("protected", 0)  # ✅ `.data.get()` 사용 (None 대비 default=0)
+    if protected == 1 and (not password or len(password) < 4 or len(password) > 60):
+        raise ValueError
+    return password
 
 class ArticleCreateRequest(BaseModel):
     title: Annotated[
@@ -45,22 +48,35 @@ class ArticleCreateRequest(BaseModel):
     category_id : int
     hometopic_id : int
     secret : int
-    images: List[ImageCreateRequest] = []  
+    protected: int
+    password: Optional[str] = None
+    images: List[ImageCreateRequest] = [] 
+
+    @field_validator("password")
+    @classmethod
+    def validate_password(cls, password: Optional[str], values: ValidationInfo):
+        return password_valid(password, values)
 
 
 class ArticleUpdateRequest(BaseModel):
     title: Annotated[
-        str | None,
+        Optional[str],
         AfterValidator(title_length_1_and_80),
         AfterValidator(title_not_empty)
     ] = None
     content: Annotated[
-        str | None,
+        Optional[str],
         AfterValidator(content_min_valid_character)
     ] = None
-    description :str
-    main_image_url : str | None
-    category_id : int
-    hometopic_id : int
-    secret : int | None
+    description: Optional[str] = None
+    main_image_url: Optional[str] = None
+    category_id: Optional[int] = None
+    hometopic_id: Optional[int] = None
+    secret: Optional[int] = None
+    protected: Optional[int] = None
+    password: Optional[str] = None
     images: List[ImageCreateRequest] = []
+
+    @field_validator("password", mode="before")
+    def validate_password(cls, password, values):
+        return password_valid(password, values)
