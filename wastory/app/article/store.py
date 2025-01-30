@@ -1,5 +1,6 @@
 from functools import cache
-from typing import Annotated, Sequence
+from fastapi import Depends
+from typing import Annotated, Sequence, List
 from datetime import datetime, timedelta
 from sqlalchemy import Select, select, or_, and_, func, update
 from sqlalchemy.orm import joinedload, aliased
@@ -14,8 +15,17 @@ from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 from wastory.app.article.dto.responses import ArticleSearchInListResponse, PaginatedArticleListResponse, ArticleInformationResponse
 from wastory.app.user.models import User
+from wastory.app.image.models import Image
+from wastory.app.image.store import ImageStore
+from wastory.app.image.dto.requests import ImageCreateRequest
+
 
 class ArticleStore :
+    def __init__(
+        self,
+        image_store : Annotated[ImageStore, Depends()]
+    ) :
+        self.image_store = image_store
 
     def get_access_condition(self, user: User) -> ClauseElement:
         """
@@ -57,6 +67,7 @@ class ArticleStore :
         blog_id : int, 
         category_id : int, 
         hometopic_id : int,
+        images : List[ImageCreateRequest],
         secret : int = 0
     ) -> Article :
         article = Article(
@@ -65,12 +76,28 @@ class ArticleStore :
             description = article_description, 
             main_image_url = main_image_url,
             blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id,
-            secret=secret
+            secret = secret
         )
+        
         SESSION.add(article)
-        # 왜 필요하지?       
         await SESSION.flush()
         await SESSION.refresh(article)
+
+        """
+        # main_image 에 대응되는 객체 생성
+        if main_image_url :
+            await self.image_store.create_image(
+                file_url = main_image_url,
+                article_id = article.id,
+                is_main = True
+            )
+        """
+        # article 내부에 존재하는 객체 생성
+        for image_request in images:
+            await self.image_store.create_image(
+                file_url = image_request.file_url,
+                article_id = article.id
+            )
         return article
     
     @transactional
@@ -83,6 +110,7 @@ class ArticleStore :
         main_image_url : str | None,
         category_id : int,
         hometopic_id : int,
+        images : List[ImageCreateRequest],
         secret : int | None
     ) -> Article:
         if article_title is not None:
@@ -93,9 +121,62 @@ class ArticleStore :
             article.description = article_description
         if secret is not None:
             article.secret=secret
-        article.main_image_url = main_image_url
         article.category_id = category_id
         article.hometopic_id = hometopic_id
+
+
+        if main_image_url != article.main_image_url :
+            previous_main_image = await self.image_store.get_image_of_article_by_url(article.id, article.main_image_url)
+            print("previous main image URL : ",article.main_image_url)
+            print("after_main_image_url : ", main_image_url)
+            # 기존의 main image 가 content 내부에 들어있지 않는 조건
+            if not previous_main_image :
+                print("A")
+
+                # 기존의 main image 가 null 이나 "" 의 값이 아닐 조건               
+                if await self.image_store.image_exists_in_S3(article.main_image_url):
+                    await self.image_store.delete_image_in_S3(article.main_image_url)
+
+            print("A main_image_url :", article.main_image_url)
+
+            """
+            if main_image_url :
+                
+                print("B main_image_url :", main_image_url)
+                await self.image_store.create_image(
+                    file_url = main_image_url, 
+                    article_id = article.id,
+                    is_main = True
+                )
+            """
+        
+        article.main_image_url = main_image_url
+
+
+        # 기존 이미지 목록 가져오기(단, main_image 는 제외)
+        existing_images = await SESSION.execute(
+            select(Image).where(Image.article_id == article.id, Image.is_main == False)
+        )
+        existing_images = existing_images.scalars().all()
+        
+        # 기존 이미지 URL 리스트
+        existing_image_urls = {img.file_url for img in existing_images}
+        # 업데이트 요청에 포함된 이미지 URL
+        new_image_urls = {img.file_url for img in images}
+
+        # 삭제할 이미지 찾기 (기존에는 있었지만, 새 데이터에는 없는 이미지)
+        images_to_delete = [img for img in existing_images if img.file_url not in new_image_urls]
+        for img in images_to_delete:
+            if article.main_image_url != img.file_url:
+                await self.image_store.delete_image(img)
+
+        # 추가할 이미지 찾기 (기존에는 없었지만, 새 데이터에 있는 이미지)
+        for img in images : 
+            if img.file_url not in existing_image_urls :
+                await self.image_store.create_image(
+                    file_url = img.file_url, 
+                    article_id = article.id
+                )
 
         await SESSION.merge(article)
         await SESSION.flush()
@@ -104,6 +185,8 @@ class ArticleStore :
 
     @transactional
     async def delete_article(self, article: Article) -> None:
+        if await self.image_store.image_exists_in_S3(article.main_image_url):
+            await self.image_store.delete_image_in_S3(article.main_image_url)
         await SESSION.delete(article)
         await SESSION.flush()   
 
@@ -635,4 +718,3 @@ class ArticleStore :
             total_count=total_count or 0,
             articles=articles,
         )
-
