@@ -36,7 +36,8 @@ async def create_article(
             secret=article.secret,
             images = article.images,
             protected=article.protected,
-            password=article.password
+            password=article.password,
+            comments_enabled=article.comments_enabled
             )
     else:
         return await article_service.create_article(
@@ -50,7 +51,8 @@ async def create_article(
             secret=article.secret,
             images = article.images,
             protected=article.protected,
-            password=article.password
+            password=article.password,
+            comments_enabled=article.comments_enabled
             )
 
 # article 수정
@@ -77,7 +79,8 @@ async def update_article(
             images = article.images,
             secret = article.secret,
             protected=article.protected,
-            password=article.password
+            password=article.password,
+            comments_enabled=article.comments_enabled
         )
     else : 
         return await article_service.update_article(
@@ -92,7 +95,8 @@ async def update_article(
             images = article.images,
             secret = article.secret,
             protected=article.protected,
-            password=article.password
+            password=article.password,
+            comments_enabled=article.comments_enabled
         )
 
 

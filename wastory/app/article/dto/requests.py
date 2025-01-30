@@ -51,6 +51,7 @@ class ArticleCreateRequest(BaseModel):
     protected: int
     password: Optional[str] = None
     images: List[ImageCreateRequest] = [] 
+    comments_enabled: int = 1  # 1 = 활성화, 0 = 비활성화
 
     @field_validator("password")
     @classmethod
@@ -76,6 +77,7 @@ class ArticleUpdateRequest(BaseModel):
     protected: Optional[int] = None
     password: Optional[str] = None
     images: List[ImageCreateRequest] = []
+    comments_enabled: Optional[int] = None  # 사용자가 수정할 수 있도록 설정
 
     @field_validator("password", mode="before")
     def validate_password(cls, password, values):
