@@ -622,7 +622,7 @@ class ArticleStore :
         search_conditions = [
             or_(
                 Article.title.ilike(f"%{word}%"),
-                Article.content.ilike(f"%{word}%")
+                Article.description.ilike(f"%{word}%")
             )
             for word in words
         ]

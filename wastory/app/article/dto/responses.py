@@ -116,11 +116,17 @@ class ArticleSearchInListResponse(BaseModel):
     ) -> Self:
         if article is None:
             raise ArticleNotFoundError
+        
+        # 🔥 description 80자 제한 로직 추가
+        if article.protected == 0:
+            return_description = article.description[:80] + "…" if len(article.description) > 80 else article.description
+        else:
+            return_description = "🔒 보호된 게시글입니다."
 
         return ArticleSearchInListResponse(
             id=article.id,
             title=article.title,
-            description=article.description if article.protected == 0 else "🔒 보호된 게시글입니다.",
+            description=return_description,
             created_at=article.created_at,
             updated_at=article.updated_at,
             article_main_image_url=article.main_image_url,
