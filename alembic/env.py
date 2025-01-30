@@ -20,6 +20,7 @@ from wastory.app.like.models import Like
 from wastory.app.message.models import Message
 from wastory.app.hometopic.models import Hometopic
 from wastory.app.draft.models import Draft
+from wastory.app.image.models import Image
 
 print(DB_SETTINGS.url)
 

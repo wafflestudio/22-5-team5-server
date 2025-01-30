@@ -1,7 +1,8 @@
-from typing import Annotated
+from typing import Annotated, List
 from pydantic import AfterValidator, BaseModel
 
 from wastory.common.errors import InvalidFieldFormatError
+from wastory.app.image.dto.requests import ImageCreateRequest
 
 
 def title_length_1_and_80(title: str | None) -> str | None:
@@ -44,6 +45,7 @@ class ArticleCreateRequest(BaseModel):
     category_id : int
     hometopic_id : int
     secret : int
+    images: List[ImageCreateRequest] = []  
 
 
 class ArticleUpdateRequest(BaseModel):
@@ -57,8 +59,8 @@ class ArticleUpdateRequest(BaseModel):
         AfterValidator(content_min_valid_character)
     ] = None
     description :str
-
     main_image_url : str | None
     category_id : int
     hometopic_id : int
     secret : int | None
+    images: List[ImageCreateRequest] = []

@@ -21,7 +21,7 @@ class ImageService:
         file: UploadFile = File(...)
     ) -> ImageDetailResponse :
         try:
-            file_url = await self.image_store.upload_image(s3_path, file)
+            file_url = await self.image_store.upload_image_in_S3(s3_path, file)
             return ImageDetailResponse.from_image(file_url)
         except ClientError as e:
             raise S3ClientError
@@ -33,7 +33,7 @@ class ImageService:
         file_url : str
     ) -> dict :
         try:
-            return await self.image_store.delete_image(file_url)
+            return await self.image_store.delete_image_in_S3(file_url)
         except ClientError as e:
             raise S3ClientError
         except Exception as e:

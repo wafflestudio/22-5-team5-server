@@ -39,10 +39,9 @@ async def delete_image(
     image_service: Annotated[ImageService, Depends()],
     file_url: str
 ) -> dict :
-    
     return await image_service.delete_image(file_url)
 
-
+    
 @image_router.post("/generate-presigned-urls", status_code=201)
 async def generate_presigned_urls(
     user: Annotated[User, Depends(login_with_header)],

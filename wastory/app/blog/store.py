@@ -10,11 +10,19 @@ from wastory.app.blog.errors import (
     BlogAlreadyExistsError
 )
 from wastory.app.blog.models import Blog
+from wastory.app.image.store import ImageStore
+
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
 
 
 class BlogStore:
+    def __init__(
+        self,
+        image_store : Annotated[ImageStore, Depends()]
+    ) :
+        self.image_store = image_store
+    
     @transactional
     async def add_blog(self, user_id: int, name : str, default_id : int) -> Blog:
         blog_name = name + "님의 블로그"
@@ -88,9 +96,23 @@ class BlogStore:
 
         if new_default_category_id is not None:
             blog.default_category_id = new_default_category_id
+        
+        if new_main_image_URL != blog.main_image_url :
+            previous_main_image = await self.image_store.get_main_image_of_blog(blog.id)
+            if previous_main_image :
+                await self.image_store.delete_image(previous_main_image)
+            print("A main_image_url :", blog.main_image_url)
 
-        if new_main_image_URL is not None:
-            blog.main_image_url=new_main_image_URL
+            if new_main_image_URL :
+                print("B main_image_url :", new_main_image_URL)
+                await self.image_store.create_image(
+                    file_url = new_main_image_URL, 
+                    blog_id = blog.id,
+                    is_main = True
+                )
+
+        blog.main_image_url=new_main_image_URL
+
 
         SESSION.merge(blog)
         await SESSION.flush()
@@ -162,5 +184,3 @@ class BlogStore:
         # 쿼리 실행 및 결과 반환
         count = await SESSION.scalar(query)
         return count or 0
-
-

@@ -6,6 +6,7 @@ from wastory.app.article.service import ArticleService
 from wastory.app.blog.service import BlogService
 
 from wastory.app.user.models import User
+from wastory.app.image.models import Image
 from wastory.app.user.views import login_with_header
 
 
@@ -21,6 +22,8 @@ async def create_article(
 ) -> ArticleDetailResponse:
     user_blog = await blog_service.get_blog_by_user(user)
 
+
+
     if article.category_id == 0:
         return await article_service.create_article(
             user=user, 
@@ -30,7 +33,8 @@ async def create_article(
             main_image_url = article.main_image_url,
             category_id=user_blog.default_category_id,
             hometopic_id = article.hometopic_id,
-            secret=article.secret
+            secret=article.secret,
+            images = article.images
             )
     else:
         return await article_service.create_article(
@@ -41,7 +45,8 @@ async def create_article(
             main_image_url = article.main_image_url, 
             category_id=article.category_id,
             hometopic_id = article.hometopic_id,
-            secret=article.secret
+            secret=article.secret,
+            images = article.images
             )
 
 # article 수정
@@ -65,7 +70,8 @@ async def update_article(
             main_image_url = article.main_image_url,
             category_id=user_blog.default_category_id,
             hometopic_id = article.hometopic_id,
-            secret=article.secret
+            images = article.images,
+            secret = article.secret
         )
     else : 
         return await article_service.update_article(
@@ -75,8 +81,10 @@ async def update_article(
             article_content=article.content, 
             article_description = article.description, 
             main_image_url = article.main_image_url,
-            category_id=article.category_id,
-            hometopic_id = article.hometopic_id
+            category_id = article.category_id,
+            hometopic_id = article.hometopic_id,
+            images = article.images,
+            secret = article.secret
         )
 
 
@@ -96,7 +104,7 @@ async def get_today_most_viewed(
     user : Annotated[User, Depends(login_with_header)],
 ) ->PaginatedArticleListResponse:
     return await article_service.get_today_most_viewed(
-        user=user
+        user = user
     )
 # blog 내 인기글 가져오기
 @article_router.get("/weekly_wastory", status_code=200)
@@ -119,7 +127,7 @@ async def get_top_articles_in_blog(
     return await article_service.get_top_articles_in_blog(
         blog_id = blog_id,
         sort_by = sort_by,
-        user=user
+        user = user
     )
 
 # hometopic 인기글 가져오기기
