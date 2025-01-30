@@ -1,6 +1,6 @@
 from functools import cache
 from fastapi import Depends
-from typing import Annotated, Sequence, List
+from typing import Annotated, Sequence, List, Optional
 from datetime import datetime, timedelta
 from sqlalchemy import Select, select, or_, and_, func, update
 from sqlalchemy.orm import joinedload, aliased
@@ -18,6 +18,7 @@ from wastory.app.user.models import User
 from wastory.app.image.models import Image
 from wastory.app.image.store import ImageStore
 from wastory.app.image.dto.requests import ImageCreateRequest
+from wastory.app.article.errors import NoAuthoriztionError
 
 
 class ArticleStore :
@@ -60,7 +61,7 @@ class ArticleStore :
     @transactional
     async def create_article(
         self, 
-        atricle_title : str, 
+        article_title : str, 
         article_content: str, 
         article_description: str, 
         main_image_url : str | None,
@@ -68,15 +69,22 @@ class ArticleStore :
         category_id : int, 
         hometopic_id : int,
         images : List[ImageCreateRequest],
-        secret : int = 0
+        secret : int = 0,
+        protected: int = 0,
+        password: Optional[str] = None
     ) -> Article :
+        
         article = Article(
-            title = atricle_title, 
-            content = article_content, 
-            description = article_description, 
-            main_image_url = main_image_url,
-            blog_id = blog_id, category_id = category_id, hometopic_id = hometopic_id,
-            secret = secret
+            title=article_title, 
+            content=article_content, 
+            description=article_description, 
+            main_image_url=main_image_url,
+            blog_id=blog_id, 
+            category_id=category_id, 
+            hometopic_id=hometopic_id,
+            secret=secret,
+            protected=protected,
+            password=password
         )
         
         SESSION.add(article)
@@ -103,15 +111,17 @@ class ArticleStore :
     @transactional
     async def update_article(
         self, 
-        article: Article, 
-        article_title: str | None,
-        article_content: str | None,
-        article_description: str | None,
-        main_image_url : str | None,
-        category_id : int,
-        hometopic_id : int,
-        images : List[ImageCreateRequest],
-        secret : int | None
+        article: Article,
+        category_id: int,
+        hometopic_id: int,
+        images: List[ImageCreateRequest],
+        article_title: Optional[str] = None,
+        article_content: Optional[str] = None,
+        article_description: Optional[str] = None,
+        main_image_url: Optional[str] = None,
+        secret: Optional[int] = None,
+        protected: Optional[int] = None,
+        password: Optional[str] = None,
     ) -> Article:
         if article_title is not None:
             article.title = article_title
@@ -121,6 +131,13 @@ class ArticleStore :
             article.description = article_description
         if secret is not None:
             article.secret=secret
+        if protected is not None:
+            if protected == 0 and article.protected==1:
+                article.password = None
+            article.protected = protected
+        if password is not None:
+            article.password = password
+
         article.category_id = category_id
         article.hometopic_id = hometopic_id
 
@@ -207,30 +224,33 @@ class ArticleStore :
         return result.scalar_one_or_none()
 
     @transactional
-    async def get_article_information_by_id(self, article_id : int) -> ArticleInformationResponse:
+    async def get_article_information_by_id(self, article_id: int, password: Optional[str] = None) -> ArticleInformationResponse:
         base_query = self.build_base_query()
-        stmt = (
-            base_query
-            .filter(Article.id == article_id)
-        )
+        stmt = base_query.filter(Article.id == article_id)
         
         result = await SESSION.execute(stmt)
-
         row = result.one_or_none()
-        article = ArticleInformationResponse.from_article(
-                article=row.Article,
-                blog_name = row.blog_name,
-                blog_main_image_url = row.blog_main_image_url,
-                article_likes=row.likes,
-                article_comments=row.comments,
-            )
-        
+        article = row.Article
+        if article.protected == 1:
+            if not password:
+                raise NoAuthoriztionError()
+            if article.password != password:
+                raise NoAuthoriztionError()
+            
         blog = await SESSION.get(Blog, article.blog_id)
 
-        if article.category_id == blog.default_category_id:
-            article.category_id = 0
+        article_response = ArticleInformationResponse.from_article(
+            article=article,
+            blog_name=row.blog_name,
+            blog_main_image_url=row.blog_main_image_url,
+            article_likes=row.likes,
+            article_comments=row.comments
+        )
 
-        return article
+        if article_response.category_id == blog.default_category_id:
+            article_response.category_id = 0
+
+        return article_response
     
     
     @transactional

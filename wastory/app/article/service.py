@@ -1,7 +1,10 @@
-from typing import Annotated, List
-
+from typing import Annotated, List, Optional
 from fastapi import Depends
-from wastory.app.article.dto.responses import ArticleDetailResponse, PaginatedArticleListResponse, ArticleInformationResponse
+from wastory.app.article.dto.responses import (
+    ArticleDetailResponse, 
+    PaginatedArticleListResponse, 
+    ArticleInformationResponse
+)
 from wastory.app.article.errors import ArticleNotFoundError, NoAuthoriztionError
 from wastory.app.article.store import ArticleStore
 from wastory.app.blog.errors import BlogNotFoundError
@@ -22,7 +25,7 @@ class ArticleService:
         blog_store: Annotated[BlogStore, Depends()],
         category_store: Annotated[CategoryStore, Depends()],
         subscription_store: Annotated[SubscriptionStore, Depends()],
-        hometopic_store : Annotated[HometopicStore, Depends()],
+        hometopic_store: Annotated[HometopicStore, Depends()],
         notification_service: Annotated[NotificationService, Depends()],
     ):
         self.article_store = article_store
@@ -38,13 +41,14 @@ class ArticleService:
         article_title: str, 
         article_content: str, 
         article_description: str,
-        main_image_url : str | None,
-        category_id :int, 
-        hometopic_id : int, 
-        images : List[ImageCreateRequest],
-        secret : int = 0
-    ) -> ArticleDetailResponse :
-                
+        main_image_url: Optional[str],
+        category_id: int, 
+        hometopic_id: int, 
+        images: List[ImageCreateRequest],
+        secret: int = 0,
+        protected: int = 0,
+        password: Optional[str] = None
+    ) -> ArticleDetailResponse:
         # 사용자의 Blog 확인
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
@@ -52,27 +56,29 @@ class ArticleService:
         
         # 유효한 hometopic_id 범위 검사
         if hometopic_id <= 0 or (2 <= hometopic_id <= 9) or hometopic_id >= 54:
-            raise InvalidhometopicError    
+            raise InvalidhometopicError()
         
         new_article = await self.article_store.create_article(
-            atricle_title=article_title, 
+            article_title=article_title, 
             article_content=article_content, 
-            article_description = article_description,
-            main_image_url = main_image_url,
+            article_description=article_description,
+            main_image_url=main_image_url,
             blog_id=user_blog.id, 
             category_id=category_id, 
-            hometopic_id = hometopic_id,
-            images = images,
-            secret=secret
+            hometopic_id=hometopic_id,
+            images=images,
+            secret=secret,
+            protected=protected,
+            password=password
         )
 
         # 새 글 알림
         await self.notification_service.add_notification(
-            blog_address_names = await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
-            type = 1,
-            notification_blog_name = user_blog.blog_name,
+            blog_address_names=await self.subscription_store.get_subscriber_blog_addresses(user_blog.id),
+            type=1,
+            notification_blog_name=user_blog.blog_name,
             username=user.username,
-            notification_blog_image_url = user_blog.main_image_url,
+            notification_blog_image_url=user_blog.main_image_url,
             article_id=new_article.id
         )
 
@@ -82,16 +88,17 @@ class ArticleService:
         self, 
         user: User,
         article_id: int,
-        article_title: str,
-        article_content: str,
-        article_description : str,
-        main_image_url : str | None,
-        category_id : int,
-        hometopic_id : int,
-        images : List[ImageCreateRequest],
-        secret : int | None
+        category_id: int,
+        hometopic_id: int,
+        images: List[ImageCreateRequest],
+        article_title: Optional[str] = None,
+        article_content: Optional[str] = None,
+        article_description: Optional[str] = None,
+        main_image_url: Optional[str] = None,
+        secret: Optional[int] = None,
+        protected: Optional[int] = None,
+        password: Optional[str] = None
     ) -> ArticleDetailResponse:
-        
         # 사용자의 Blog 확인
         user_blog = await self.blog_store.get_blog_of_user(user.id)
         if user_blog is None:
@@ -108,37 +115,41 @@ class ArticleService:
         
         # 유효한 hometopic_id 범위 검사
         if hometopic_id <= 0 or (2 <= hometopic_id <= 9) or hometopic_id >= 54:
-            raise InvalidhometopicError 
-    
+            raise InvalidhometopicError()
         
         updated_article = await self.article_store.update_article(
-            article, 
-            article_title, 
-            article_content,
-            article_description,
-            main_image_url,
-            category_id,
-            hometopic_id,
-            images,
-            secret
+            article=article, 
+            category_id=category_id,
+            hometopic_id=hometopic_id,
+            images=images,
+            article_title=article_title,
+            article_content=article_content,
+            article_description=article_description,
+            main_image_url=main_image_url,
+            secret=secret,
+            protected=protected,
+            password=password
         )
 
         return ArticleDetailResponse.from_article(updated_article)
 
-    async def get_article_information_by_id(self, user: User, article_id: int) -> ArticleInformationResponse:
+    async def get_article_information_by_id(self, user: User, article_id: int, password: Optional[str] = None) -> ArticleInformationResponse:
         article = await self.article_store.get_article_by_id(article_id)
         
         # Article 존재 확인
         if article is None:
             raise ArticleNotFoundError()
 
-        # 비밀글 접근 권한 확인
+        # 비밀글 & 보호된 글 접근 권한 확인
         if article.secret == 1 and article.blog.user_id != user.id:
+            raise NoAuthoriztionError()
+        if article.protected == 1 and article.password != password:
             raise NoAuthoriztionError()
 
         # 조회수 증가
         await self.article_store.increment_article_views(article_id)
-        return await self.article_store.get_article_information_by_id(article_id)
+        return await self.article_store.get_article_information_by_id(article_id, password)
+
     
     async def get_today_most_viewed(
         self,

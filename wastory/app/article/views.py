@@ -1,5 +1,5 @@
-from typing import Annotated
-from fastapi import APIRouter, Depends
+from typing import Annotated, Optional
+from fastapi import APIRouter, Depends, Query
 from wastory.app.article.dto.requests import ArticleCreateRequest, ArticleUpdateRequest
 from wastory.app.article.dto.responses import PaginatedArticleListResponse, ArticleDetailResponse, ArticleInformationResponse
 from wastory.app.article.service import ArticleService
@@ -34,7 +34,9 @@ async def create_article(
             category_id=user_blog.default_category_id,
             hometopic_id = article.hometopic_id,
             secret=article.secret,
-            images = article.images
+            images = article.images,
+            protected=article.protected,
+            password=article.password
             )
     else:
         return await article_service.create_article(
@@ -46,7 +48,9 @@ async def create_article(
             category_id=article.category_id,
             hometopic_id = article.hometopic_id,
             secret=article.secret,
-            images = article.images
+            images = article.images,
+            protected=article.protected,
+            password=article.password
             )
 
 # article 수정
@@ -71,7 +75,9 @@ async def update_article(
             category_id=user_blog.default_category_id,
             hometopic_id = article.hometopic_id,
             images = article.images,
-            secret = article.secret
+            secret = article.secret,
+            protected=article.protected,
+            password=article.password
         )
     else : 
         return await article_service.update_article(
@@ -84,7 +90,9 @@ async def update_article(
             category_id = article.category_id,
             hometopic_id = article.hometopic_id,
             images = article.images,
-            secret = article.secret
+            secret = article.secret,
+            protected=article.protected,
+            password=article.password
         )
 
 
@@ -94,8 +102,9 @@ async def get_article_information_by_id(
     article_service: Annotated[ArticleService, Depends()],
     user: Annotated[User, Depends(login_with_header)],
     article_id : int,
+    password: Optional[str] = Query(None, description="보호된 글의 비밀번호")
 ) -> ArticleInformationResponse :
-    return await article_service.get_article_information_by_id(user, article_id)
+    return await article_service.get_article_information_by_id(user, article_id, password)
 
 # blog 내 인기글 가져오기
 @article_router.get("/today_wastory", status_code=200)
