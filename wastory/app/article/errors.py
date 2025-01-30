@@ -8,3 +8,7 @@ class ArticleNotFoundError(WastoryHttpException):
 class NoAuthoriztionError(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=400, detail="It's secret.")
+
+class MissingPassword(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=400, detail="Password is missing")

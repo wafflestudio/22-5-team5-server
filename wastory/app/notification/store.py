@@ -14,7 +14,7 @@ from wastory.app.article.models import Article
 from wastory.app.comment.models import Comment
 from wastory.app.notification.models import Notification
 from wastory.app.article.models import Article
-from wastory.app.comment.models import comment
+from wastory.app.comment.models import Comment
 from wastory.app.notification.dto.responses import NotificationResponse, PaginatedNotificationListResponse
 from wastory.database.annotation import transactional
 from wastory.database.connection import SESSION
