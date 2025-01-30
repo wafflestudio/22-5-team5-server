@@ -1,3 +1,4 @@
+# 22-5-team5-iOS
 # 🚀 Wastory  
 **Tistory 클론 코딩 프로젝트 - Wastory입니다.**  
 
@@ -29,13 +30,24 @@ pyjwt = "^2.10.1"  # JWT (JSON Web Token) 인증 처리
 pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
 ```
 ### 🔹 프론트엔드 (Frontend)
-// Swift 기반 iOS 앱 개발
+### 📱 플랫폼
+- **iOS** (지원 버전: iOS 18.0 이상)
+
+### 💻 개발 언어
+- **Swift**
+
+### 🛠 프레임워크 및 라이브러리
+- **UI**: SwiftUI / UIKit 
+- **네트워크**: Alamofire
+- **이미지 처리**: Kingfisher
+- **리치 텍스트**: RichTextKit
+
 
 ## 🔄 워크플로우  
-> 📌 프로젝트의 주요 동작 흐름을 정리하세요.  
-> 예) 사용자 가입 → 로그인 → 글 작성 → 댓글 → 알림  
 
----
+<img width="1198" alt="워크플로" src="https://github.com/user-attachments/assets/d4084f2d-d43b-447f-b5ed-35e14fe32f5c" />
+
+
 
 ## 🎨 프로젝트 뷰  
 > 📌 Wastory 프로젝트의 주요 화면 구성입니다.  
