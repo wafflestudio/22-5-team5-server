@@ -15,6 +15,7 @@ class ArticleInformationResponse(BaseModel):
     updated_at: datetime
     article_main_image_url: Optional[str] = None
     protected: int
+    comments_enabled: int
 
     blog_id: int
     blog_name: str
@@ -55,7 +56,8 @@ class ArticleInformationResponse(BaseModel):
             blog_main_image_url=blog_main_image_url,
             article_likes=article_likes,
             article_comments=article_comments,
-            protected=article.protected
+            protected=article.protected,
+            comments_enabled=article.comments_enabled
         )
 
 
@@ -67,6 +69,7 @@ class ArticleDetailResponse(BaseModel):
     updated_at: datetime
     views: int
     protected: int
+    comments_enabled: int
 
     @staticmethod
     def from_article(article: Article) -> Self:
@@ -77,7 +80,8 @@ class ArticleDetailResponse(BaseModel):
             created_at=article.created_at,
             updated_at=article.updated_at,
             views=article.views,
-            protected=article.protected
+            protected=article.protected,
+            comments_enabled=article.comments_enabled
         )
 
 

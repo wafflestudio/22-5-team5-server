@@ -21,6 +21,7 @@ class Article(Base):
     secret: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     protected: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     password: Mapped[str | None] = mapped_column(String(60), nullable=True)
+    comments_enabled: Mapped[int] = mapped_column(Integer, default=1, nullable=False)  # 1 = 활성화, 0 = 비활성화
     title : Mapped[str] = mapped_column(String(80), index=True, nullable = False)
     content : Mapped[str] = mapped_column(Text, nullable = False)
     description: Mapped[str] = mapped_column(String(100), nullable = False) # 미리보기용 description

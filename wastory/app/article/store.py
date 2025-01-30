@@ -71,6 +71,7 @@ class ArticleStore :
         images : List[ImageCreateRequest],
         secret : int = 0,
         protected: int = 0,
+        comments_enabled : int = 1,
         password: Optional[str] = None
     ) -> Article :
         
@@ -84,7 +85,8 @@ class ArticleStore :
             hometopic_id=hometopic_id,
             secret=secret,
             protected=protected,
-            password=password
+            password=password,
+            comments_enabled=comments_enabled
         )
         
         SESSION.add(article)
@@ -122,6 +124,7 @@ class ArticleStore :
         secret: Optional[int] = None,
         protected: Optional[int] = None,
         password: Optional[str] = None,
+        comments_enabled: Optional[int]=None,
     ) -> Article:
         if article_title is not None:
             article.title = article_title
@@ -137,6 +140,8 @@ class ArticleStore :
             article.protected = protected
         if password is not None:
             article.password = password
+        if comments_enabled is not None:
+            article.comments_enabled = comments_enabled
 
         article.category_id = category_id
         article.hometopic_id = hometopic_id
@@ -244,7 +249,7 @@ class ArticleStore :
             blog_name=row.blog_name,
             blog_main_image_url=row.blog_main_image_url,
             article_likes=row.likes,
-            article_comments=row.comments
+            article_comments=row.comments,
         )
 
         if article_response.category_id == blog.default_category_id:
