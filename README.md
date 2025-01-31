@@ -21,7 +21,7 @@
 ## 🛠 기술 스택  
 
 ### 🔹 백엔드 (Backend)  
-![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white) ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ```python
 fastapi = "^0.115.0"  # Python 기반 비동기 웹 프레임워크
 sqlalchemy = "^2.0.35"  # ORM (Object Relational Mapper)
