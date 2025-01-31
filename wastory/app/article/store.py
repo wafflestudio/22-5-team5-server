@@ -33,7 +33,10 @@ class ArticleStore :
         공개 글 또는 작성자인 경우 접근 권한을 확인하는 조건 생성
         """
         if show_secret==0:
-            return Article.secret==0
+            return and_(
+                Article.secret==0,
+                Article.protected==0
+            )
         
         return or_(
             Article.secret == 0,  # 공개 글
