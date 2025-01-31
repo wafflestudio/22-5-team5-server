@@ -34,7 +34,7 @@ pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
 - **iOS** (지원 버전: iOS 18.0 이상)
 
 ### 💻 개발 언어
-- **Swift**
+- ![Swift](https://img.shields.io/badge/swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white)
 
 ### 🛠 프레임워크 및 라이브러리
 - **UI**: SwiftUI / UIKit 
