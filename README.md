@@ -117,7 +117,7 @@ pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
 <img width="300" alt="내블로그2" src="https://github.com/user-attachments/assets/889e8718-357a-4791-a809-f0c5fa0337db" />
 
 
-- 카테고리 관리 **(추가기능!)**
+- 카테고리 관리 **(추가기능!)** (상위, 하위 카테고리 지정 가능) 
 <img width="300" alt="내블로그3" src="https://github.com/user-attachments/assets/85a21a8d-f1d0-4fc9-8c0d-2439f7065fdb" />
 
 
