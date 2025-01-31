@@ -12,3 +12,7 @@ class NoAuthoriztionError(WastoryHttpException):
 class MissingPassword(WastoryHttpException):
     def __init__(self) -> None:
         super().__init__(status_code=400, detail="Password is missing")
+
+class InvalidPasswordError(WastoryHttpException):
+    def __init__(self) -> None:
+        super().__init__(status_code=400, detail="Password length should be 1-60")

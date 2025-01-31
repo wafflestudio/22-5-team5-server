@@ -1,6 +1,6 @@
 from typing import Annotated, List, Optional
 from pydantic import AfterValidator, BaseModel, field_validator, ValidationInfo
-
+from wastory.app.article.errors import InvalidPasswordError
 from wastory.common.errors import InvalidFieldFormatError
 from wastory.app.image.dto.requests import ImageCreateRequest
 
@@ -29,8 +29,8 @@ def content_min_valid_character(content: str | None) -> str | None:
 
 def password_valid(password: Optional[str], values: ValidationInfo) -> Optional[str]:
     protected = values.data.get("protected", 0)  # ✅ `.data.get()` 사용 (None 대비 default=0)
-    if protected == 1 and (not password or len(password) < 4 or len(password) > 60):
-        raise ValueError
+    if protected == 1 and (not password or len(password) < 1 or len(password) > 60):
+        raise InvalidPasswordError
     return password
 
 class ArticleCreateRequest(BaseModel):
