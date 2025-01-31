@@ -25,7 +25,8 @@ from wastory.app.user.models import User
 class ArticleStore :
     def __init__(
         self,
-        image_store : Annotated[ImageStore, Depends()]
+        image_store : Annotated[ImageStore, Depends()],
+
     ) :
         self.image_store = image_store
 
@@ -56,6 +57,7 @@ class ArticleStore :
             .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)
             .join(Comment, Comment.article_id == Article.id, isouter=True)
+            .options(joinedload(Article.blog))
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
         )
 
@@ -316,6 +318,7 @@ class ArticleStore :
                 blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -364,6 +367,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -411,6 +415,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -462,6 +467,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -524,6 +530,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -578,6 +585,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -664,6 +672,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -730,6 +739,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
