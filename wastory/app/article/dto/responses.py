@@ -22,6 +22,7 @@ class ArticleInformationResponse(BaseModel):
     blog_main_image_url: Optional[str] = None
     category_id: int
 
+    secret: int
     views: int
 
     article_likes: int
@@ -57,7 +58,8 @@ class ArticleInformationResponse(BaseModel):
             article_likes=article_likes,
             article_comments=article_comments,
             protected=article.protected,
-            comments_enabled=article.comments_enabled
+            comments_enabled=article.comments_enabled,
+            secret=article.secret
         )
 
 
@@ -70,6 +72,7 @@ class ArticleDetailResponse(BaseModel):
     views: int
     protected: int
     comments_enabled: int
+    secret: int
 
     @staticmethod
     def from_article(article: Article) -> Self:
@@ -81,7 +84,8 @@ class ArticleDetailResponse(BaseModel):
             updated_at=article.updated_at,
             views=article.views,
             protected=article.protected,
-            comments_enabled=article.comments_enabled
+            comments_enabled=article.comments_enabled,
+            secret=article.secret
         )
 
 
@@ -101,6 +105,7 @@ class ArticleSearchInListResponse(BaseModel):
     article_likes: int
     article_comments: int
     protected: int
+    secret: int
 
     model_config = {
         "from_attributes": True
@@ -136,7 +141,8 @@ class ArticleSearchInListResponse(BaseModel):
             blog_main_image_url=blog_main_image_url,
             article_likes=article_likes,
             article_comments=article_comments,
-            protected=article.protected
+            protected=article.protected,
+            secret=article.secret
         )
 
 
