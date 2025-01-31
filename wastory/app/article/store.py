@@ -28,10 +28,13 @@ class ArticleStore :
     ) :
         self.image_store = image_store
 
-    def get_access_condition(self, user: User) -> ClauseElement:
+    def get_access_condition(self, user: User, show_secret: int = 1) -> ClauseElement:
         """
         공개 글 또는 작성자인 경우 접근 권한을 확인하는 조건 생성
         """
+        if show_secret==0:
+            return Article.secret==0
+        
         return or_(
             Article.secret == 0,  # 공개 글
             Blog.user_id == user.id  # 작성자인 경우
@@ -277,7 +280,7 @@ class ArticleStore :
     @transactional
     async def get_today_most_viewed(
         self,
-        user: User
+        user: User,
     ) -> PaginatedArticleListResponse:
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
@@ -287,7 +290,7 @@ class ArticleStore :
         today_start = datetime.now(timezone(timedelta(hours=9))).replace(hour=0, minute=0, second=0, microsecond=0)
         today_end = today_start + timedelta(days=1)
         
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -326,7 +329,7 @@ class ArticleStore :
         self,
         user: User  # 사용자 정보 추가
     ) -> PaginatedArticleListResponse:
-        access_condition = self.get_access_condition(user)  # 접근 권한 조건 추가
+        access_condition = self.get_access_condition(user, 0)  # 접근 권한 조건 추가
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
         per_page = 5  # 페이지당 기사 수
@@ -335,7 +338,7 @@ class ArticleStore :
         week_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=7)
         today_end = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999999)
 
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -383,7 +386,7 @@ class ArticleStore :
         per_page = per_page  # 페이지당 기사 수
         offset_val = (page - 1) * per_page  # 페이지 오프셋 계산
 
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -498,7 +501,7 @@ class ArticleStore :
             raise ValueError("Invalid sort_by value. Use 'likes', 'comments', or 'views'.")
 
         # 접근 조건 생성
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -700,7 +703,7 @@ class ArticleStore :
             )
 
         # 접근 조건 추가
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
