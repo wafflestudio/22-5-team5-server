@@ -26,6 +26,10 @@ class ArticleInformationResponse(BaseModel):
     secret: int
     views: int
 
+    hometopic_id: int
+    password: Optional[str]=None
+
+
     article_likes: int
     article_comments: int
 
@@ -60,7 +64,9 @@ class ArticleInformationResponse(BaseModel):
             article_comments=article_comments,
             protected=article.protected,
             comments_enabled=article.comments_enabled,
-            secret=article.secret
+            secret=article.secret,
+            hometopic_id=article.hometopic_id,
+            password=article.password
         )
 
 
