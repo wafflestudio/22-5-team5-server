@@ -9,7 +9,7 @@
 ### 🔹 백엔드 (Backend)  
 - **박수인** - [GitHub 프로필](https://github.com/SooinPark1019)  
 - **박상현**  
-- **권재영**  
+- **권재영** - [GitHub 프로필](https://github.com/jaylions)  
 - **임수호**  
 
 ### 🔹 프론트엔드 (Frontend)  
