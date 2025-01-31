@@ -19,6 +19,7 @@ from wastory.app.image.models import Image
 from wastory.app.image.store import ImageStore
 from wastory.app.image.dto.requests import ImageCreateRequest
 from wastory.app.article.errors import NoAuthoriztionError
+from wastory.app.user.models import User
 
 
 class ArticleStore :
@@ -235,20 +236,19 @@ class ArticleStore :
         return result.scalar_one_or_none()
 
     @transactional
-    async def get_article_information_by_id(self, article_id: int, password: Optional[str] = None) -> ArticleInformationResponse:
+    async def get_article_information_by_id(self, article_id: int, user: User, password: Optional[str] = None) -> ArticleInformationResponse:
         base_query = self.build_base_query()
         stmt = base_query.filter(Article.id == article_id)
         
         result = await SESSION.execute(stmt)
         row = result.one_or_none()
         article = row.Article
-        if article.protected == 1:
+        blog = await SESSION.get(Blog, article.blog_id)
+        if article.protected == 1 and blog.user_id != user.id :
             if not password:
                 raise NoAuthoriztionError()
             if article.password != password:
                 raise NoAuthoriztionError()
-            
-        blog = await SESSION.get(Blog, article.blog_id)
 
         article_response = ArticleInformationResponse.from_article(
             article=article,
@@ -641,6 +641,8 @@ class ArticleStore :
         offset_val = (page - 1) * per_page
         # 접근 조건 추가
         access_condition = self.get_access_condition(user)
+        if blog_id is None:
+            access_condition=self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
