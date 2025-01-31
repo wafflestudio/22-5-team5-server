@@ -21,6 +21,7 @@
 ## 🛠 기술 스택  
 
 ### 🔹 백엔드 (Backend)  
+![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi) ![MySQL](https://img.shields.io/badge/mysql-4479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
 ```python
 fastapi = "^0.115.0"  # Python 기반 비동기 웹 프레임워크
 sqlalchemy = "^2.0.35"  # ORM (Object Relational Mapper)
@@ -34,7 +35,7 @@ pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
 - **iOS** (지원 버전: iOS 18.0 이상)
 
 ### 💻 개발 언어
-- ![Swift](https://img.shields.io/badge/swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white)
+![Swift](https://img.shields.io/badge/swift-F54A2A?style=for-the-badge&logo=swift&logoColor=white)
 
 ### 🛠 프레임워크 및 라이브러리
 - **UI**: SwiftUI / UIKit 
