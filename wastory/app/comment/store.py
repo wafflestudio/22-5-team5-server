@@ -248,7 +248,7 @@ class CommentStore:
         await SESSION.flush()
 
     # 답글이 달린 댓글 작성자들의 address_name을 반환
-    async def get_replies_blog_address_name(self, address_name: str, parent_id: int) -> list[str]:
+    async def get_replies_blog_address_name(self, address_name: str, parent_id: int, blog_address_name: str) -> list[str]:
         stmt = (
             select(Blog.address_name)
             .select_from(Comment)
@@ -261,6 +261,9 @@ class CommentStore:
             .distinct()  # 중복 제거
         )
         result = await SESSION.execute(stmt)
-        replies = result.all()
-        print(replies)
-        return [reply[0] for reply in replies if reply[0] != address_name] 
+        replies = [reply[0] for reply in result.all()]
+
+        if blog_address_name not in replies:
+            replies.append(blog_address_name)
+
+        return [reply for reply in replies if reply != address_name]
