@@ -28,7 +28,7 @@ class Comment(Base):
     blog_id: Mapped[Optional[int]] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=True, index=True)
     blog: Mapped[Optional["Blog"]] = relationship("Blog", back_populates="comments")
     
-    notification: Mapped[Optional["Notification"]] = relationship("Notification", back_populates="comments")
+    notification: Mapped[Optional["Notification"]] = relationship("Notification", back_populates="comments",  cascade = "all, delete-orphan")
 
     # 자기 자신의 FK(부모 댓글)
     parent_id: Mapped[Optional[int]] = mapped_column(ForeignKey("comment.id"), nullable=True)
