@@ -26,10 +26,10 @@ class Notification(Base):
     notification_blog_image_url: Mapped[str | None] = mapped_column(String(255), default=None, nullable=True)
 
 
-    user_id: Mapped[int] = mapped_column(ForeignKey("user.id"), nullable=False)  # 알림 소유자
-    blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id"), nullable=False)  # 알림 소유자
-    article_id: Mapped[int] = mapped_column(ForeignKey("Article.id", ondelete="SET NULL"), nullable=True)  # 관련 글
-    comment_id: Mapped[int] = mapped_column(ForeignKey("comment.id", ondelete="SET NULL"), nullable=True)  # 관련 댓글
+    user_id: Mapped[int] = mapped_column(ForeignKey("user.id", ondelete="CASCADE"), nullable=False)  # 알림 소유자
+    blog_id: Mapped[int] = mapped_column(ForeignKey("blog.id", ondelete="CASCADE"), nullable=False)  # 알림 소유자
+    article_id: Mapped[int] = mapped_column(ForeignKey("Article.id", ondelete="CASCADE"), nullable=True)  # 관련 글
+    comment_id: Mapped[int] = mapped_column(ForeignKey("comment.id", ondelete="CASCADE"), nullable=True)  # 관련 댓글
 
 
     # 관계 설정
