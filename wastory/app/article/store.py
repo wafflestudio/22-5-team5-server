@@ -291,17 +291,18 @@ class ArticleStore :
         sort_column = Article.views.desc()
         per_page = 5  # 페이지당 기사 수 (1개로 설정)
 
-        # 오늘 날짜의 시작과 끝 계산
-        today_start = datetime.now(timezone(timedelta(hours=9))).replace(hour=0, minute=0, second=0, microsecond=0)
-        today_end = today_start + timedelta(days=1)
+        # 현재 시간 기준 24시간 전부터 현재까지
+        now = datetime.now(timezone(timedelta(hours=9)))
+        last_24_hours_start = now - timedelta(days=1)  # 24시간 전
+        last_24_hours_end = now  # 현재 시간까지
         
         access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
             .filter(
-                Article.created_at >= today_start,  # 오늘 시작 시간 이후
-                Article.created_at < today_end   # 오늘 끝 시간 이전
+                Article.created_at >= last_24_hours_start,  # 오늘 시작 시간 이후
+                Article.created_at < last_24_hours_end   # 오늘 끝 시간 이전
             )
             .order_by(sort_column)  # 조회수 기준 정렬       
             .limit(per_page)        # 페이지당 제한 (1개)
