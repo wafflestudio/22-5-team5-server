@@ -54,4 +54,4 @@ class Article(Base):
     likes : Mapped[list["Like"]] = relationship("Like", back_populates = "article", cascade = "all, delete-orphan")
     hometopic : Mapped["Hometopic"] = relationship("Hometopic", back_populates = "articles")
 
-    notification: Mapped[Optional["Notification"]] = relationship("Notification", back_populates="article")
+    notification: Mapped[Optional["Notification"]] = relationship("Notification", back_populates="article",  cascade = "all, delete-orphan")
