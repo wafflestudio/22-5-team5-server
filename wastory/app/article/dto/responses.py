@@ -5,6 +5,7 @@ from datetime import datetime
 from wastory.app.article.models import Article
 from wastory.app.article.errors import ArticleNotFoundError
 from wastory.app.blog.store import BlogStore
+from wastory.app.user.models import User
 
 
 class ArticleInformationResponse(BaseModel):
@@ -24,6 +25,10 @@ class ArticleInformationResponse(BaseModel):
 
     secret: int
     views: int
+
+    hometopic_id: int
+    password: Optional[str]=None
+
 
     article_likes: int
     article_comments: int
@@ -59,7 +64,9 @@ class ArticleInformationResponse(BaseModel):
             article_comments=article_comments,
             protected=article.protected,
             comments_enabled=article.comments_enabled,
-            secret=article.secret
+            secret=article.secret,
+            hometopic_id=article.hometopic_id,
+            password=article.password
         )
 
 
@@ -79,7 +86,7 @@ class ArticleDetailResponse(BaseModel):
         return ArticleDetailResponse(
             id=article.id,
             title=article.title,
-            content=article.content if article.protected == 0 else "🔒 보호된 게시글입니다.",
+            content=article.content,
             created_at=article.created_at,
             updated_at=article.updated_at,
             views=article.views,
@@ -117,13 +124,14 @@ class ArticleSearchInListResponse(BaseModel):
         blog_name: str, 
         blog_main_image_url: Optional[str], 
         article_likes: int, 
-        article_comments: int
+        article_comments: int,
+        user: User 
     ) -> Self:
         if article is None:
             raise ArticleNotFoundError
         
         # 🔥 description 80자 제한 로직 추가
-        if article.protected == 0:
+        if article.protected == 0 or article.blog.user_id == user.id:
             return_description = article.description[:80] + "…" if len(article.description) > 80 else article.description
         else:
             return_description = "🔒 보호된 게시글입니다."

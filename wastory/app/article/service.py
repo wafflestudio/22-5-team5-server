@@ -147,12 +147,12 @@ class ArticleService:
         # 비밀글 & 보호된 글 접근 권한 확인
         if article.secret == 1 and article.blog.user_id != user.id:
             raise NoAuthoriztionError()
-        if article.protected == 1 and article.password != password:
+        if article.blog.user_id != user.id and article.protected == 1 and article.password != password:
             raise NoAuthoriztionError()
 
         # 조회수 증가
         await self.article_store.increment_article_views(article_id)
-        return await self.article_store.get_article_information_by_id(article_id, password)
+        return await self.article_store.get_article_information_by_id(article_id, user, password)
 
     
     async def get_today_most_viewed(

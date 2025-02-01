@@ -19,19 +19,27 @@ from wastory.app.image.models import Image
 from wastory.app.image.store import ImageStore
 from wastory.app.image.dto.requests import ImageCreateRequest
 from wastory.app.article.errors import NoAuthoriztionError
+from wastory.app.user.models import User
 
 
 class ArticleStore :
     def __init__(
         self,
-        image_store : Annotated[ImageStore, Depends()]
+        image_store : Annotated[ImageStore, Depends()],
+
     ) :
         self.image_store = image_store
 
-    def get_access_condition(self, user: User) -> ClauseElement:
+    def get_access_condition(self, user: User, show_secret: int = 1) -> ClauseElement:
         """
         공개 글 또는 작성자인 경우 접근 권한을 확인하는 조건 생성
         """
+        if show_secret==0:
+            return and_(
+                Article.secret==0,
+                Article.protected==0
+            )
+        
         return or_(
             Article.secret == 0,  # 공개 글
             Blog.user_id == user.id  # 작성자인 경우
@@ -49,6 +57,7 @@ class ArticleStore :
             .join(Blog, Blog.id == Article.blog_id)
             .join(Like, Like.article_id == Article.id, isouter=True)
             .join(Comment, Comment.article_id == Article.id, isouter=True)
+            .options(joinedload(Article.blog))
             .group_by(Article.id, Blog.blog_name, Blog.main_image_url)
         )
 
@@ -229,20 +238,19 @@ class ArticleStore :
         return result.scalar_one_or_none()
 
     @transactional
-    async def get_article_information_by_id(self, article_id: int, password: Optional[str] = None) -> ArticleInformationResponse:
+    async def get_article_information_by_id(self, article_id: int, user: User, password: Optional[str] = None) -> ArticleInformationResponse:
         base_query = self.build_base_query()
         stmt = base_query.filter(Article.id == article_id)
         
         result = await SESSION.execute(stmt)
         row = result.one_or_none()
         article = row.Article
-        if article.protected == 1:
+        blog = await SESSION.get(Blog, article.blog_id)
+        if article.protected == 1 and blog.user_id != user.id :
             if not password:
                 raise NoAuthoriztionError()
             if article.password != password:
                 raise NoAuthoriztionError()
-            
-        blog = await SESSION.get(Blog, article.blog_id)
 
         article_response = ArticleInformationResponse.from_article(
             article=article,
@@ -277,7 +285,7 @@ class ArticleStore :
     @transactional
     async def get_today_most_viewed(
         self,
-        user: User
+        user: User,
     ) -> PaginatedArticleListResponse:
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
@@ -287,7 +295,7 @@ class ArticleStore :
         today_start = datetime.now(timezone(timedelta(hours=9))).replace(hour=0, minute=0, second=0, microsecond=0)
         today_end = today_start + timedelta(days=1)
         
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -310,6 +318,7 @@ class ArticleStore :
                 blog_main_image_url = row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -326,7 +335,7 @@ class ArticleStore :
         self,
         user: User  # 사용자 정보 추가
     ) -> PaginatedArticleListResponse:
-        access_condition = self.get_access_condition(user)  # 접근 권한 조건 추가
+        access_condition = self.get_access_condition(user, 0)  # 접근 권한 조건 추가
         # 정렬 기준: 조회수 내림차순
         sort_column = Article.views.desc()
         per_page = 5  # 페이지당 기사 수
@@ -335,7 +344,7 @@ class ArticleStore :
         week_start = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=7)
         today_end = datetime.now().replace(hour=23, minute=59, second=59, microsecond=999999)
 
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -358,6 +367,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -383,7 +393,7 @@ class ArticleStore :
         per_page = per_page  # 페이지당 기사 수
         offset_val = (page - 1) * per_page  # 페이지 오프셋 계산
 
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -405,6 +415,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -456,6 +467,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -498,7 +510,7 @@ class ArticleStore :
             raise ValueError("Invalid sort_by value. Use 'likes', 'comments', or 'views'.")
 
         # 접근 조건 생성
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -518,6 +530,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -572,6 +585,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -635,6 +649,8 @@ class ArticleStore :
         offset_val = (page - 1) * per_page
         # 접근 조건 추가
         access_condition = self.get_access_condition(user)
+        if blog_id is None:
+            access_condition=self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -656,6 +672,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
@@ -700,7 +717,7 @@ class ArticleStore :
             )
 
         # 접근 조건 추가
-        access_condition = self.get_access_condition(user)
+        access_condition = self.get_access_condition(user, 0)
         base_query = self.build_base_query(access_condition)
         stmt = (
             base_query
@@ -722,6 +739,7 @@ class ArticleStore :
                 blog_main_image_url=row.blog_main_image_url,
                 article_likes=row.likes,
                 article_comments=row.comments,
+                user=user
             )
             for row in rows
         ]
