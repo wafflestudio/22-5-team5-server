@@ -63,7 +63,7 @@ class CommentService:
                 )
                 # 댓글 알림
                 await self.notification_service.add_notification(
-                    blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
+                    blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id, blog.address_name),
                     type = 3,
                     notification_blog_name = blog.blog_name,
                     username=user.username,
@@ -108,7 +108,7 @@ class CommentService:
                 )
                 # 방명록 알림
                 await self.notification_service.add_notification(
-                    blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id),
+                    blog_address_names = await self.comment_store.get_replies_blog_address_name(user_blog.address_name, parent_id, blog.address_name),
                     username=user.username,
                     type=4,
                     notification_blog_name=blog.blog_name,
