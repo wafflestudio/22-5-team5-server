@@ -151,13 +151,10 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 ### 피드 탭
 - 구독중인 블로그의 최신 게시물
-<p align="center">
-  <img width="300" alt="피드1" src="https://github.com/user-attachments/assets/cb0be5b6-647e-4f4e-a0c5-a0f1ed30ff5c" />
-<p/>
-
 - 내가 구독하는, 나를 구독하는 블로그 리스트
 <table>
   <tr>
+    <td><img alt="피드1" src ="https://github.com/user-attachments/assets/cb0be5b6-647e-4f4e-a0c5-a0f1ed30ff5c" /></td>
     <td><img alt="피드2" src="https://github.com/user-attachments/assets/fb5bf9e1-54e1-44ab-a863-d2cc41de47f9" /></td>
     <td><img alt="피드3" src="https://github.com/user-attachments/assets/ffaab94d-020d-463c-a98d-ea50fbed707e" /></td>
   </tr>
