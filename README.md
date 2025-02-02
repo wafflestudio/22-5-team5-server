@@ -1,4 +1,4 @@
-# 22-5-team5-iOS
+# 22-5-team5-Server
 # 🚀 Wastory  
 **Tistory 클론 코딩 프로젝트 - Wastory입니다.**  
 
