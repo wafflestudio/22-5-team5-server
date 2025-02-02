@@ -110,16 +110,16 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
  <table>
   <tr>
-    <td><img width="300" alt="회원가입1" src="https://github.com/user-attachments/assets/1c528b10-39ed-410f-aace-fb274324164b" /></td>
-    <td><img width="300" alt="회원가입2" src="https://github.com/user-attachments/assets/5f008273-84e3-4b56-8d56-359b92f7bf57" /></td>
+    <td><img alt="회원가입1" src="https://github.com/user-attachments/assets/1c528b10-39ed-410f-aace-fb274324164b" /></td>
+    <td><img alt="회원가입2" src="https://github.com/user-attachments/assets/5f008273-84e3-4b56-8d56-359b92f7bf57" /></td>
   </tr>
   <tr>
-    <td><img width="300" alt="회원가입3" src="https://github.com/user-attachments/assets/84b9701b-3158-4603-a5ca-542fc0468ee1" /></td>
-    <td><img width="300" alt="회원가입4" src="https://github.com/user-attachments/assets/202d6ba7-a27a-43b5-916a-6adf55c14391" /></td>
+    <td><img alt="회원가입3" src="https://github.com/user-attachments/assets/84b9701b-3158-4603-a5ca-542fc0468ee1" /></td>
+    <td><img alt="회원가입4" src="https://github.com/user-attachments/assets/202d6ba7-a27a-43b5-916a-6adf55c14391" /></td>
   </tr>
   <tr>
-    <td><img width="300" alt="회원가입5" src="https://github.com/user-attachments/assets/eacc58e7-0492-4448-bcbf-7b1a15dc4949" /></td>
-    <td><img width="300" alt="회원가입6" src="https://github.com/user-attachments/assets/c425a2ee-2480-4dd7-a00e-6ae370674dc9" /></td>
+    <td><img alt="회원가입5" src="https://github.com/user-attachments/assets/eacc58e7-0492-4448-bcbf-7b1a15dc4949" /></td>
+    <td><img alt="회원가입6" src="https://github.com/user-attachments/assets/c425a2ee-2480-4dd7-a00e-6ae370674dc9" /></td>
   </tr>
 </table>
 
