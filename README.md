@@ -184,54 +184,72 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 ### ✍️ 5. 글 조회 페이지  
 - 작성한 글 조회 및 좋아요 가능
-<img width="300" alt="글 조회1" src="https://github.com/user-attachments/assets/a29f6043-9194-47c2-a1d1-094c815f7e27" />
+ - 우측 상단의 카테고리 클릭 시 블로그 조회 뷰로 이동해 해당 카테고리 글들을 볼 수 있음
+ - 하단의 버튼들을 이용해 좋아요, 댓글, 글 수정 삭제가 가능함
+ - 글 수정 삭제버튼은 자신의 글인 경우에만 나타남
+<p align="center">
+  <img width="300" alt="글 조회1" src="https://github.com/user-attachments/assets/a29f6043-9194-47c2-a1d1-094c815f7e27" />
+<p/>
 
-
-- 블로그 내 연관 게시물 & 인기글 확인 가능
-<img width="300" alt="글 조회2" src="https://github.com/user-attachments/assets/a2e4b864-ff69-4655-a0f3-3538bb12e54f" />
-
+- 블로그 내 동 카테고리 게시물 & 인기글 확인 가능
+  - 더보기 클릭 시 블로그 조회 뷰로 이동해 해당 카테고리 글들을 볼 수 있음
+  - 다른 사람의 블로그의 경우 블로그 정보에 구독하기 버튼이 생겨 구독 추가/취소 가 가능함
+  
+<p align="center">
+  <img width="300" alt="글 조회2" src="https://github.com/user-attachments/assets/a2e4b864-ff69-4655-a0f3-3538bb12e54f" />
+<p/>
 
 ### 💬 6. 댓글 작성 및 조회 페이지  
 - 실시간 댓글 작성 및 대댓글 지원
 - 작성자 정보 및 작성일 표시
 - 비밀 댓글 가능
-<img width="300" alt="댓글" src="https://github.com/user-attachments/assets/d93f233a-119c-49e6-9653-09d539eaeb26" />
-
+<p align="center">
+  <img width="300" alt="댓글" src="https://github.com/user-attachments/assets/d93f233a-119c-49e6-9653-09d539eaeb26" />
+<p/>
 
 ### 🌐 7. 블로그 조회 페이지
 - 블로그 글 조회 및 카테고리 별로 조회 가능
-<img width="300" alt="블로그 조회1" src="https://github.com/user-attachments/assets/3e222522-afca-49a7-8777-f77cccc6ff41" />
-
+<p align="center">
+  <img width="300" alt="블로그 조회1" src="https://github.com/user-attachments/assets/3e222522-afca-49a7-8777-f77cccc6ff41" />
+<p/>
 
 - 블로그 인기글 조회수, 댓글수, 공감수 순으로 조회 가능
-<img width="300" alt="블로그 조회2" src="https://github.com/user-attachments/assets/1635fff2-158d-498b-b54d-97fb07b323cb" />
-
+<p align="center">
+  <img width="300" alt="블로그 조회2" src="https://github.com/user-attachments/assets/1635fff2-158d-498b-b54d-97fb07b323cb" />
+<p/>
 
 - 블로그 내 글 검색 가능
-<img width="300" alt="블로그 내 검색" src="https://github.com/user-attachments/assets/554e59a3-ddaf-4028-9c55-299ef1a46184" />
-
+  - 우측의 전체검색을 누를시 전체 검색가능
+<p align="center">
+  <img width="300" alt="블로그 내 검색" src="https://github.com/user-attachments/assets/554e59a3-ddaf-4028-9c55-299ef1a46184" />
+<p/>
 
 
 ### 📖 8. 방명록 작성 및 조회 페이지  
 - 자유롭게 메시지를 남기고 열람 가능  
 - 작성자 정보 및 작성일 표시
 - 비밀 방명록 가능
-<img width="300" alt="방명록" src="https://github.com/user-attachments/assets/269c1a34-fbea-4045-b828-ad275c4535e0" />
-
+  
+<p align="center">
+  <img width="300" alt="방명록" src="https://github.com/user-attachments/assets/269c1a34-fbea-4045-b828-ad275c4535e0" />
+<p/>
 
 
 ### 🔍 9. 검색 페이지
 - 키워드로 검색 가능
-<img width="300" alt="검색1" src="https://github.com/user-attachments/assets/9a26b7e1-7605-420d-afcb-6f813b864e4d" />
-
+<p align="center">
+  <img width="300" alt="검색1" src="https://github.com/user-attachments/assets/9a26b7e1-7605-420d-afcb-6f813b864e4d" />
+<p/>
 
 - 글 검색 (제목 및 내용)
-<img width="300" alt="검색2" src="https://github.com/user-attachments/assets/0d2d15b0-eccf-4424-8324-c69ba13a8c57" />
-
+<p align="center">
+  <img width="300" alt="검색2" src="https://github.com/user-attachments/assets/0d2d15b0-eccf-4424-8324-c69ba13a8c57" />
+<p/>
 
 - 블로그 검색 (이름)
-<img width="300" alt="검색3" src="https://github.com/user-attachments/assets/b55dfce8-ab83-409c-9093-7aa228c07dc3" />
-
+<p align="center">
+  <img width="300" alt="검색3" src="https://github.com/user-attachments/assets/b55dfce8-ab83-409c-9093-7aa228c07dc3" />
+<p/>
 
 ### 👤 10. 계정 관리 페이지
 - 비밀번호 변경, 로그아웃, 계정 탈퇴 가능
