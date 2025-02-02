@@ -16,6 +16,10 @@
   - like Entity 설계 및 API 구현
   - hometopic - Article 연결 및, hometopic 기본 데이터 구조 설계
 - **권재영** - [GitHub 프로필](https://github.com/jaylions)  
+  - category 관련 api 구현
+  - comment 관련 api 구현
+  - draft 관련 api 구현
+  - hometopic 모델 설계
 - **임수호** - [GitHub 프로필](https://github.com/vnny27)
   - 소셜 로그인 및 이메일 인증 구현
   - 유저 및 알림 api 구현
