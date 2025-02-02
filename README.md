@@ -7,7 +7,13 @@
 ## 👨‍💻 프로젝트 참여자  
 
 ### 🔹 백엔드 (Backend)  
-- **박수인** - [GitHub 프로필](https://github.com/SooinPark1019) 
+- **박수인** - [GitHub 프로필](https://github.com/SooinPark1019)
+  - 도메인 연결 후 https 설정
+  - EC2 서버 및 DB 관리(업데이트 및 유지보수)
+  - blog Entity 세부 설계 및 API 구현
+  - 블로그 내 글(Article) 공개/보호/비공개 설정 기능 API 구현
+  - 블로그 검색 기능 API 구현
+  - subscription Entity 설계 및 API 구현
 - **박상현** - [GitHub 프로필](https://github.com/euntimes2)
   - 블로그 내 글(Article) Entity 세부 설계 및 API 구현
   - 글 검색 기능 API 구현
