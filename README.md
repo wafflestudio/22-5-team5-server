@@ -151,13 +151,20 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 <img width="300" alt="글작성2" src="https://github.com/user-attachments/assets/37d63d7f-9567-433f-95f9-167bc91466ba" />
 
 
-- 글 공개여부 & 댓글 공개여부 설정 가능
+- 카테고리 설정 가능
+- 글 공개, 보호, 비공개 여부 설정 가능
+- 홈주제 설정 가능
+- 댓글 공개여부 설정 가능
 <img width="300" alt="글작성3" src="https://github.com/user-attachments/assets/86242eb2-0be5-4945-9735-ff34075d9e87" />
 
 
 
 #### 알림 탭
 - 알림 표시 및 알림 종류별로 조회 가능
+- 구독한 블로그의 새 글 발행 알림
+- 자신의 블로그의 구독자 추가 알림
+- 자신의 글에 달린 댓글 혹은 자신의 댓글의 답글 추가 알림
+- 자신의 블로그의 방명록 혹은 자신의 방명록의 답글 추가 알림
 <img width="300" alt="알림" src="https://github.com/user-attachments/assets/7514ab41-aef4-414d-95b6-39cbb1413530" />
 
 #### 내 블로그 탭
@@ -166,6 +173,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 
 - 내 블로그 설정
+- 대표 이미지 설정 가능
 <img width="300" alt="내블로그2" src="https://github.com/user-attachments/assets/889e8718-357a-4791-a809-f0c5fa0337db" />
 
 
@@ -227,6 +235,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 ### 👤 10. 계정 관리 페이지
 - 비밀번호 변경, 로그아웃, 계정 탈퇴 가능
+- 카카오 로그인 유저는 비밀번호 변경 불가능
 <img width="300" alt="계정 설정" src="https://github.com/user-attachments/assets/599e8a23-e165-4d77-a34d-aa0231868b01" />
 
 
