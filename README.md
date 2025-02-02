@@ -162,12 +162,14 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 
 ### 글 작성 탭
-- 글 작성
+- 글자 서식 변경 
+- 이미지 첨부
+- 되돌리기 및 앞으로가기 
 <p align="center">
   <img width="300" alt="글작성1" src="https://github.com/user-attachments/assets/af8bb3ee-19a5-48c5-b8e6-1ae8355c38e5" />
 <p/>
 
-- 임시 저장 및 저장된 글 불러오기 가능
+- 임시 저장 및 저장된 글 불러오기
 <p align="center">
   <img width="300" alt="글작성2" src="https://github.com/user-attachments/assets/37d63d7f-9567-433f-95f9-167bc91466ba" />
 <p/>
