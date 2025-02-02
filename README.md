@@ -10,11 +10,11 @@
 - **박수인** - [GitHub 프로필](https://github.com/SooinPark1019) 
 - **박상현** - [GitHub 프로필](https://github.com/euntimes2)
   - 블로그 내 글(Article) Entity 세부 설계 및 API 구현
-  - AWS S3 image 관리 및 presigned URL 을 통한 배포
-  - Image Entity 를 이용해 file_URL 미사용 시 자동 삭제 구현
   - 글 검색 기능 API 구현
+  - AWS S3 image 관리 및 presigned URL 을 통한 배포
+  - Image Entity 를 이용해 file_URL 미사용 시 S3 자동 삭제 구현
   - like Entity 설계 및 API 구현
-  - hometopic - Article 연결 및 데이터 기본 구조
+  - hometopic - Article 연결 및, hometopic 기본 데이터 구조 설계
 - **권재영** - [GitHub 프로필](https://github.com/jaylions)  
 - **임수호** - [GitHub 프로필](https://github.com/vnny27)
   - 소셜 로그인 및 이메일 인증 구현
