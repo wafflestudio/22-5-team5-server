@@ -158,8 +158,8 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 - 내가 구독하는, 나를 구독하는 블로그 리스트
 <table>
   <tr>
-    <td><img width="300" alt="피드2" src="https://github.com/user-attachments/assets/fb5bf9e1-54e1-44ab-a863-d2cc41de47f9" /></td>
-    <td><img width="300" alt="피드3" src="https://github.com/user-attachments/assets/ffaab94d-020d-463c-a98d-ea50fbed707e" /></td>
+    <td><img alt="피드2" src="https://github.com/user-attachments/assets/fb5bf9e1-54e1-44ab-a863-d2cc41de47f9" /></td>
+    <td><img alt="피드3" src="https://github.com/user-attachments/assets/ffaab94d-020d-463c-a98d-ea50fbed707e" /></td>
   </tr>
 </table>
 
