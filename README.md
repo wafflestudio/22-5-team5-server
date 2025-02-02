@@ -126,7 +126,8 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 
 ### 🏡 4. 메인 페이지
-#### 홈 탭
+
+### 홈 탭
 - today wastory
   - 오늘 하루 조회수가 상위 5개의 게시글 전달(비공개글, 보호글은 제외)
 - weekly wastory
@@ -148,7 +149,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 </table>
 
 
-#### 피드 탭
+### 피드 탭
 - 구독중인 블로그의 최신 게시물
 <p align="center">
   <img width="300" alt="피드1" src="https://github.com/user-attachments/assets/cb0be5b6-647e-4f4e-a0c5-a0f1ed30ff5c" />
@@ -163,7 +164,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 </table>
 
 
-#### 글 작성 탭
+### 글 작성 탭
 - 글 작성
 <p align="center">
   <img width="300" alt="글작성1" src="https://github.com/user-attachments/assets/af8bb3ee-19a5-48c5-b8e6-1ae8355c38e5" />
@@ -184,7 +185,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 <p/>
 
 
-#### 알림 탭
+### 알림 탭
 - 알림 표시 및 알림 종류별로 조회 가능
 - 구독한 블로그의 새 글 발행 알림
 - 자신의 블로그의 구독자 추가 알림
@@ -194,7 +195,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
   <img width="300" alt="알림" src="https://github.com/user-attachments/assets/7514ab41-aef4-414d-95b6-39cbb1413530" />
 <p/>
 
-#### 내 블로그 탭
+### 내 블로그 탭
 - 블로그 글 조회
 <p align="center">
   <img width="300" alt="내블로그1" src="https://github.com/user-attachments/assets/34124541-4616-4f90-b240-746e10cf4735" />
