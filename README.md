@@ -84,13 +84,13 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 ### 🔑 2. 로그인 페이지
 <strong>- 카카오톡 소셜 로그인</strong>  
 - 카카오톡 연결을 통한 소셜 로그인이 진행  
-- 카카오톡 미가입 회원이라면, 회원가입 창으로 이동  
+- 카카오톡 미가입 회원이라면, 자동으로 회원가입 연결  
 
 <strong>- 이메일 인증 로그인</strong>  
 - 간편 로그인 정보 저장을 통해, 지난 로그인 정보 유지  
-- 회원가입 뷰로 이동
+- 회원가입 뷰로 이동 가능
 
-<strong>로그아웃하지 않은 지난 로그인 기록이 있다면, 추가적인 로그인 필요 없이 앱에 접속 가능</strong> 
+<strong> 로그아웃하지 않은 지난 로그인 기록이 있다면, 추가적인 로그인 필요 없이 앱에 접속 가능! </strong> 
  
 <table>
   <tr>
@@ -103,13 +103,26 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 ### 📝 3. 회원가입 페이지  
 - 회원가입
-<img width="300" alt="회원가입1" src="https://github.com/user-attachments/assets/1c528b10-39ed-410f-aace-fb274324164b" />
-<img width="300" alt="회원가입2" src="https://github.com/user-attachments/assets/5f008273-84e3-4b56-8d56-359b92f7bf57" />
-<img width="300" alt="회원가입3" src="https://github.com/user-attachments/assets/84b9701b-3158-4603-a5ca-542fc0468ee1" />
-<img width="300" alt="회원가입4" src="https://github.com/user-attachments/assets/202d6ba7-a27a-43b5-916a-6adf55c14391" />
-<img width="300" alt="회원가입5" src="https://github.com/user-attachments/assets/eacc58e7-0492-4448-bcbf-7b1a15dc4949" />
-<img width="300" alt="회원가입6" src="https://github.com/user-attachments/assets/c425a2ee-2480-4dd7-a00e-6ae370674dc9" />
-<img width="300" alt="회원가입7" src="https://github.com/user-attachments/assets/8053966f-a152-4db9-8575-5babb0b41ec7" />
+  - 서비스 약관 동의 이후, 회원가입 진행 가능
+  - 이메일을 통해 8자 인증번호 기입을 통한 인증
+  - 비밀번호 설정 시, 비밀번호 재입력을 통한 확인
+  - 회원가입 성공 시, 나만의 블로그 주소 설정 가능
+
+ <table>
+  <tr>
+    <td><img width="300" alt="회원가입1" src="https://github.com/user-attachments/assets/1c528b10-39ed-410f-aace-fb274324164b" /></td>
+    <td><img width="300" alt="회원가입2" src="https://github.com/user-attachments/assets/5f008273-84e3-4b56-8d56-359b92f7bf57" /></td>
+  </tr>
+  <tr>
+    <td><img width="300" alt="회원가입3" src="https://github.com/user-attachments/assets/84b9701b-3158-4603-a5ca-542fc0468ee1" /></td>
+    <td><img width="300" alt="회원가입4" src="https://github.com/user-attachments/assets/202d6ba7-a27a-43b5-916a-6adf55c14391" /></td>
+  </tr>
+  <tr>
+    <td><img width="300" alt="회원가입5" src="https://github.com/user-attachments/assets/eacc58e7-0492-4448-bcbf-7b1a15dc4949" /></td>
+    <td><img width="300" alt="회원가입6" src="https://github.com/user-attachments/assets/c425a2ee-2480-4dd7-a00e-6ae370674dc9" /></td>
+  </tr>
+</table>
+
 
 
 ### 🏡 4. 메인 페이지
