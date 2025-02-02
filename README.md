@@ -127,10 +127,25 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 ### 🏡 4. 메인 페이지
 #### 홈 탭
-- 최신 인기글, 카테고리별 글 모아보기, 주제 별 글 모아보기
-<img width="300" alt="홈1" src="https://github.com/user-attachments/assets/527fe2b1-5e80-42d0-b747-d52c5e625b18" />
-<img width="300" alt="홈2" src="https://github.com/user-attachments/assets/528b3f79-1321-4df4-a55e-05f4d57ed47c" />
-<img width="300" alt="홈3" src="https://github.com/user-attachments/assets/6910d5b1-bb59-4adc-8be9-ce2af8268c40" />
+- today wastory
+  - 오늘 하루 조회수가 상위 5개의 게시글 전달(비공개글, 보호글은 제외)
+- weekly wastory
+  - 일주일 기준 조회수가 상위 5개의 게시글 전달(비공개글, 보호글은 제외)
+- category 별 인기글
+  - 사용자가 지정한 hometopic(category) 의 조회수 상위 7개의 게시글 전달
+- Focus View(J의 주말 계획/오후에는 커피 한 잔)
+  - J의 주말 계획
+    - category 중, 국내여행/해외여행/캠핑,등산/맛집 의 조회수 상위 5개 게시글 전달
+  - 오후에는 커피 한 잔
+    - category 중, 카페 디저트트 의 조회수 상위 5개 게시글 전달
+   
+<table>
+  <tr>
+    <td><img alt="홈1" src="https://github.com/user-attachments/assets/527fe2b1-5e80-42d0-b747-d52c5e625b18" /></td>
+    <td><img alt="홈2" src="https://github.com/user-attachments/assets/528b3f79-1321-4df4-a55e-05f4d57ed47c" /></td>
+    <td><img alt="홈3" src="https://github.com/user-attachments/assets/6910d5b1-bb59-4adc-8be9-ce2af8268c40" /></td>
+  </tr>
+</table>
 
 
 #### 피드 탭
