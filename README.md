@@ -16,7 +16,9 @@
   - like Entity 설계 및 API 구현
   - hometopic - Article 연결 및 데이터 기본 구조
 - **권재영** - [GitHub 프로필](https://github.com/jaylions)  
-- **임수호** - [GitHub 프로필](https://github.com/vnny27)  
+- **임수호** - [GitHub 프로필](https://github.com/vnny27)
+  - 소셜 로그인 및 이메일 인증 구현
+  - 유저 및 알림 api 구현
 
 ### 🔹 프론트엔드 (Frontend)  
 - **서종환** - [GitHub 프로필](https://github.com/muzigae)
@@ -37,6 +39,7 @@ aiomysql = "^0.2.0"  # MySQL 비동기 드라이버
 alembic = "^1.13.3"  # 데이터베이스 마이그레이션 도구
 pyjwt = "^2.10.1"  # JWT (JSON Web Token) 인증 처리
 pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
+redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 ```
 ### 🔹 프론트엔드 (Frontend)
 ### 📱 플랫폼
