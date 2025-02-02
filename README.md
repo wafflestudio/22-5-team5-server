@@ -65,9 +65,9 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 > 📌 Wastory 프로젝트의 주요 화면 구성입니다.  
 
 ### 🏠 1. 랜딩 페이지  
-
-<img width="300" alt="시작" src="https://github.com/user-attachments/assets/93179430-b921-4ad4-af2d-2d91825248cf" />
-
+<p align="center">
+  <img width="300" alt="시작" src="https://github.com/user-attachments/assets/93179430-b921-4ad4-af2d-2d91825248cf" />
+</p>
 
 ### 🔑 2. 로그인 페이지  
 - 이메일 및 소셜 로그인 지원
