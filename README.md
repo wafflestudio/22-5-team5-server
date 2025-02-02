@@ -1,4 +1,4 @@
-# 22-5-team5-iOS
+# 22-5-team5-Server
 # 🚀 Wastory  
 **Tistory 클론 코딩 프로젝트 - Wastory입니다.**  
 
@@ -8,13 +8,13 @@
 
 ### 🔹 백엔드 (Backend)  
 - **박수인** - [GitHub 프로필](https://github.com/SooinPark1019)  
-- **박상현**  
+- **박상현** - [GitHub 프로필](https://github.com/euntimes2)  
 - **권재영** - [GitHub 프로필](https://github.com/jaylions)  
-- **임수호**  
+- **임수호** - [GitHub 프로필](https://github.com/vnny27)  
 
 ### 🔹 프론트엔드 (Frontend)  
-- **서종환**  
-- **신중원**  
+- **서종환** - [GitHub 프로필](https://github.com/muzigae)
+- **신중원** - [GitHub 프로필](https://github.com/joongwon0204)
 
 ---
 
