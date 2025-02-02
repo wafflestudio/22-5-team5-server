@@ -14,8 +14,10 @@
 
 ### 🔹 프론트엔드 (Frontend)  
 - **서종환** - [GitHub 프로필](https://github.com/muzigae)
+  로그인, 회원가입, 계정관리, 글작성(RichTextKit 적용)
 - **신중원** - [GitHub 프로필](https://github.com/joongwon0204)
-
+  메인탭, 글/블로그 조회, 댓글/방명록, View간 navigation
+  
 ---
 
 ## 🛠 기술 스택  
