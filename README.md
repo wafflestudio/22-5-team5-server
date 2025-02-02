@@ -69,12 +69,13 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 > 📌 Wastory 프로젝트의 주요 화면 구성입니다.  
 
 ### 🏠 1. 랜딩 페이지  
+- 사용자가 초기에 들어가는 페이지입니다.
 <p align="center">
   <img width="300" alt="시작" src="https://github.com/user-attachments/assets/93179430-b921-4ad4-af2d-2d91825248cf" />
 </p>
 
 ### 🔑 2. 로그인 페이지  
-- 이메일 및 소셜 로그인 지원
+- 카카오톡 소셜 로그인 / 이메일 인증 로그인을 통해 회원가입이 가능합니다.
 <img width="300" alt="로그인" src="https://github.com/user-attachments/assets/3b48f119-516a-4d6c-812f-fe81e3917241" />
 
 
@@ -86,6 +87,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 <img width="300" alt="회원가입4" src="https://github.com/user-attachments/assets/202d6ba7-a27a-43b5-916a-6adf55c14391" />
 <img width="300" alt="회원가입5" src="https://github.com/user-attachments/assets/eacc58e7-0492-4448-bcbf-7b1a15dc4949" />
 <img width="300" alt="회원가입6" src="https://github.com/user-attachments/assets/c425a2ee-2480-4dd7-a00e-6ae370674dc9" />
+<img width="300" alt="회원가입7" src="https://github.com/user-attachments/assets/8053966f-a152-4db9-8575-5babb0b41ec7" />
 
 
 ### 🏡 4. 메인 페이지
