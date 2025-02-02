@@ -150,7 +150,9 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 #### 피드 탭
 - 구독중인 블로그의 최신 게시물
-<img width="300" alt="피드1" src="https://github.com/user-attachments/assets/cb0be5b6-647e-4f4e-a0c5-a0f1ed30ff5c" />
+<p align="center">
+  <img width="300" alt="피드1" src="https://github.com/user-attachments/assets/cb0be5b6-647e-4f4e-a0c5-a0f1ed30ff5c" />
+<p/>
 
 - 내가 구독하는, 나를 구독하는 블로그 리스트
 <img width="300" alt="피드2" src="https://github.com/user-attachments/assets/fb5bf9e1-54e1-44ab-a863-d2cc41de47f9" />
@@ -159,19 +161,23 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 
 #### 글 작성 탭
 - 글 작성
-<img width="300" alt="글작성1" src="https://github.com/user-attachments/assets/af8bb3ee-19a5-48c5-b8e6-1ae8355c38e5" />
-
+<p align="center">
+  <img width="300" alt="글작성1" src="https://github.com/user-attachments/assets/af8bb3ee-19a5-48c5-b8e6-1ae8355c38e5" />
+<p/>
 
 - 임시 저장 및 저장된 글 불러오기 가능
-<img width="300" alt="글작성2" src="https://github.com/user-attachments/assets/37d63d7f-9567-433f-95f9-167bc91466ba" />
+<p align="center">
+  <img width="300" alt="글작성2" src="https://github.com/user-attachments/assets/37d63d7f-9567-433f-95f9-167bc91466ba" />
+<p/>
 
 
 - 카테고리 설정 가능
 - 글 공개, 보호, 비공개 여부 설정 가능
 - 홈주제 설정 가능
 - 댓글 공개여부 설정 가능
-<img width="300" alt="글작성3" src="https://github.com/user-attachments/assets/86242eb2-0be5-4945-9735-ff34075d9e87" />
-
+<p align="center">
+  <img width="300" alt="글작성3" src="https://github.com/user-attachments/assets/86242eb2-0be5-4945-9735-ff34075d9e87" />
+<p/>
 
 
 #### 알림 탭
@@ -180,21 +186,27 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 - 자신의 블로그의 구독자 추가 알림
 - 자신의 글에 달린 댓글 혹은 자신의 댓글의 답글 추가 알림
 - 자신의 블로그의 방명록 혹은 자신의 방명록의 답글 추가 알림
-<img width="300" alt="알림" src="https://github.com/user-attachments/assets/7514ab41-aef4-414d-95b6-39cbb1413530" />
+<p align="center">
+  <img width="300" alt="알림" src="https://github.com/user-attachments/assets/7514ab41-aef4-414d-95b6-39cbb1413530" />
+<p/>
 
 #### 내 블로그 탭
 - 블로그 글 조회
-<img width="300" alt="내블로그1" src="https://github.com/user-attachments/assets/34124541-4616-4f90-b240-746e10cf4735" />
-
+<p align="center">
+  <img width="300" alt="내블로그1" src="https://github.com/user-attachments/assets/34124541-4616-4f90-b240-746e10cf4735" />
+<p/>
 
 - 내 블로그 설정
 - 대표 이미지 설정 가능
-<img width="300" alt="내블로그2" src="https://github.com/user-attachments/assets/889e8718-357a-4791-a809-f0c5fa0337db" />
+<p align="center">
+  <img width="300" alt="내블로그2" src="https://github.com/user-attachments/assets/889e8718-357a-4791-a809-f0c5fa0337db" />
+<p/>
 
 
-- 카테고리 관리 **(추가기능!)** (상위, 하위 카테고리 지정 가능) 
-<img width="300" alt="내블로그3" src="https://github.com/user-attachments/assets/85a21a8d-f1d0-4fc9-8c0d-2439f7065fdb" />
-
+- 카테고리 관리 **(추가기능!)** (상위, 하위 카테고리 지정 가능)
+<p align="center">
+  <img width="300" alt="내블로그3" src="https://github.com/user-attachments/assets/85a21a8d-f1d0-4fc9-8c0d-2439f7065fdb" />
+<p/>
 
 
 ### ✍️ 5. 글 조회 페이지  
@@ -269,6 +281,7 @@ redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 ### 👤 10. 계정 관리 페이지
 - 비밀번호 변경, 로그아웃, 계정 탈퇴 가능
 - 카카오 로그인 유저는 비밀번호 변경 불가능
-<img width="300" alt="계정 설정" src="https://github.com/user-attachments/assets/599e8a23-e165-4d77-a34d-aa0231868b01" />
-
+<p align="center">
+  <img width="300" alt="계정 설정" src="https://github.com/user-attachments/assets/599e8a23-e165-4d77-a34d-aa0231868b01" />
+<p/>
 
