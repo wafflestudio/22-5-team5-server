@@ -49,7 +49,6 @@ aiomysql = "^0.2.0"  # MySQL 비동기 드라이버
 alembic = "^1.13.3"  # 데이터베이스 마이그레이션 도구
 pyjwt = "^2.10.1"  # JWT (JSON Web Token) 인증 처리
 pydantic-settings = "^2.5.2"  # 환경 변수 및 설정 관리
-redis = "^5.2.1"  # Redis 클라이언트 라이브러리
 ```
 ### 🔹 프론트엔드 (Frontend)
 ### 📱 플랫폼
